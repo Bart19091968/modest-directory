@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import prisma from '@/lib/db'
@@ -28,17 +29,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return generateShopMetadata(shop)
 }
 
-export async function generateStaticParams() {
-  try {
-    const shops = await prisma.shop.findMany({
-      where: { status: 'APPROVED' },
-      select: { slug: true },
-    })
-    return shops.map(shop => ({ slug: shop.slug }))
-  } catch {
-    return []
-  }
-}
 export default async function ShopDetailPage({ params }: PageProps) {
   const { slug } = await params
   const shop = await getShop(slug)
