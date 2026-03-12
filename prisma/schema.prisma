@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Shop {
+  id               String    @id @default(cuid())
+  name             String
+  slug             String    @unique
+  shortDescription String    @db.VarChar(200)
+  longDescription  String?   @db.Text
+  address          String?
+  city             String?
+  country          String    @default("BE") // BE or NL
+  websiteUrl       String?
+  email            String?
+  phone            String?
+  logoUrl          String?
+  isPhysicalStore  Boolean   @default(false)
+  isWebshop        Boolean   @default(true)
+  status           ShopStatus @default(PENDING)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  reviews          Review[]
+}
+
+model Review {
+  id                String   @id @default(cuid())
+  shopId            String
+  shop              Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  reviewerEmail     String
+  reviewerName      String
+  score             Int      // 1-5
+  reviewText        String   @db.Text
+  isVerified        Boolean  @default(false)
+  verificationToken String   @unique @default(cuid())
+  createdAt         DateTime @default(now())
+}
+
+model Sponsor {
+  id        String   @id @default(cuid())
+  name      String
+  bannerUrl String
+  linkUrl   String
+  position  BannerPosition @default(SIDEBAR)
+  isActive  Boolean  @default(true)
+  startDate DateTime @default(now())
+  endDate   DateTime?
+  createdAt DateTime @default(now())
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+enum ShopStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum BannerPosition {
+  HEADER
+  SIDEBAR
+  FOOTER
+}
