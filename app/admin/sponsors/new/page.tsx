@@ -151,7 +151,7 @@ export default function NewSponsorPage() {
             {loading ? 'Opslaan...' : 'Sponsor toevoegen'}
           </button>
           
-            href="/admin/sponsors"
+            <a href="/admin/sponsors"
             className="px-6 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
           >
             Annuleren
