@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export default function SearchFilter() {
   const router = useRouter()
@@ -11,14 +11,19 @@ export default function SearchFilter() {
   const [country, setCountry] = useState(searchParams.get('country') || '')
   const [type, setType] = useState(searchParams.get('type') || '')
 
-  const applyFilters = () => {
+  const applyFilters = useCallback((newQuery?: string, newCountry?: string, newType?: string) => {
     const params = new URLSearchParams()
-    if (query) params.set('q', query)
-    if (country) params.set('country', country)
-    if (type) params.set('type', type)
+    
+    const q = newQuery !== undefined ? newQuery : query
+    const c = newCountry !== undefined ? newCountry : country
+    const t = newType !== undefined ? newType : type
+    
+    if (q) params.set('q', q)
+    if (c) params.set('country', c)
+    if (t) params.set('type', t)
     
     router.push(`/shops?${params.toString()}`)
-  }
+  }, [query, country, type, router])
 
   const clearFilters = () => {
     setQuery('')
@@ -27,15 +32,25 @@ export default function SearchFilter() {
     router.push('/shops')
   }
 
-  // Apply filters on change (with debounce for search)
+  // Debounce search query
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (query !== (searchParams.get('q') || '')) {
-        applyFilters()
+        applyFilters(query, country, type)
       }
     }, 500)
     return () => clearTimeout(timeout)
   }, [query])
+
+  const handleCountryChange = (value: string) => {
+    setCountry(value)
+    applyFilters(query, value, type)
+  }
+
+  const handleTypeChange = (value: string) => {
+    setType(value)
+    applyFilters(query, country, value)
+  }
 
   return (
     <div className="bg-white rounded-xl p-6 border border-gray-100 sticky top-24">
@@ -64,7 +79,7 @@ export default function SearchFilter() {
               name="country"
               value=""
               checked={country === ''}
-              onChange={e => { setCountry(e.target.value); setTimeout(applyFilters, 0) }}
+              onChange={() => handleCountryChange('')}
               className="text-accent focus:ring-accent"
             />
             <span className="text-gray-700">Alle landen</span>
@@ -75,7 +90,7 @@ export default function SearchFilter() {
               name="country"
               value="BE"
               checked={country === 'BE'}
-              onChange={e => { setCountry(e.target.value); setTimeout(applyFilters, 0) }}
+              onChange={() => handleCountryChange('BE')}
               className="text-accent focus:ring-accent"
             />
             <span className="text-gray-700">🇧🇪 België</span>
@@ -86,7 +101,7 @@ export default function SearchFilter() {
               name="country"
               value="NL"
               checked={country === 'NL'}
-              onChange={e => { setCountry(e.target.value); setTimeout(applyFilters, 0) }}
+              onChange={() => handleCountryChange('NL')}
               className="text-accent focus:ring-accent"
             />
             <span className="text-gray-700">🇳🇱 Nederland</span>
@@ -104,7 +119,7 @@ export default function SearchFilter() {
               name="type"
               value=""
               checked={type === ''}
-              onChange={e => { setType(e.target.value); setTimeout(applyFilters, 0) }}
+              onChange={() => handleTypeChange('')}
               className="text-accent focus:ring-accent"
             />
             <span className="text-gray-700">Alle types</span>
@@ -115,7 +130,7 @@ export default function SearchFilter() {
               name="type"
               value="webshop"
               checked={type === 'webshop'}
-              onChange={e => { setType(e.target.value); setTimeout(applyFilters, 0) }}
+              onChange={() => handleTypeChange('webshop')}
               className="text-accent focus:ring-accent"
             />
             <span className="text-gray-700">🌐 Webshop</span>
@@ -126,7 +141,7 @@ export default function SearchFilter() {
               name="type"
               value="fysiek"
               checked={type === 'fysiek'}
-              onChange={e => { setType(e.target.value); setTimeout(applyFilters, 0) }}
+              onChange={() => handleTypeChange('fysiek')}
               className="text-accent focus:ring-accent"
             />
             <span className="text-gray-700">🏪 Fysieke winkel</span>
