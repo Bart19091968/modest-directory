@@ -145,7 +145,7 @@ export default function AdminShopList({ shops }: { shops: Shop[] }) {
                   )}
                   {shop.status === 'APPROVED' && (
                     
-                      href={`/shops/${shop.slug}`}
+                      <a href={`/shops/${shop.slug}`}
                       target="_blank"
                       className="text-accent hover:underline text-sm"
                     >
