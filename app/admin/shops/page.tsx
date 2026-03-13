@@ -31,7 +31,15 @@ export default async function AdminShopsPage({
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Winkels beheren</h1>
+        <div className="flex items-center gap-4">
+  <h1 className="text-2xl font-bold text-gray-900">Winkels beheren</h1>
+  
+    href="/admin/shops/import"
+    className="bg-accent text-white px-4 py-2 rounded-lg text-sm hover:bg-emerald-700 transition-colors"
+  >
+    + CSV Import
+  </a>
+</div>
         
         <div className="flex gap-2">
           <a 
