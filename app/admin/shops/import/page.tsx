@@ -126,7 +126,7 @@ Modest Fashion Store,Abaya's en modest kleding,Brussel,BE,https://modestfashion.
             {loading ? 'Importeren...' : 'Importeer winkels'}
           </button>
           
-            href="/admin/shops"
+            <a href="/admin/shops"
             className="px-6 py-2 border rounded-lg hover:bg-gray-50 transition-colors"
           >
             Annuleren
