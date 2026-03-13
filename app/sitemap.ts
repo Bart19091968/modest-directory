@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 
 export const dynamic = 'force-dynamic'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.be'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Import prisma here to avoid build-time issues
