@@ -92,7 +92,7 @@ export default function AdminSponsorList({ sponsors }: { sponsors: Sponsor[] }) 
                   <div>
                     <div className="font-medium text-gray-900">{sponsor.name}</div>
                     
-                      href={sponsor.linkUrl}
+                      <a href={sponsor.linkUrl}
                       target="_blank"
                       className="text-xs text-gray-500 hover:text-accent"
                     >
@@ -124,7 +124,7 @@ export default function AdminSponsorList({ sponsors }: { sponsors: Sponsor[] }) 
               <td className="px-6 py-4">
                 <div className="flex gap-2">
                   
-                    href={sponsor.linkUrl}
+                    <a href={sponsor.linkUrl}
                     target="_blank"
                     className="text-accent hover:underline text-sm"
                   >
