@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   const sponsor = await prisma.sponsor.create({
     data: {
       name: data.name,
-      imageUrl: data.imageUrl,
+      bannerUrl: data.bannerUrl,
       linkUrl: data.linkUrl,
       position: data.position,
       isActive: data.isActive ?? true,
