@@ -15,7 +15,10 @@ async function getFeaturedShops() {
         select: { score: true },
       },
     },
-    orderBy: { createdAt: 'desc' },
+    orderBy: [
+      { isFeatured: 'desc' },
+      { createdAt: 'desc' },
+    ],
     take: 6,
   })
 }

@@ -13,6 +13,7 @@ type Shop = {
   status: string
   email: string | null
   websiteUrl: string | null
+  isFeatured: boolean
   createdAt: Date
   _count: { reviews: number }
 }
@@ -28,6 +29,20 @@ export default function AdminShopList({ shops }: { shops: Shop[] }) {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ shopId, status }),
+      })
+      router.refresh()
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      setLoading(null)
+    }
+  }
+
+  const handleFeatureToggle = async (shopId: string) => {
+    setLoading(shopId)
+    try {
+      await fetch(`/api/admin/shops/${shopId}/feature`, {
+        method: 'POST',
       })
       router.refresh()
     } catch (error) {
@@ -77,6 +92,7 @@ export default function AdminShopList({ shops }: { shops: Shop[] }) {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Winkel</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Locatie</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Uitgelicht</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reviews</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acties</th>
           </tr>
@@ -95,6 +111,16 @@ export default function AdminShopList({ shops }: { shops: Shop[] }) {
                 <span className={`px-2 py-1 text-xs rounded-full ${statusColors[shop.status as keyof typeof statusColors]}`}>
                   {shop.status}
                 </span>
+              </td>
+              <td className="px-6 py-4">
+                <button
+                  onClick={() => handleFeatureToggle(shop.id)}
+                  disabled={shop.status !== 'APPROVED'}
+                  className={`text-xl ${shop.status !== 'APPROVED' ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer hover:scale-110 transition-transform'}`}
+                  title={shop.isFeatured ? 'Verwijder uit uitgelicht' : 'Markeer als uitgelicht'}
+                >
+                  {shop.isFeatured ? '⭐' : '☆'}
+                </button>
               </td>
               <td className="px-6 py-4 text-sm text-gray-600">
                 {shop._count.reviews}
@@ -118,7 +144,7 @@ export default function AdminShopList({ shops }: { shops: Shop[] }) {
                     </>
                   )}
                   {shop.status === 'APPROVED' && (
-                    <a
+                    
                       href={`/shops/${shop.slug}`}
                       target="_blank"
                       className="text-accent hover:underline text-sm"
