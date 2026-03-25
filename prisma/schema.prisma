@@ -1,0 +1,207 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// CORE MODELS
+// ============================================
+
+model Shop {
+  id               String     @id @default(cuid())
+  name             String
+  slug             String     @unique
+  shortDescription String     @db.VarChar(200)
+  longDescription  String?    @db.Text
+  address          String?
+  city             String?
+  citySlug         String?
+  country          String     @default("BE")
+  websiteUrl       String?
+  email            String?
+  phone            String?
+  logoUrl          String?
+  photos           String[]   // Array van foto URLs
+  isPhysicalStore  Boolean    @default(false)
+  isWebshop        Boolean    @default(true)
+  isFeatured       Boolean    @default(false)
+  status           ShopStatus @default(PENDING)
+  // Factuurgegevens
+  invoiceRequested    Boolean  @default(false)
+  invoiceCompanyName  String?
+  invoiceVatNumber    String?
+  invoiceAddress      String?
+  invoiceEmail        String?
+  // Payment tracking
+  isPaid              Boolean  @default(false)
+  paidAt              DateTime?
+  validUntil          DateTime?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  reviews          Review[]
+  categories       ShopCategory[]
+}
+
+model ShopCategory {
+  id         String   @id @default(cuid())
+  shopId     String
+  shop       Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([shopId, categoryId])
+}
+
+// ============================================
+// PROGRAMMATIC SEO MODELS
+// ============================================
+
+model Country {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  nameLocal   String
+  slug        String   @unique
+  description String?  @db.Text
+  metaTitle   String?
+  metaDesc    String?  @db.VarChar(200)
+  isActive    Boolean  @default(true)
+  cities      City[]
+  createdAt   DateTime @default(now())
+}
+
+model City {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  countryId   String
+  country     Country  @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  description String?  @db.Text
+  metaTitle   String?
+  metaDesc    String?  @db.VarChar(200)
+  population  Int?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+model Category {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  namePlural   String
+  description  String?  @db.Text
+  metaTitle    String?
+  metaDesc     String?  @db.VarChar(200)
+  icon         String?
+  sortOrder    Int      @default(0)
+  isActive     Boolean  @default(true)
+  shops        ShopCategory[]
+  createdAt    DateTime @default(now())
+}
+
+// ============================================
+// BLOG & CONTENT MODELS
+// ============================================
+
+model BlogPost {
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  excerpt      String   @db.VarChar(300)
+  content      String   @db.Text
+  featuredImage String?
+  metaTitle    String?
+  metaDesc     String?  @db.VarChar(200)
+  tags         String[]
+  isPublished  Boolean  @default(false)
+  publishedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String   @db.Text
+  category  String   @default("algemeen")
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// ============================================
+// MONETIZATION MODELS
+// ============================================
+
+model Sponsor {
+  id         String   @id @default(cuid())
+  name       String
+  bannerUrl  String
+  linkUrl    String
+  position   SponsorPosition @default(SIDEBAR)
+  isActive   Boolean  @default(true)
+  startDate  DateTime @default(now())
+  endDate    DateTime?
+  createdAt  DateTime @default(now())
+}
+
+model AdPlacement {
+  id        String   @id @default(cuid())
+  slot      String   @unique
+  type      AdType   @default(ADSENSE)
+  code      String?  @db.Text
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// REVIEWS & VERIFICATION
+// ============================================
+
+model Review {
+  id            String   @id @default(cuid())
+  shopId        String
+  shop          Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  reviewerEmail String
+  reviewerName  String
+  score         Int
+  reviewText    String   @db.Text
+  isVerified    Boolean  @default(false)
+  verificationToken String? @unique
+  tokenExpiresAt DateTime?
+  createdAt     DateTime @default(now())
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum ShopStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum SponsorPosition {
+  HEADER
+  SIDEBAR
+  FOOTER
+}
+
+enum AdType {
+  ADSENSE
+  SPONSOR
+  CUSTOM
+}
