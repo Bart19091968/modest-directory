@@ -57,10 +57,13 @@ export function generateBlogPostJsonLd(post: {
   slug: string
   excerpt: string
   content: string
-  publishedAt: Date
+  publishedAt: Date | null
   updatedAt?: Date
+  createdAt?: Date
 }) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.be'
+  const datePublished = post.publishedAt || post.createdAt || new Date()
+  const dateModified = post.updatedAt || datePublished
   
   return {
     '@context': 'https://schema.org',
@@ -68,8 +71,8 @@ export function generateBlogPostJsonLd(post: {
     headline: post.title,
     description: post.excerpt,
     url: `${siteUrl}/blog/${post.slug}`,
-    datePublished: post.publishedAt.toISOString(),
-    dateModified: (post.updatedAt || post.publishedAt).toISOString(),
+    datePublished: datePublished.toISOString(),
+    dateModified: dateModified.toISOString(),
     author: {
       '@type': 'Organization',
       name: 'ModestDirectory'
