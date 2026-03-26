@@ -33,5 +33,10 @@
     "postcss": "^8.4.35",
     "autoprefixer": "^10.4.17",
     "tsx": "^4.7.0"
-  }
+  },
+"scripts": {
+  "build": "prisma generate && next build",
+  "db:push": "prisma db push",
+  "postinstall": "prisma generate"
+}
 }
