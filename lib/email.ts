@@ -1,6 +1,14 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy initialization to avoid build-time errors
+let resend: Resend | null = null
+
+function getResend(): Resend {
+  if (!resend) {
+    resend = new Resend(process.env.RESEND_API_KEY || '')
+  }
+  return resend
+}
 
 export async function sendVerificationEmail(
   to: string,
@@ -10,7 +18,7 @@ export async function sendVerificationEmail(
   const verificationUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/verify/${verificationToken}`
   
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.FROM_EMAIL || 'noreply@modestdirectory.be',
       to,
       subject: `Bevestig je review voor ${shopName}`,
@@ -41,7 +49,7 @@ export async function sendNewShopNotification(
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@modestdirectory.be'
   
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: process.env.FROM_EMAIL || 'noreply@modestdirectory.be',
       to: adminEmail,
       subject: `Nieuwe winkel aangemeld: ${shopName}${invoiceRequested ? ' (factuur gewenst)' : ''}`,
