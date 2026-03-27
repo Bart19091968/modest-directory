@@ -35,7 +35,7 @@ export async function GET(request: Request) {
       headers: {
         'Content-Type': 'application/json',
         'X-Goog-Api-Key': apiKey,
-        'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.rating,places.userRatingTotal,places.googleMapsUri',
+        'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.rating,places.userRatingCount,places.googleMapsUri',
       },
       body: JSON.stringify({
         textQuery: query,
@@ -57,7 +57,7 @@ export async function GET(request: Request) {
       name: place.displayName?.text || '',
       address: place.formattedAddress || '',
       rating: place.rating || null,
-      reviewCount: place.userRatingTotal || null,
+      reviewCount: place.userRatingCount || null,
       reviewsUrl: place.googleMapsUri
         ? `${place.googleMapsUri}?hl=nl`
         : null,
