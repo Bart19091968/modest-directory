@@ -53,19 +53,41 @@ export default function Header() {
               </button>
               
               {categoriesOpen && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border py-2 z-50">
-                  <Link href="/hijab-shops/nederland" onClick={closeDropdown} className="block px-4 py-2 text-gray-600 hover:bg-gray-50 hover:text-accent">
-                    Hijab Shops
-                  </Link>
-                  <Link href="/abaya-shops/nederland" onClick={closeDropdown} className="block px-4 py-2 text-gray-600 hover:bg-gray-50 hover:text-accent">
-                    Abaya Winkels
-                  </Link>
-                  <Link href="/modest-fashion/nederland" onClick={closeDropdown} className="block px-4 py-2 text-gray-600 hover:bg-gray-50 hover:text-accent">
-                    Modest Fashion
-                  </Link>
-                  <Link href="/islamitische-kleding/nederland" onClick={closeDropdown} className="block px-4 py-2 text-gray-600 hover:bg-gray-50 hover:text-accent">
-                    Islamitische Kleding
-                  </Link>
+                <div className="absolute top-full left-0 mt-2 w-[420px] bg-white rounded-lg shadow-lg border py-4 px-4 z-50">
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* België */}
+                    <div>
+                      <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">🇧🇪 België</h4>
+                      <Link href="/hijab-shops/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                        🧕 Hijab Shops
+                      </Link>
+                      <Link href="/abaya-shops/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                        👗 Abaya Winkels
+                      </Link>
+                      <Link href="/modest-fashion/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                        ✨ Modest Fashion
+                      </Link>
+                      <Link href="/islamitische-kleding/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                        🌙 Islamitische Kleding
+                      </Link>
+                    </div>
+                    {/* Nederland */}
+                    <div>
+                      <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">🇳🇱 Nederland</h4>
+                      <Link href="/hijab-shops/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                        🧕 Hijab Shops
+                      </Link>
+                      <Link href="/abaya-shops/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                        👗 Abaya Winkels
+                      </Link>
+                      <Link href="/modest-fashion/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                        ✨ Modest Fashion
+                      </Link>
+                      <Link href="/islamitische-kleding/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                        🌙 Islamitische Kleding
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -102,23 +124,44 @@ export default function Header() {
         {/* Mobile menu */}
         {mobileMenuOpen && (
           <nav className="md:hidden py-4 border-t border-gray-100">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
               <Link href="/shops" className="text-gray-600 hover:text-accent transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
                 Alle Winkels
               </Link>
-              <Link href="/hijab-shops/nederland" className="text-gray-600 hover:text-accent transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
-                Hijab Shops
-              </Link>
-              <Link href="/abaya-shops/nederland" className="text-gray-600 hover:text-accent transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
-                Abaya Winkels
-              </Link>
+
+              <div className="py-2">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">🇧🇪 België</p>
+                <Link href="/hijab-shops/belgie" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
+                  Hijab Shops
+                </Link>
+                <Link href="/abaya-shops/belgie" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
+                  Abaya Winkels
+                </Link>
+                <Link href="/modest-fashion/belgie" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
+                  Modest Fashion
+                </Link>
+              </div>
+
+              <div className="py-2">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">🇳🇱 Nederland</p>
+                <Link href="/hijab-shops/nederland" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
+                  Hijab Shops
+                </Link>
+                <Link href="/abaya-shops/nederland" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
+                  Abaya Winkels
+                </Link>
+                <Link href="/modest-fashion/nederland" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
+                  Modest Fashion
+                </Link>
+              </div>
+
               <Link href="/blog" className="text-gray-600 hover:text-accent transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
                 Blog
               </Link>
               <Link href="/aanmelden" className="text-gray-600 hover:text-accent transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
                 Winkel Aanmelden
               </Link>
-              <Link href="/shops" className="btn-primary text-sm text-center" onClick={() => setMobileMenuOpen(false)}>
+              <Link href="/shops" className="btn-primary text-sm text-center mt-2" onClick={() => setMobileMenuOpen(false)}>
                 Zoek een winkel
               </Link>
             </div>
