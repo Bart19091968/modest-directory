@@ -8,7 +8,7 @@ export default function Header() {
   const [categoriesOpen, setCategoriesOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Sluit dropdown bij klik erbuiten
+  // Close dropdown on click outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -35,7 +35,7 @@ export default function Header() {
               Alle Winkels
             </Link>
             
-            {/* Categories dropdown */}
+            {/* Categories dropdown — no gap between trigger and panel */}
             <div
               className="relative"
               ref={dropdownRef}
@@ -44,7 +44,7 @@ export default function Header() {
               <button 
                 onClick={() => setCategoriesOpen(!categoriesOpen)}
                 onMouseEnter={() => setCategoriesOpen(true)}
-                className="text-gray-600 hover:text-accent transition-colors flex items-center gap-1"
+                className="text-gray-600 hover:text-accent transition-colors flex items-center gap-1 py-2"
               >
                 Categorieën
                 <svg className={`w-4 h-4 transition-transform ${categoriesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,39 +53,41 @@ export default function Header() {
               </button>
               
               {categoriesOpen && (
-                <div className="absolute top-full left-0 mt-2 w-[420px] bg-white rounded-lg shadow-lg border py-4 px-4 z-50">
-                  <div className="grid grid-cols-2 gap-4">
-                    {/* België */}
-                    <div>
-                      <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">🇧🇪 België</h4>
-                      <Link href="/hijab-shops/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
-                        🧕 Hijab Shops
-                      </Link>
-                      <Link href="/abaya-shops/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
-                        👗 Abaya Winkels
-                      </Link>
-                      <Link href="/modest-fashion/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
-                        ✨ Modest Fashion
-                      </Link>
-                      <Link href="/islamitische-kleding/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
-                        🌙 Islamitische Kleding
-                      </Link>
-                    </div>
-                    {/* Nederland */}
-                    <div>
-                      <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">🇳🇱 Nederland</h4>
-                      <Link href="/hijab-shops/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
-                        🧕 Hijab Shops
-                      </Link>
-                      <Link href="/abaya-shops/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
-                        👗 Abaya Winkels
-                      </Link>
-                      <Link href="/modest-fashion/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
-                        ✨ Modest Fashion
-                      </Link>
-                      <Link href="/islamitische-kleding/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
-                        🌙 Islamitische Kleding
-                      </Link>
+                <div className="absolute top-full left-0 pt-1 z-50">
+                  <div className="w-[420px] bg-white rounded-lg shadow-lg border py-4 px-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* België */}
+                      <div>
+                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">🇧🇪 België</h4>
+                        <Link href="/hijab-shops/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                          🧕 Hijab Shops
+                        </Link>
+                        <Link href="/abaya-shops/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                          👗 Abaya Winkels
+                        </Link>
+                        <Link href="/modest-fashion/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                          ✨ Modest Fashion
+                        </Link>
+                        <Link href="/islamitische-kleding/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                          🌙 Islamitische Kleding
+                        </Link>
+                      </div>
+                      {/* Nederland */}
+                      <div>
+                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">🇳🇱 Nederland</h4>
+                        <Link href="/hijab-shops/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                          🧕 Hijab Shops
+                        </Link>
+                        <Link href="/abaya-shops/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                          👗 Abaya Winkels
+                        </Link>
+                        <Link href="/modest-fashion/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                          ✨ Modest Fashion
+                        </Link>
+                        <Link href="/islamitische-kleding/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
+                          🌙 Islamitische Kleding
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -19,217 +19,211 @@ type Props = {
   categories: Category[]
   citiesBE: CityOption[]
   citiesNL: CityOption[]
-  activeCountry?: string
-  activeCity?: string
-  activeType?: string
-  activeCategory?: string
-  activeSearch?: string
 }
 
-export default function ShopFilters({
-  categories,
-  citiesBE,
-  citiesNL,
-  activeCountry,
-  activeCity,
-  activeType,
-  activeCategory,
-  activeSearch,
-}: Props) {
+export default function ShopFilters({ categories, citiesBE, citiesNL }: Props) {
   const router = useRouter()
-  const [search, setSearch] = useState(activeSearch || '')
+  const searchParams = useSearchParams()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
-  const buildUrl = useCallback((overrides: Record<string, string | undefined>) => {
+  // Parse multi-value params (comma-separated)
+  const activeCountries = searchParams.get('country')?.split(',').filter(Boolean) || []
+  const activeTypes = searchParams.get('type')?.split(',').filter(Boolean) || []
+  const activeCategories = searchParams.get('category')?.split(',').filter(Boolean) || []
+  const activeCities = searchParams.get('city')?.split(',').filter(Boolean) || []
+
+  const toggleParam = useCallback((key: string, value: string, currentValues: string[]) => {
+    const params = new URLSearchParams(searchParams.toString())
+    let newValues: string[]
+
+    if (currentValues.includes(value)) {
+      newValues = currentValues.filter(v => v !== value)
+    } else {
+      newValues = [...currentValues, value]
+    }
+
+    if (newValues.length === 0) {
+      params.delete(key)
+    } else {
+      params.set(key, newValues.join(','))
+    }
+
+    // If country changes, clear cities that no longer apply
+    if (key === 'country') {
+      const selectedCountries = newValues
+      const validCities = [
+        ...(selectedCountries.includes('BE') || selectedCountries.length === 0 ? citiesBE : []),
+        ...(selectedCountries.includes('NL') || selectedCountries.length === 0 ? citiesNL : []),
+      ].map(c => c.slug)
+
+      const currentCities = params.get('city')?.split(',').filter(Boolean) || []
+      const filteredCities = currentCities.filter(c => validCities.includes(c))
+      if (filteredCities.length === 0) {
+        params.delete('city')
+      } else {
+        params.set('city', filteredCities.join(','))
+      }
+    }
+
+    router.push(`/shops?${params.toString()}`)
+  }, [searchParams, router, citiesBE, citiesNL])
+
+  const clearAll = () => {
     const params = new URLSearchParams()
-
-    const values: Record<string, string | undefined> = {
-      search: activeSearch,
-      country: activeCountry,
-      city: activeCity,
-      type: activeType,
-      category: activeCategory,
-      ...overrides,
-    }
-
-    // If country changes, clear city
-    if ('country' in overrides && overrides.country !== activeCountry) {
-      values.city = undefined
-    }
-
-    Object.entries(values).forEach(([key, value]) => {
-      if (value) params.set(key, value)
-    })
-
-    return `/shops?${params.toString()}`
-  }, [activeSearch, activeCountry, activeCity, activeType, activeCategory])
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    router.push(buildUrl({ search: search || undefined }))
+    const search = searchParams.get('search')
+    if (search) params.set('search', search)
+    router.push(`/shops?${params.toString()}`)
   }
 
-  const navigate = (overrides: Record<string, string | undefined>) => {
-    router.push(buildUrl(overrides))
-  }
+  const hasActiveFilters = activeCountries.length > 0 || activeTypes.length > 0 || activeCategories.length > 0 || activeCities.length > 0
 
-  // Determine which cities to show based on selected country
-  const visibleCities = activeCountry === 'BE'
-    ? citiesBE
-    : activeCountry === 'NL'
-      ? citiesNL
-      : [...citiesBE, ...citiesNL].sort((a, b) => a.name.localeCompare(b.name))
+  // Show cities based on selected countries
+  const visibleCities = (() => {
+    const cities: CityOption[] = []
+    if (activeCountries.length === 0 || activeCountries.includes('BE')) {
+      cities.push(...citiesBE)
+    }
+    if (activeCountries.length === 0 || activeCountries.includes('NL')) {
+      cities.push(...citiesNL)
+    }
+    return cities.sort((a, b) => a.name.localeCompare(b.name))
+  })()
 
-  const hasActiveFilters = activeCountry || activeCity || activeType || activeCategory || activeSearch
-
-  return (
-    <div className="space-y-6">
-      {/* Search */}
-      <div>
-        <form onSubmit={handleSearch}>
-          <div className="relative">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Zoek op naam of stad..."
-              className="w-full px-4 py-2.5 pr-10 border rounded-lg text-sm focus:ring-2 focus:ring-accent focus:border-transparent"
-            />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-accent"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
-        </form>
-      </div>
-
+  const filterContent = (
+    <div className="space-y-5">
       {/* Clear filters */}
       {hasActiveFilters && (
-        <a
-          href="/shops"
+        <button
+          onClick={clearAll}
           className="inline-flex items-center gap-1 text-sm text-red-600 hover:text-red-800"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
-          Alle filters wissen
-        </a>
+          Filters wissen
+        </button>
       )}
 
-      {/* Country filter */}
+      {/* Country */}
       <div>
         <h3 className="text-sm font-semibold text-gray-900 mb-2 uppercase tracking-wide">Land</h3>
-        <div className="space-y-1">
-          {[
-            { value: undefined, label: 'Alle landen' },
-            { value: 'BE', label: '🇧🇪 België' },
-            { value: 'NL', label: '🇳🇱 Nederland' },
-          ].map(option => (
-            <button
-              key={option.label}
-              onClick={() => navigate({ country: option.value })}
-              className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                activeCountry === option.value || (!activeCountry && !option.value)
-                  ? 'bg-accent text-white font-medium'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
+        <label className="flex items-center gap-2 py-1 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={activeCountries.includes('BE')}
+            onChange={() => toggleParam('country', 'BE', activeCountries)}
+            className="w-4 h-4 text-accent rounded focus:ring-accent"
+          />
+          <span className="text-sm text-gray-700">🇧🇪 België</span>
+        </label>
+        <label className="flex items-center gap-2 py-1 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={activeCountries.includes('NL')}
+            onChange={() => toggleParam('country', 'NL', activeCountries)}
+            className="w-4 h-4 text-accent rounded focus:ring-accent"
+          />
+          <span className="text-sm text-gray-700">🇳🇱 Nederland</span>
+        </label>
       </div>
 
-      {/* Type filter */}
+      {/* Type */}
       <div>
         <h3 className="text-sm font-semibold text-gray-900 mb-2 uppercase tracking-wide">Type</h3>
-        <div className="space-y-1">
-          {[
-            { value: undefined, label: 'Alle types' },
-            { value: 'webshop', label: '🌐 Webshop' },
-            { value: 'physical', label: '🏪 Fysieke winkel' },
-          ].map(option => (
-            <button
-              key={option.label}
-              onClick={() => navigate({ type: option.value })}
-              className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                activeType === option.value || (!activeType && !option.value)
-                  ? 'bg-accent text-white font-medium'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
+        <label className="flex items-center gap-2 py-1 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={activeTypes.includes('webshop')}
+            onChange={() => toggleParam('type', 'webshop', activeTypes)}
+            className="w-4 h-4 text-accent rounded focus:ring-accent"
+          />
+          <span className="text-sm text-gray-700">🌐 Webshop</span>
+        </label>
+        <label className="flex items-center gap-2 py-1 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={activeTypes.includes('physical')}
+            onChange={() => toggleParam('type', 'physical', activeTypes)}
+            className="w-4 h-4 text-accent rounded focus:ring-accent"
+          />
+          <span className="text-sm text-gray-700">🏪 Fysieke winkel</span>
+        </label>
       </div>
 
-      {/* Category filter */}
+      {/* Category */}
       {categories.length > 0 && (
         <div>
           <h3 className="text-sm font-semibold text-gray-900 mb-2 uppercase tracking-wide">Categorie</h3>
-          <div className="space-y-1">
-            <button
-              onClick={() => navigate({ category: undefined })}
-              className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                !activeCategory
-                  ? 'bg-accent text-white font-medium'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              Alle categorieën
-            </button>
-            {categories.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => navigate({ category: cat.slug })}
-                className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                  activeCategory === cat.slug
-                    ? 'bg-accent text-white font-medium'
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                {cat.icon} {cat.name}
-              </button>
-            ))}
-          </div>
+          {categories.map(cat => (
+            <label key={cat.id} className="flex items-center gap-2 py-1 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={activeCategories.includes(cat.slug)}
+                onChange={() => toggleParam('category', cat.slug, activeCategories)}
+                className="w-4 h-4 text-accent rounded focus:ring-accent"
+              />
+              <span className="text-sm text-gray-700">{cat.icon} {cat.name}</span>
+            </label>
+          ))}
         </div>
       )}
 
-      {/* City filter */}
+      {/* City */}
       {visibleCities.length > 0 && (
         <div>
           <h3 className="text-sm font-semibold text-gray-900 mb-2 uppercase tracking-wide">Stad</h3>
-          <div className="space-y-1 max-h-64 overflow-y-auto">
-            <button
-              onClick={() => navigate({ city: undefined })}
-              className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                !activeCity
-                  ? 'bg-accent text-white font-medium'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              Alle steden
-            </button>
+          <div className="max-h-48 overflow-y-auto space-y-0">
             {visibleCities.map(city => (
-              <button
-                key={city.slug}
-                onClick={() => navigate({ city: city.slug })}
-                className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                  activeCity === city.slug
-                    ? 'bg-accent text-white font-medium'
-                    : 'text-gray-600 hover:bg-gray-100'
-                }`}
-              >
-                {city.name}
-              </button>
+              <label key={city.slug} className="flex items-center gap-2 py-1 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={activeCities.includes(city.slug)}
+                  onChange={() => toggleParam('city', city.slug, activeCities)}
+                  className="w-4 h-4 text-accent rounded focus:ring-accent"
+                />
+                <span className="text-sm text-gray-700">{city.name}</span>
+              </label>
             ))}
           </div>
         </div>
       )}
     </div>
+  )
+
+  return (
+    <>
+      {/* Desktop: always visible */}
+      <div className="hidden lg:block">
+        {filterContent}
+      </div>
+
+      {/* Mobile: collapsible button */}
+      <div className="lg:hidden">
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-white border rounded-lg text-sm font-medium text-gray-700"
+        >
+          <span className="flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            Filters
+            {hasActiveFilters && (
+              <span className="bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {activeCountries.length + activeTypes.length + activeCategories.length + activeCities.length}
+              </span>
+            )}
+          </span>
+          <svg className={`w-5 h-5 transition-transform ${mobileOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        {mobileOpen && (
+          <div className="mt-3 p-4 bg-white border rounded-lg">
+            {filterContent}
+          </div>
+        )}
+      </div>
+    </>
   )
 }

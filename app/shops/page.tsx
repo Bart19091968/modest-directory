@@ -1,6 +1,7 @@
 import prisma from '@/lib/db'
 import { Metadata } from 'next'
 import ShopCard from '@/components/ShopCard'
+import SearchFilter from '@/components/SearchFilter'
 import ShopFilters from '@/components/ShopFilters'
 import { generateLocalBusinessJsonLd } from '@/lib/seo'
 
@@ -30,26 +31,58 @@ async function getShops(params: SearchParams) {
     ]
   }
 
+  // Multi-value: country=BE,NL
   if (params.country) {
-    where.country = params.country
+    const countries = params.country.split(',').filter(Boolean)
+    if (countries.length === 1) {
+      where.country = countries[0]
+    } else if (countries.length > 1) {
+      where.country = { in: countries }
+    }
   }
 
+  // Multi-value: city=brussel,antwerpen
   if (params.city) {
-    where.citySlug = params.city
+    const cities = params.city.split(',').filter(Boolean)
+    if (cities.length === 1) {
+      where.citySlug = cities[0]
+    } else if (cities.length > 1) {
+      where.citySlug = { in: cities }
+    }
   }
 
-  if (params.type === 'physical') {
-    where.isPhysicalStore = true
-  } else if (params.type === 'webshop') {
-    where.isWebshop = true
+  // Multi-value: type=webshop,physical
+  if (params.type) {
+    const types = params.type.split(',').filter(Boolean)
+    if (types.includes('physical') && types.includes('webshop')) {
+      // Both selected: show shops that are either
+      where.OR = [
+        ...(where.OR || []),
+        { isPhysicalStore: true },
+        { isWebshop: true },
+      ]
+      // Actually both checked means no filter needed since all shops are one or the other
+      // But let's keep it explicit
+    } else if (types.includes('physical')) {
+      where.isPhysicalStore = true
+    } else if (types.includes('webshop')) {
+      where.isWebshop = true
+    }
   }
 
+  // Multi-value: category=hijab-shops,abaya-shops
   if (params.category) {
-    const categoryRecord = await prisma.category.findUnique({
-      where: { slug: params.category },
-    })
-    if (categoryRecord) {
-      where.categories = { some: { categoryId: categoryRecord.id } }
+    const categorySlugs = params.category.split(',').filter(Boolean)
+    if (categorySlugs.length > 0) {
+      const categoryRecords = await prisma.category.findMany({
+        where: { slug: { in: categorySlugs } },
+        select: { id: true },
+      })
+      if (categoryRecords.length > 0) {
+        where.categories = {
+          some: { categoryId: { in: categoryRecords.map(c => c.id) } },
+        }
+      }
     }
   }
 
@@ -111,34 +144,31 @@ export default async function ShopsPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
+      {/* Header + Search bar on top */}
       <div className="text-center mb-12">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           Alle Winkels
         </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
+        <p className="text-gray-600 max-w-2xl mx-auto mb-8">
           Ontdek de beste islamitische kledingwinkels in Nederland en België
         </p>
+        <SearchFilter />
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar filters */}
-        <aside className="lg:w-64 shrink-0">
+        <aside className="lg:w-56 shrink-0">
           <ShopFilters
             categories={filterData.categories}
             citiesBE={filterData.citiesBE}
             citiesNL={filterData.citiesNL}
-            activeCountry={params.country}
-            activeCity={params.city}
-            activeType={params.type}
-            activeCategory={params.category}
-            activeSearch={params.search}
           />
         </aside>
 
         {/* Shop listing */}
         <main className="flex-1">
           <div className="flex items-center justify-between mb-6">
-            <p className="text-gray-600">
+            <p className="text-sm text-gray-500">
               {shops.length} winkel{shops.length !== 1 ? 's' : ''} gevonden
             </p>
           </div>

@@ -10,8 +10,12 @@ export default function SearchFilter() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const params = new URLSearchParams()
-    if (search) params.set('search', search)
+    const params = new URLSearchParams(searchParams.toString())
+    if (search) {
+      params.set('search', search)
+    } else {
+      params.delete('search')
+    }
     router.push(`/shops?${params.toString()}`)
   }
 
