@@ -58,8 +58,8 @@ export async function GET(request: Request) {
       address: place.formattedAddress || '',
       rating: place.rating || null,
       reviewCount: place.userRatingCount || null,
-      reviewsUrl: place.googleMapsUri
-        ? `${place.googleMapsUri}?hl=nl`
+      reviewsUrl: place.id
+        ? `https://search.google.com/local/reviews?placeid=${place.id}&hl=nl`
         : null,
     }))
 
