@@ -2,20 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --accent-color: #5d7a5d;
+  --accent-dark: #4a624a;
+  --background: #f8f7f5;
+  --foreground: #1a1a1a;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
 @layer components {
   .btn-primary {
-    @apply bg-accent text-white px-6 py-2 rounded-full hover:bg-accent-dark transition-colors font-medium;
+    @apply bg-accent text-white px-6 py-3 rounded-lg font-medium hover:bg-accent-dark transition-colors;
   }
   
   .btn-secondary {
-    @apply border border-accent text-accent px-6 py-2 rounded-full hover:bg-accent hover:text-white transition-colors font-medium;
+    @apply bg-white text-accent border-2 border-accent px-6 py-3 rounded-lg font-medium hover:bg-accent hover:text-white transition-colors;
   }
   
   .card {
-    @apply bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100;
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden;
   }
   
   .input {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all;
+    @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all;
+  }
+  
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-2;
   }
 }

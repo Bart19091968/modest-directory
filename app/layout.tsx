@@ -82,20 +82,16 @@ export default function RootLayout({
                 <h4 className="font-semibold mb-4">Navigatie</h4>
                 <ul className="space-y-2 text-gray-400">
                   <li><Link href="/shops" className="hover:text-white transition-colors">Alle winkels</Link></li>
-                  <li><Link href="/hijab-shops/nederland" className="hover:text-white transition-colors">Hijab shops Nederland</Link></li>
-                  <li><Link href="/hijab-shops/belgie" className="hover:text-white transition-colors">Hijab shops België</Link></li>
-                  <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                  <li><Link href="/shops?country=BE" className="hover:text-white transition-colors">Winkels in België</Link></li>
+                  <li><Link href="/shops?country=NL" className="hover:text-white transition-colors">Winkels in Nederland</Link></li>
                   <li><Link href="/aanmelden" className="hover:text-white transition-colors">Winkel aanmelden</Link></li>
                 </ul>
               </div>
               
               <div>
-                <h4 className="font-semibold mb-4">Populaire steden</h4>
+                <h4 className="font-semibold mb-4">Contact</h4>
                 <ul className="space-y-2 text-gray-400">
-                  <li><Link href="/hijab-shops/amsterdam" className="hover:text-white transition-colors">Amsterdam</Link></li>
-                  <li><Link href="/hijab-shops/rotterdam" className="hover:text-white transition-colors">Rotterdam</Link></li>
-                  <li><Link href="/hijab-shops/brussel" className="hover:text-white transition-colors">Brussel</Link></li>
-                  <li><Link href="/hijab-shops/antwerpen" className="hover:text-white transition-colors">Antwerpen</Link></li>
+                  <li>info@modestdirectory.be</li>
                 </ul>
               </div>
             </div>
