@@ -118,21 +118,9 @@ export default async function HomePage() {
               
               {shops.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {shops.map(shop => {
-                    const avgRating = shop.reviews.length > 0
-                      ? shop.reviews.reduce((sum, r) => sum + r.score, 0) / shop.reviews.length
-                      : 0
-                    return (
-                      <ShopCard 
-                        key={shop.id} 
-                        shop={{
-                          ...shop,
-                          averageRating: avgRating,
-                          reviewCount: shop.reviews.length,
-                        }}
-                      />
-                    )
-                  })}
+                  {shops.map(shop => (
+                    <ShopCard key={shop.id} shop={shop} />
+                  ))}
                 </div>
               ) : (
                 <div className="text-center py-12 bg-gray-50 rounded-xl">
