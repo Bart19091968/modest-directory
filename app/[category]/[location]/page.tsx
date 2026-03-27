@@ -69,6 +69,9 @@ async function getData(category: string, location: string) {
       isWebshop: true,
       isFeatured: true,
       logoUrl: true,
+      googlePlaceId: true,
+      googleRating: true,
+      googleReviewCount: true,
       reviews: { where: { isVerified: true }, select: { score: true } },
     },
   })

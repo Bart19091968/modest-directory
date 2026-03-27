@@ -5,6 +5,7 @@ import Link from 'next/link'
 import ReviewForm from '@/components/ReviewForm'
 import StarRating from '@/components/StarRating'
 import { generateLocalBusinessJsonLd } from '@/lib/seo'
+import { getVisibleReviewData } from '@/lib/reviews'
 
 export const dynamic = 'force-dynamic'
 
@@ -59,14 +60,28 @@ export default async function ShopDetailPage({
     notFound()
   }
 
-  const averageScore = shop.reviews.length > 0
+  // ModestDirectory reviews
+  const mdAverage = shop.reviews.length > 0
     ? shop.reviews.reduce((acc, r) => acc + r.score, 0) / shop.reviews.length
-    : null
+    : 0
+
+  // Fallback logic for header rating
+  const reviewData = getVisibleReviewData({
+    googlePlaceId: shop.googlePlaceId,
+    googleRating: shop.googleRating,
+    googleReviewCount: shop.googleReviewCount,
+    modestDirectoryAverageRating: mdAverage,
+    modestDirectoryReviewCount: shop.reviews.length,
+  })
 
   const location = shop.city ? `${shop.city}, ${shop.country}` : shop.country
   const firstLetter = shop.name.charAt(0).toUpperCase()
 
-  const jsonLd = generateLocalBusinessJsonLd(shop)
+  const jsonLd = generateLocalBusinessJsonLd({
+    ...shop,
+    averageRating: reviewData.averageRating,
+    reviewCount: reviewData.reviewCount,
+  })
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
@@ -127,16 +142,19 @@ export default async function ShopDetailPage({
               )}
             </div>
 
-            {/* Rating */}
-            {averageScore !== null && (
+            {/* Rating - with fallback logic */}
+            {reviewData.reviewCount > 0 && (
               <div className="flex items-center gap-3 mt-3">
-                <StarRating rating={Math.round(averageScore)} readonly />
+                <StarRating rating={Math.round(reviewData.averageRating)} readonly />
                 <span className="text-lg font-medium text-gray-900">
-                  {averageScore.toFixed(1)}
+                  {reviewData.averageRating.toFixed(1)}
                 </span>
                 <span className="text-gray-500">
-                  ({shop.reviews.length} review{shop.reviews.length !== 1 ? 's' : ''})
+                  ({reviewData.reviewCount} review{reviewData.reviewCount !== 1 ? 's' : ''})
                 </span>
+                {reviewData.source === 'google' && (
+                  <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded">Google</span>
+                )}
               </div>
             )}
           </div>
@@ -161,6 +179,22 @@ export default async function ShopDetailPage({
               className="btn-primary"
             >
               🌐 Bezoek website
+            </a>
+          )}
+          {shop.googleReviewsUrl && (
+            <a
+              href={shop.googleReviewsUrl}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="px-6 py-3 bg-white border-2 border-gray-200 rounded-full hover:bg-gray-50 transition flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+              </svg>
+              Reviews op Google
             </a>
           )}
           {shop.phone && (
@@ -205,7 +239,7 @@ export default async function ShopDetailPage({
       {/* Photo Gallery */}
       {shop.photos && shop.photos.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Foto's</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Foto&apos;s</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {shop.photos.map((photo, index) => (
               <div key={index} className="aspect-square rounded-xl overflow-hidden bg-gray-100">
@@ -224,8 +258,20 @@ export default async function ShopDetailPage({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Review List */}
         <div>
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Reviews ({shop.reviews.length})
+          <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            Reviews
+            {mdAverage > 0 && (
+              <span className="flex items-center gap-1">
+                <span className="flex">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <span key={star} className={`text-base ${star <= Math.round(mdAverage) ? 'text-yellow-400' : 'text-gray-300'}`}>★</span>
+                  ))}
+                </span>
+                <span className="text-base font-normal text-gray-600">
+                  {mdAverage.toFixed(1)} ({shop.reviews.length})
+                </span>
+              </span>
+            )}
           </h2>
 
           {shop.reviews.length === 0 ? (

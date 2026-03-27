@@ -31,6 +31,14 @@ type Shop = {
   isFeatured: boolean
   status: string
   categories: { category: Category }[]
+  // Google Places
+  googlePlaceId: string | null
+  googleName: string | null
+  googleAddress: string | null
+  googleRating: number | null
+  googleReviewCount: number | null
+  googleReviewsUrl: string | null
+  googleLastSyncedAt: string | null
 }
 
 export default function EditShopPage() {
@@ -60,10 +68,21 @@ export default function EditShopPage() {
     isWebshop: true,
     isFeatured: false,
     status: 'APPROVED',
+    // Google Places
+    googlePlaceId: '',
+    googleName: '',
+    googleAddress: '',
+    googleRating: '',
+    googleReviewCount: '',
+    googleReviewsUrl: '',
   })
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [photos, setPhotos] = useState<string[]>([])
   const [newPhotoUrl, setNewPhotoUrl] = useState('')
+  // Google Places search
+  const [googleSearch, setGoogleSearch] = useState('')
+  const [googleResults, setGoogleResults] = useState<any[]>([])
+  const [googleSearching, setGoogleSearching] = useState(false)
 
   // Fetch shop data
   useEffect(() => {
@@ -90,6 +109,13 @@ export default function EditShopPage() {
           isWebshop: shop.isWebshop,
           isFeatured: shop.isFeatured,
           status: shop.status,
+          // Google Places
+          googlePlaceId: shop.googlePlaceId || '',
+          googleName: shop.googleName || '',
+          googleAddress: shop.googleAddress || '',
+          googleRating: shop.googleRating != null ? String(shop.googleRating) : '',
+          googleReviewCount: shop.googleReviewCount != null ? String(shop.googleReviewCount) : '',
+          googleReviewsUrl: shop.googleReviewsUrl || '',
         })
         setPhotos(shop.photos || [])
         setSelectedCategories(shop.categories.map(sc => sc.category.id))
@@ -132,6 +158,36 @@ export default function EditShopPage() {
 
   const removePhoto = (index: number) => {
     setPhotos(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const handleGoogleSearch = async () => {
+    if (!googleSearch.trim()) return
+    setGoogleSearching(true)
+    setGoogleResults([])
+    try {
+      const res = await fetch(`/api/admin/shops/google-search?q=${encodeURIComponent(googleSearch)}`)
+      if (!res.ok) throw new Error('Zoeken mislukt')
+      const data = await res.json()
+      setGoogleResults(data.results || [])
+    } catch (err) {
+      setError('Google Places zoeken mislukt. Controleer of de API key is ingesteld.')
+    } finally {
+      setGoogleSearching(false)
+    }
+  }
+
+  const selectGooglePlace = (place: any) => {
+    setForm(prev => ({
+      ...prev,
+      googlePlaceId: place.placeId || '',
+      googleName: place.name || '',
+      googleAddress: place.address || '',
+      googleRating: place.rating != null ? String(place.rating) : '',
+      googleReviewCount: place.reviewCount != null ? String(place.reviewCount) : '',
+      googleReviewsUrl: place.reviewsUrl || '',
+    }))
+    setGoogleResults([])
+    setGoogleSearch('')
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -521,6 +577,137 @@ export default function EditShopPage() {
               )}
             </div>
           </div>
+        </section>
+
+        {/* ── Google Places ── */}
+        <section className="bg-white rounded-xl shadow-sm border p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Google Places koppeling</h2>
+          
+          {/* Search */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Zoek op Google Places
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={googleSearch}
+                onChange={(e) => setGoogleSearch(e.target.value)}
+                placeholder={`Bijv. "${form.name} ${form.city}"`}
+                className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    handleGoogleSearch()
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleGoogleSearch}
+                disabled={googleSearching || !googleSearch.trim()}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+              >
+                {googleSearching ? 'Zoeken...' : 'Zoeken'}
+              </button>
+            </div>
+          </div>
+
+          {/* Search results */}
+          {googleResults.length > 0 && (
+            <div className="mb-4 border rounded-lg divide-y max-h-60 overflow-y-auto">
+              {googleResults.map((place, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => selectGooglePlace(place)}
+                  className="w-full text-left px-4 py-3 hover:bg-blue-50 transition"
+                >
+                  <div className="font-medium text-gray-900">{place.name}</div>
+                  <div className="text-sm text-gray-500">{place.address}</div>
+                  {place.rating && (
+                    <div className="text-sm text-gray-600 mt-1">
+                      ★ {place.rating} ({place.reviewCount} reviews)
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Current Google data */}
+          {form.googlePlaceId && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm font-medium text-blue-900">Gekoppeld aan Google Places</p>
+                  <p className="text-sm text-blue-700 mt-1">{form.googleName}</p>
+                  <p className="text-xs text-blue-600">{form.googleAddress}</p>
+                  {form.googleRating && (
+                    <p className="text-sm text-blue-700 mt-1">
+                      ★ {form.googleRating} ({form.googleReviewCount} reviews)
+                    </p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setForm(prev => ({
+                      ...prev,
+                      googlePlaceId: '',
+                      googleName: '',
+                      googleAddress: '',
+                      googleRating: '',
+                      googleReviewCount: '',
+                      googleReviewsUrl: '',
+                    }))
+                  }}
+                  className="text-sm text-red-600 hover:text-red-800"
+                >
+                  Ontkoppelen
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Manual fields (hidden by default, toggle) */}
+          <details className="text-sm">
+            <summary className="text-gray-500 cursor-pointer hover:text-gray-700">
+              Handmatig bewerken
+            </summary>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Place ID</label>
+                <input type="text" name="googlePlaceId" value={form.googlePlaceId} onChange={handleChange}
+                  className="w-full px-3 py-1.5 border rounded text-sm" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Google Naam</label>
+                <input type="text" name="googleName" value={form.googleName} onChange={handleChange}
+                  className="w-full px-3 py-1.5 border rounded text-sm" />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-xs font-medium text-gray-500 mb-1">Google Adres</label>
+                <input type="text" name="googleAddress" value={form.googleAddress} onChange={handleChange}
+                  className="w-full px-3 py-1.5 border rounded text-sm" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Rating</label>
+                <input type="number" step="0.1" name="googleRating" value={form.googleRating} onChange={handleChange}
+                  className="w-full px-3 py-1.5 border rounded text-sm" />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Aantal reviews</label>
+                <input type="number" name="googleReviewCount" value={form.googleReviewCount} onChange={handleChange}
+                  className="w-full px-3 py-1.5 border rounded text-sm" />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-xs font-medium text-gray-500 mb-1">Reviews URL</label>
+                <input type="url" name="googleReviewsUrl" value={form.googleReviewsUrl} onChange={handleChange}
+                  className="w-full px-3 py-1.5 border rounded text-sm" placeholder="https://search.google.com/local/reviews?placeid=..." />
+              </div>
+            </div>
+          </details>
         </section>
 
         {/* ── Acties ── */}

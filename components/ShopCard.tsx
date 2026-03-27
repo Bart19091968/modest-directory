@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getVisibleReviewData } from '@/lib/reviews'
 
 type Review = {
   score: number
@@ -16,12 +17,26 @@ type Shop = {
   isFeatured?: boolean
   logoUrl?: string | null
   reviews: Review[]
+  // Google Places
+  googlePlaceId?: string | null
+  googleRating?: number | null
+  googleReviewCount?: number | null
 }
 
 export default function ShopCard({ shop }: { shop: Shop }) {
-  const averageScore = shop.reviews.length > 0
+  // Calculate ModestDirectory average from reviews
+  const mdAverage = shop.reviews.length > 0
     ? shop.reviews.reduce((acc, r) => acc + r.score, 0) / shop.reviews.length
-    : null
+    : 0
+
+  // Use fallback logic: Google data if available, otherwise ModestDirectory
+  const reviewData = getVisibleReviewData({
+    googlePlaceId: shop.googlePlaceId,
+    googleRating: shop.googleRating,
+    googleReviewCount: shop.googleReviewCount,
+    modestDirectoryAverageRating: mdAverage,
+    modestDirectoryReviewCount: shop.reviews.length,
+  })
 
   const firstLetter = shop.name.charAt(0).toUpperCase()
 
@@ -75,18 +90,21 @@ export default function ShopCard({ shop }: { shop: Shop }) {
         )}
       </div>
       
-      {averageScore !== null ? (
+      {reviewData.reviewCount > 0 ? (
         <div className="flex items-center gap-2">
           <div className="flex">
             {[1, 2, 3, 4, 5].map(star => (
-              <span key={star} className={star <= Math.round(averageScore) ? 'text-yellow-400' : 'text-gray-300'}>
+              <span key={star} className={star <= Math.round(reviewData.averageRating) ? 'text-yellow-400' : 'text-gray-300'}>
                 ★
               </span>
             ))}
           </div>
           <span className="text-sm text-gray-600">
-            {averageScore.toFixed(1)} ({shop.reviews.length} reviews)
+            {reviewData.averageRating.toFixed(1)} ({reviewData.reviewCount} review{reviewData.reviewCount !== 1 ? 's' : ''})
           </span>
+          {reviewData.source === 'google' && (
+            <span className="text-xs text-gray-400">Google</span>
+          )}
         </div>
       ) : (
         <span className="text-sm text-gray-400">Nog geen reviews</span>

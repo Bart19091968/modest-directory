@@ -30,6 +30,14 @@ model Shop {
   isWebshop        Boolean    @default(true)
   isFeatured       Boolean    @default(false)
   status           ShopStatus @default(PENDING)
+  // Google Places
+  googlePlaceId       String?
+  googleName          String?
+  googleAddress       String?
+  googleRating        Float?
+  googleReviewCount   Int?
+  googleReviewsUrl    String?
+  googleLastSyncedAt  DateTime?
   // Factuurgegevens
   invoiceRequested    Boolean  @default(false)
   invoiceCompanyName  String?

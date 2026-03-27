@@ -82,6 +82,14 @@ export async function PUT(
       isFeatured,
       status,
       categoryIds,
+      // Google Places
+      googlePlaceId,
+      googleName,
+      googleAddress,
+      googleRating,
+      googleReviewCount,
+      googleReviewsUrl,
+      googleLastSyncedAt,
     } = body
 
     // Validate required fields
@@ -134,6 +142,14 @@ export async function PUT(
         isWebshop: !!isWebshop,
         isFeatured: !!isFeatured,
         status: status || existing.status,
+        // Google Places
+        googlePlaceId: googlePlaceId || null,
+        googleName: googleName || null,
+        googleAddress: googleAddress || null,
+        googleRating: googleRating != null ? parseFloat(googleRating) : null,
+        googleReviewCount: googleReviewCount != null ? parseInt(googleReviewCount) : null,
+        googleReviewsUrl: googleReviewsUrl || null,
+        googleLastSyncedAt: googleLastSyncedAt ? new Date(googleLastSyncedAt) : null,
       },
     })
 
