@@ -126,6 +126,12 @@ export default function AdminShopList({ shops }: { shops: Shop[] }) {
               </td>
               <td className="px-4 py-4">
                 <div className="flex gap-2 text-sm">
+                  <a
+                    href={`/admin/shops/${shop.id}/edit`}
+                    className="text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    Bewerken
+                  </a>
                   {shop.status === 'PENDING' && (
                     <>
                       <button

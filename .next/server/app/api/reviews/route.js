@@ -1,0 +1,21 @@
+"use strict";(()=>{var e={};e.id=7186,e.ids=[7186],e.modules={3524:e=>{e.exports=require("@prisma/client")},399:e=>{e.exports=require("next/dist/compiled/next-server/app-page.runtime.prod.js")},517:e=>{e.exports=require("next/dist/compiled/next-server/app-route.runtime.prod.js")},1212:e=>{e.exports=require("async_hooks")},4770:e=>{e.exports=require("crypto")},6162:e=>{e.exports=require("stream")},1764:e=>{e.exports=require("util")},4492:e=>{e.exports=require("node:stream")},1034:(e,r,t)=>{t.r(r),t.d(r,{originalPathname:()=>h,patchFetch:()=>x,requestAsyncStorage:()=>g,routeModule:()=>v,serverHooks:()=>w,staticGenerationAsyncStorage:()=>m});var n={};t.r(n),t.d(n,{POST:()=>c});var o=t(9303),s=t(8716),i=t(3131),a=t(7070),p=t(9487),u=t(6119),d=t(4770),l=t.n(d);async function c(e){try{let{shopId:r,reviewerName:t,reviewerEmail:n,score:o,reviewText:s}=await e.json();if(!r||!t||!n||!o||!s)return a.NextResponse.json({error:"Alle velden zijn verplicht"},{status:400});if(o<1||o>5)return a.NextResponse.json({error:"Score moet tussen 1 en 5 zijn"},{status:400});let i=await p.Z.shop.findUnique({where:{id:r}});if(!i)return a.NextResponse.json({error:"Winkel niet gevonden"},{status:404});let d=l().randomBytes(32).toString("hex"),c=new Date(Date.now()+864e5),v=await p.Z.review.create({data:{shopId:r,reviewerName:t,reviewerEmail:n,score:o,reviewText:s,verificationToken:d,tokenExpiresAt:c}});return await (0,u.z)(n,i.name,d),a.NextResponse.json({success:!0,reviewId:v.id})}catch(e){return console.error("Review error:",e),a.NextResponse.json({error:"Er ging iets mis"},{status:500})}}let v=new o.AppRouteRouteModule({definition:{kind:s.x.APP_ROUTE,page:"/api/reviews/route",pathname:"/api/reviews",filename:"route",bundlePath:"app/api/reviews/route"},resolvedPagePath:"C:\\Users\\bartd\\Documents\\Bart\\Software projecten\\modest-directory\\app\\api\\reviews\\route.ts",nextConfigOutput:"",userland:n}),{requestAsyncStorage:g,staticGenerationAsyncStorage:m,serverHooks:w}=v,h="/api/reviews/route";function x(){return(0,i.patchFetch)({serverHooks:w,staticGenerationAsyncStorage:m})}},9487:(e,r,t)=>{t.d(r,{Z:()=>o});var n=t(3524);let o=globalThis.prisma??new n.PrismaClient},6119:(e,r,t)=>{t.d(r,{u:()=>a,z:()=>i});var n=t(6495);let o=null;function s(){return o||(o=new n.R(process.env.RESEND_API_KEY||"")),o}async function i(e,r,t){let n=`${process.env.NEXT_PUBLIC_SITE_URL}/verify/${t}`;try{return await s().emails.send({from:process.env.FROM_EMAIL||"noreply@modestdirectory.be",to:e,subject:`Bevestig je review voor ${r}`,html:`
+        <h2>Bedankt voor je review!</h2>
+        <p>Je hebt een review achtergelaten voor <strong>${r}</strong>.</p>
+        <p>Klik op de onderstaande link om je review te bevestigen:</p>
+        <p><a href="${n}" style="background-color: #5d7a5d; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">Bevestig Review</a></p>
+        <p>Of kopieer deze link: ${n}</p>
+        <p>Deze link is 24 uur geldig.</p>
+        <br>
+        <p>Met vriendelijke groet,<br>ModestDirectory</p>
+      `}),!0}catch(e){return console.error("Email error:",e),!1}}async function a(e,r,t,n){let o=process.env.ADMIN_EMAIL||"admin@modestdirectory.be";try{return await s().emails.send({from:process.env.FROM_EMAIL||"noreply@modestdirectory.be",to:o,subject:`Nieuwe winkel aangemeld: ${e}${n?" (factuur gewenst)":""}`,html:`
+        <h2>Nieuwe winkel aanmelding</h2>
+        <p><strong>Naam:</strong> ${e}</p>
+        <p><strong>Email:</strong> ${r}</p>
+        <p><strong>Stad:</strong> ${t||"Niet opgegeven"}</p>
+        <p><strong>Factuur gewenst:</strong> ${n?"Ja":"Nee"}</p>
+        <hr>
+        <p><strong>Betalingsgegevens voor klant:</strong></p>
+        <p>€100 naar BE07 9734 4192 5566</p>
+        <hr>
+        <p><a href="${process.env.NEXT_PUBLIC_SITE_URL}/admin/shops">Bekijk in admin panel</a></p>
+      `}),!0}catch(e){return console.error("Email error:",e),!1}}}};var r=require("../../../webpack-runtime.js");r.C(e);var t=e=>r(r.s=e),n=r.X(0,[8948,5972,5234],()=>t(1034));module.exports=n})();
