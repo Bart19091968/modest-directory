@@ -58,11 +58,8 @@ export async function GET(request: Request) {
       address: place.formattedAddress || '',
       rating: place.rating || null,
       reviewCount: place.userRatingCount || null,
-      reviewsUrl: place.id
-        ? `https://search.google.com/local/reviews?placeid=${place.id}&hl=nl`
-        : null,
-    }))
-
+      reviewsUrl: place.googleMapsUri || null,    
+}))
     return NextResponse.json({ results })
   } catch (error) {
     console.error('Google Places search error:', error)
