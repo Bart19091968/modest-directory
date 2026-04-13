@@ -162,8 +162,8 @@ export default function RootLayout({
                 <h4 className="font-semibold mb-4">Contact</h4>
                 <ul className="space-y-2 text-gray-400">
                   <li>
-                    <a href="mailto:info@modestdirectory.be" className="hover:text-white transition-colors">
-                      info@modestdirectory.be
+                    <a href="mailto:info@modestdirectory.com" className="hover:text-white transition-colors">
+                      info@modestdirectory.com
                     </a>
                   </li>
                 </ul>

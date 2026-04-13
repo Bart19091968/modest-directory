@@ -51,10 +51,10 @@ export default async function FAQPage() {
           Neem contact met ons op via email
         </p>
         <a 
-          href="mailto:info@modestdirectory.be" 
+          href="mailto:info@modestdirectory.com"
           className="text-accent hover:underline font-medium"
         >
-          info@modestdirectory.be
+          info@modestdirectory.com
         </a>
       </div>
 
