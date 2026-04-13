@@ -205,9 +205,13 @@ export default async function ShopDetailPage({
               Bezoek website
             </a>
           )}
-          {shop.googleReviewsUrl && (
+          {(shop.googlePlaceId || shop.googleReviewsUrl) && (
             <a
-              href={shop.googleReviewsUrl}
+              href={
+                shop.googlePlaceId
+                  ? `https://search.google.com/local/reviews?placeid=${shop.googlePlaceId}`
+                  : shop.googleReviewsUrl!
+              }
               target="_blank"
               rel="noopener noreferrer nofollow"
               className="px-6 py-3 bg-white border-2 border-gray-200 rounded-full hover:bg-gray-50 transition flex items-center gap-2"
