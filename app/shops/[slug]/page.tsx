@@ -195,9 +195,9 @@ export default async function ShopDetailPage({
               href={shop.websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 bg-white border-2 border-gray-200 rounded-full hover:bg-gray-50 transition flex items-center gap-2"
+              className="px-6 py-3 bg-white border-2 border-accent rounded-full hover:bg-gray-50 transition flex items-center gap-2"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-5 h-5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/>
                 <line x1="2" y1="12" x2="22" y2="12"/>
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
@@ -212,7 +212,7 @@ export default async function ShopDetailPage({
               rel="noopener noreferrer nofollow"
               className="px-6 py-3 bg-white border-2 border-gray-200 rounded-full hover:bg-gray-50 transition flex items-center gap-2"
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+              <svg className="w-5 h-5 pointer-events-none" viewBox="0 0 24 24" fill="none">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
@@ -229,18 +229,18 @@ export default async function ShopDetailPage({
               📞 {shop.phone}
             </a>
           )}
-          {(shop.googlePlaceId || shop.address) && (
+          {shop.isPhysicalStore && (shop.googlePlaceId || shop.address) && (
             <a
               href={
                 shop.googlePlaceId
-                  ? `https://www.google.com/maps/place/?q=place_id:${shop.googlePlaceId}`
-                  : `https://maps.google.com/?q=${encodeURIComponent(shop.address!)}`
+                  ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.name)}&query_place_id=${shop.googlePlaceId}`
+                  : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shop.address!)}`
               }
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-3 bg-white border-2 border-gray-200 rounded-full hover:bg-gray-50 transition flex items-center gap-2"
             >
-              <svg className="w-5 h-5" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-5 h-5 pointer-events-none" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <radialGradient id="goldRing" cx="40%" cy="35%" r="65%">
                     <stop offset="0%" stopColor="#FFE066"/>
@@ -250,13 +250,9 @@ export default async function ShopDetailPage({
                 </defs>
                 <circle cx="16" cy="16" r="15.5" fill="url(#goldRing)" stroke="#7A4F00" strokeWidth="0.5"/>
                 <circle cx="16" cy="16" r="11.5" fill="#1a1a2e" stroke="#3a3a5c" strokeWidth="0.5"/>
-                {/* N needle red */}
                 <polygon points="16,5 14.5,16 16,14.5 17.5,16" fill="#DC2626"/>
-                {/* S needle blue */}
                 <polygon points="16,27 14.5,16 16,17.5 17.5,16" fill="#60A5FA"/>
-                {/* Center */}
                 <circle cx="16" cy="16" r="1.2" fill="white"/>
-                {/* Cardinal letters */}
                 <text x="16" y="9.5" textAnchor="middle" fontSize="3.8" fill="white" fontWeight="bold" fontFamily="Arial, sans-serif">N</text>
                 <text x="16" y="25.5" textAnchor="middle" fontSize="3.8" fill="white" fontWeight="bold" fontFamily="Arial, sans-serif">S</text>
                 <text x="6.5" y="17" textAnchor="middle" fontSize="3.8" fill="white" fontWeight="bold" fontFamily="Arial, sans-serif">W</text>
