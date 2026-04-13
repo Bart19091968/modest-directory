@@ -163,17 +163,21 @@ export default async function ShopDetailPage({
 
             {/* Rating - with fallback logic */}
             {reviewData.reviewCount > 0 && (
-              <div className="flex items-center gap-3 mt-3">
-                <StarRating rating={Math.round(reviewData.averageRating)} readonly />
-                <span className="text-lg font-medium text-gray-900">
-                  {reviewData.averageRating.toFixed(1)}
-                </span>
-                <span className="text-gray-500">
-                  ({reviewData.reviewCount} review{reviewData.reviewCount !== 1 ? 's' : ''})
-                </span>
-                {reviewData.source === 'google' && (
-                  <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded">Google</span>
-                )}
+              <div className="flex items-center gap-3 mt-3 flex-wrap">
+                <div className="flex items-center gap-3">
+                  <StarRating rating={Math.round(reviewData.averageRating)} readonly />
+                  <span className="text-lg font-medium text-gray-900">
+                    {reviewData.averageRating.toFixed(1)}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <span className="text-gray-500">
+                    ({reviewData.reviewCount} review{reviewData.reviewCount !== 1 ? 's' : ''})
+                  </span>
+                  {reviewData.source === 'google' && (
+                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded">Google</span>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -271,7 +275,11 @@ export default async function ShopDetailPage({
         {shop.address && (
           <p className="text-sm text-gray-500 mb-6 flex items-center gap-1">
             <span>📍</span>
-            <span>{shop.address}</span>
+            <span>
+              {[shop.address, shop.city, shop.country === 'NL' ? 'Nederland' : 'België']
+                .filter(Boolean)
+                .join(', ')}
+            </span>
           </p>
         )}
 
