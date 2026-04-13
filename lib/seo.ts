@@ -32,7 +32,7 @@ export function generateDirectoryJsonLd() {
           height: 512,
         },
         description: 'Online directory voor islamitische kledingwinkels, hijab shops en abaya winkels in Nederland en België.',
-        email: 'info@modestdirectory.be',
+        email: 'info@modestdirectory.com',
       },
     ],
   }

@@ -82,8 +82,8 @@ export default function AanmeldenPage() {
         </p>
         <p className="mt-2">
           Vragen? Mail naar{' '}
-          <a href="mailto:info@modestdirectory.be" className="text-accent hover:underline">
-            info@modestdirectory.be
+          <a href="mailto:info@modestdirectory.com" className="text-accent hover:underline">
+            info@modestdirectory.com
           </a>
         </p>
       </div>
