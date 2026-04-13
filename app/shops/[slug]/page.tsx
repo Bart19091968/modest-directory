@@ -189,15 +189,20 @@ export default async function ShopDetailPage({
         )}
 
         {/* Actions */}
-        <div className="flex flex-wrap gap-4 mb-6">
+        <div className="flex flex-wrap gap-4 mb-4">
           {shop.websiteUrl && (
             <a
               href={shop.websiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary"
+              className="px-6 py-3 bg-white border-2 border-gray-200 rounded-full hover:bg-gray-50 transition flex items-center gap-2"
             >
-              🌐 Bezoek website
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              Bezoek website
             </a>
           )}
           {shop.googleReviewsUrl && (
@@ -219,22 +224,56 @@ export default async function ShopDetailPage({
           {shop.phone && (
             <a
               href={`tel:${shop.phone}`}
-              className="px-6 py-3 border rounded-full hover:bg-gray-50 transition"
+              className="px-6 py-3 bg-white border-2 border-gray-200 rounded-full hover:bg-gray-50 transition flex items-center gap-2"
             >
               📞 {shop.phone}
             </a>
           )}
-          {shop.address && (
+          {(shop.googlePlaceId || shop.address) && (
             <a
-              href={`https://maps.google.com/?q=${encodeURIComponent(shop.address)}`}
+              href={
+                shop.googlePlaceId
+                  ? `https://www.google.com/maps/place/?q=place_id:${shop.googlePlaceId}`
+                  : `https://maps.google.com/?q=${encodeURIComponent(shop.address!)}`
+              }
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 border rounded-full hover:bg-gray-50 transition"
+              className="px-6 py-3 bg-white border-2 border-gray-200 rounded-full hover:bg-gray-50 transition flex items-center gap-2"
             >
-              📍 Routebeschrijving
+              <svg className="w-5 h-5" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="goldRing" cx="40%" cy="35%" r="65%">
+                    <stop offset="0%" stopColor="#FFE066"/>
+                    <stop offset="50%" stopColor="#F5A623"/>
+                    <stop offset="100%" stopColor="#8B5E00"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="16" cy="16" r="15.5" fill="url(#goldRing)" stroke="#7A4F00" strokeWidth="0.5"/>
+                <circle cx="16" cy="16" r="11.5" fill="#1a1a2e" stroke="#3a3a5c" strokeWidth="0.5"/>
+                {/* N needle red */}
+                <polygon points="16,5 14.5,16 16,14.5 17.5,16" fill="#DC2626"/>
+                {/* S needle blue */}
+                <polygon points="16,27 14.5,16 16,17.5 17.5,16" fill="#60A5FA"/>
+                {/* Center */}
+                <circle cx="16" cy="16" r="1.2" fill="white"/>
+                {/* Cardinal letters */}
+                <text x="16" y="9.5" textAnchor="middle" fontSize="3.8" fill="white" fontWeight="bold" fontFamily="Arial, sans-serif">N</text>
+                <text x="16" y="25.5" textAnchor="middle" fontSize="3.8" fill="white" fontWeight="bold" fontFamily="Arial, sans-serif">S</text>
+                <text x="6.5" y="17" textAnchor="middle" fontSize="3.8" fill="white" fontWeight="bold" fontFamily="Arial, sans-serif">W</text>
+                <text x="25.5" y="17" textAnchor="middle" fontSize="3.8" fill="white" fontWeight="bold" fontFamily="Arial, sans-serif">E</text>
+              </svg>
+              Routebeschrijving
             </a>
           )}
         </div>
+
+        {/* Address below buttons */}
+        {shop.address && (
+          <p className="text-sm text-gray-500 mb-6 flex items-center gap-1">
+            <span>📍</span>
+            <span>{shop.address}</span>
+          </p>
+        )}
 
         {/* Categories */}
         {shop.categories.length > 0 && (
