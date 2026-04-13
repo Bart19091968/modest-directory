@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ReviewForm from '@/components/ReviewForm'
 import StarRating from '@/components/StarRating'
-import { generateLocalBusinessJsonLd } from '@/lib/seo'
+import { generateShopJsonLd, generateBreadcrumbListJsonLd } from '@/lib/seo'
 import { getVisibleReviewData } from '@/lib/reviews'
 
 export const dynamic = 'force-dynamic'
@@ -36,15 +36,23 @@ export async function generateMetadata({
   }
 
   const location = shop.city ? `${shop.city}, ${shop.country}` : shop.country
+  const description = shop.shortDescription
+    ? `${shop.shortDescription} | Lees reviews en ontdek meer over ${shop.name} in ${location}.`
+    : `${shop.name} - Islamitische kledingwinkel in ${location}. Bekijk reviews, openingstijden en contactgegevens op ModestDirectory.`
 
   return {
     title: `${shop.name} | Islamitische Kleding ${location}`,
-    description: shop.shortDescription || `${shop.name} - Islamitische kledingwinkel in ${location}`,
+    description,
+    alternates: {
+      canonical: `/shops/${shop.slug}`,
+    },
     openGraph: {
-      title: shop.name,
-      description: shop.shortDescription || '',
+      title: `${shop.name} - Islamitische Kleding ${location}`,
+      description: shop.shortDescription || `${shop.name} - Islamitische kledingwinkel in ${location}`,
       type: 'website',
-      ...(shop.logoUrl && { images: [shop.logoUrl] }),
+      images: shop.logoUrl
+        ? [{ url: shop.logoUrl, alt: `${shop.name} logo` }]
+        : [{ url: '/icon-512.png', width: 512, height: 512, alt: 'ModestDirectory' }],
     },
   }
 }
@@ -76,18 +84,29 @@ export default async function ShopDetailPage({
 
   const location = shop.city ? `${shop.city}, ${shop.country}` : shop.country
   const firstLetter = shop.name.charAt(0).toUpperCase()
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
 
-  const jsonLd = generateLocalBusinessJsonLd({
+  const jsonLd = generateShopJsonLd({
     ...shop,
     averageRating: reviewData.averageRating,
     reviewCount: reviewData.reviewCount,
   })
+
+  const breadcrumbJsonLd = generateBreadcrumbListJsonLd([
+    { name: 'Home', url: siteUrl },
+    { name: 'Winkels', url: `${siteUrl}/shops` },
+    { name: shop.name, url: `${siteUrl}/shops/${shop.slug}` },
+  ])
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Breadcrumb */}

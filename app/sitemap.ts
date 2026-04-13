@@ -67,7 +67,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // Category + Location SEO pages
-  const categories = ['hijab-shops', 'abaya-shops', 'modest-fashion', 'islamitische-kleding']
+  const categories = ['hijab-shops', 'abaya-shops', 'modest-fashion', 'islamitische-kleding', 'jilbab-shops']
   const countries = await prisma.country.findMany({ select: { slug: true } })
   const cities = await prisma.city.findMany({ select: { slug: true } })
 

@@ -1,10 +1,31 @@
 export const dynamic = 'force-dynamic'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import prisma from '@/lib/db'
 import ShopCard from '@/components/ShopCard'
 import Banner from '@/components/Banner'
 
 export const revalidate = 3600 // Revalidate every hour
+
+export const metadata: Metadata = {
+  title: 'ModestDirectory - Islamitische Kledingwinkels Nederland & België',
+  description: 'Vind de beste hijab shops, abaya winkels en modest fashion in Nederland en België. Lees reviews van echte klanten, vergelijk scores en ontdek islamitische kledingwinkels bij jou in de buurt.',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'ModestDirectory - Islamitische Kledingwinkels Nederland & België',
+    description: 'Vind de beste hijab shops, abaya winkels en modest fashion in Nederland en België. Lees reviews van echte klanten.',
+    images: [
+      {
+        url: '/icon-512.png',
+        width: 512,
+        height: 512,
+        alt: 'ModestDirectory - Islamitische Kledingwinkels Nederland & België',
+      },
+    ],
+  },
+}
 
 async function getFeaturedShops() {
   return prisma.shop.findMany({

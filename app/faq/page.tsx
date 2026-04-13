@@ -4,8 +4,11 @@ import FAQSection from '@/components/FAQSection'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Veelgestelde Vragen | ModestDirectory',
-  description: 'Antwoorden op veelgestelde vragen over islamitische kleding, hijabs en modest fashion winkels.',
+  title: 'Veelgestelde Vragen over Islamitische Kleding & Hijab Shops | ModestDirectory',
+  description: 'Antwoorden op veelgestelde vragen over islamitische kleding, hijabs, abayas en modest fashion winkels in Nederland en België. Alles wat je moet weten over het vinden van de juiste winkel.',
+  alternates: {
+    canonical: '/faq',
+  },
 }
 
 export const dynamic = 'force-dynamic'
