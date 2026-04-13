@@ -1,32 +1,53 @@
 export function generateDirectoryJsonLd() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.be'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'ModestDirectory',
-    description: 'Vind de beste hijab shops en modest fashion winkels in Nederland en België',
-    url: siteUrl,
-    image: `${siteUrl}/icon-512.png`,
-    publisher: {
-      '@type': 'Organization',
-      name: 'ModestDirectory',
-      url: siteUrl,
-      logo: {
-        '@type': 'ImageObject',
-        url: `${siteUrl}/icon-512.png`,
-        width: 512,
-        height: 512,
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${siteUrl}/#website`,
+        name: 'ModestDirectory',
+        description: 'De meest complete gids voor islamitische kledingwinkels, hijab shops en abaya winkels in Nederland en België',
+        url: siteUrl,
+        inLanguage: 'nl',
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: `${siteUrl}/shops?search={search_term_string}`,
+          },
+          'query-input': 'required name=search_term_string',
+        },
       },
-    },
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${siteUrl}/shops?search={search_term_string}`,
+      {
+        '@type': 'Organization',
+        '@id': `${siteUrl}/#organization`,
+        name: 'ModestDirectory',
+        url: siteUrl,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${siteUrl}/icon-512.png`,
+          width: 512,
+          height: 512,
+        },
+        description: 'Online directory voor islamitische kledingwinkels, hijab shops en abaya winkels in Nederland en België.',
+        email: 'info@modestdirectory.be',
       },
-      'query-input': 'required name=search_term_string',
-    },
+    ],
+  }
+}
+
+export function generateBreadcrumbListJsonLd(items: { name: string; url: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
   }
 }
 
@@ -40,7 +61,7 @@ export function generateLocalBusinessJsonLd(shop: {
   averageRating?: number
   reviewCount?: number
 }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.be'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
 
   return {
     '@context': 'https://schema.org',
@@ -80,7 +101,7 @@ export function generateShopJsonLd(shop: {
   averageRating?: number
   reviewCount?: number
 }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.be'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
 
   return {
     '@context': 'https://schema.org',
@@ -124,7 +145,7 @@ export function generateBlogPostJsonLd(post: {
   updatedAt?: Date
   createdAt?: Date
 }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.be'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
   const datePublished = post.publishedAt || post.createdAt || new Date()
   const dateModified = post.updatedAt || datePublished
 

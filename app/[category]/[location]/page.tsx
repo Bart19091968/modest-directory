@@ -107,12 +107,16 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     return { title: 'Niet gevonden' }
   }
 
-  const title = `${categoryName} in ${data.locationName} | Beste Winkels 2024`
+  const currentYear = new Date().getFullYear()
+  const title = `${categoryName} in ${data.locationName} | Beste Winkels ${currentYear}`
   const description = `Ontdek de ${data.shops.length} beste ${categoryName.toLowerCase()} in ${data.locationName}. ✓ Beoordelingen ✓ Openingstijden ✓ Webshops. Vind jouw perfecte hijab of abaya winkel.`
 
   return {
     title,
     description,
+    alternates: {
+      canonical: `/${params.category}/${params.location}`,
+    },
     openGraph: {
       title,
       description,

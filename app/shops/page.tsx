@@ -8,8 +8,11 @@ import { generateLocalBusinessJsonLd } from '@/lib/seo'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Alle Winkels | ModestDirectory',
-  description: 'Ontdek de beste islamitische kledingwinkels in Nederland en België. Hijabs, abayas, modest fashion en meer.',
+  title: 'Islamitische Kledingwinkels - Hijab & Abaya Shops | ModestDirectory',
+  description: 'Ontdek alle islamitische kledingwinkels in Nederland en België. Hijab shops, abaya winkels, modest fashion webshops en meer. Filter op locatie, lees reviews en vind de beste winkel.',
+  alternates: {
+    canonical: '/shops',
+  },
 }
 
 type SearchParams = {

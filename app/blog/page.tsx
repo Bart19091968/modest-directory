@@ -3,8 +3,11 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Blog | ModestDirectory',
-  description: 'Tips, trends en inspiratie over hijabs, modest fashion en islamitische kleding.',
+  title: 'Blog - Islamitische Mode, Hijab & Modest Fashion Tips | ModestDirectory',
+  description: 'Tips, trends en inspiratie over hijabs, abayas en modest fashion. Ontdek de nieuwste islamitische mode trends, stylingtips en inspiratie voor modest wear in Nederland en België.',
+  alternates: {
+    canonical: '/blog',
+  },
 }
 
 export const dynamic = 'force-dynamic'

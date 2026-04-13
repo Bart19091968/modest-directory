@@ -5,15 +5,24 @@ import { generateDirectoryJsonLd } from '@/lib/seo'
 import Header from '@/components/Header'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.be'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'),
   title: {
     default: 'ModestDirectory - Islamitische Kledingwinkels Nederland & België',
     template: '%s | ModestDirectory',
   },
-  description: 'Vind de beste hijab shops, abaya winkels en modest fashion in Nederland en België. Lees reviews, vergelijk scores en ontdek nieuwe winkels.',
-  keywords: ['hijab', 'modest fashion', 'islamitische kleding', 'abaya', 'hoofddoek', 'België', 'Nederland', 'webshop', 'kledingwinkel'],
+  description: 'Vind de beste hijab shops, abaya winkels en modest fashion in Nederland en België. Lees reviews van echte klanten, vergelijk scores en ontdek islamitische kledingwinkels bij jou in de buurt.',
+  keywords: [
+    'hijab', 'hijab shop', 'hijab kopen', 'hoofddoek', 'hoofddoek kopen',
+    'abaya', 'abaya kopen', 'abaya winkel', 'jilbab', 'niqab', 'khimar',
+    'modest fashion', 'modest kleding', 'islamitische kleding', 'islamitische mode',
+    'moslim kleding', 'moslim mode', 'halal fashion', 'gebedskleding',
+    'thobe', 'kaftan', 'djellaba', 'islamitisch', 'moslim',
+    'België', 'Nederland', 'webshop', 'kledingwinkel', 'directory',
+    'online kopen', 'islamitische webshop', 'modest wear', 'hijab accessoires',
+  ],
   authors: [{ name: 'ModestDirectory' }],
   creator: 'ModestDirectory',
+  publisher: 'ModestDirectory',
   manifest: '/manifest.json',
   icons: {
     icon: [
@@ -29,15 +38,25 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'nl_BE',
+    alternateLocale: ['nl_NL'],
     url: '/',
     siteName: 'ModestDirectory',
     title: 'ModestDirectory - Islamitische Kledingwinkels Nederland & België',
-    description: 'Vind de beste hijab shops, abaya winkels en modest fashion in Nederland en België.',
+    description: 'Vind de beste hijab shops, abaya winkels en modest fashion in Nederland en België. Lees echte klantreviews en vergelijk scores.',
+    images: [
+      {
+        url: '/icon-512.png',
+        width: 512,
+        height: 512,
+        alt: 'ModestDirectory - Islamitische Kledingwinkels Nederland & België',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ModestDirectory - Islamitische Kledingwinkels',
-    description: 'Vind de beste hijab shops en modest fashion in NL & BE.',
+    title: 'ModestDirectory - Islamitische Kledingwinkels Nederland & België',
+    description: 'Vind de beste hijab shops en modest fashion in NL & BE. Reviews, scores en meer.',
+    images: ['/icon-512.png'],
   },
   robots: {
     index: true,
@@ -106,15 +125,15 @@ export default function RootLayout({
         {/* Footer */}
         <footer className="bg-gray-900 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div className="col-span-1 md:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div>
                 <h3 className="text-xl font-bold mb-4">ModestDirectory</h3>
                 <p className="text-gray-400 mb-4">
-                  De meest complete gids voor islamitische kledingwinkels in Nederland en België. 
+                  De meest complete gids voor islamitische kledingwinkels in Nederland en België.
                   Vind hijab shops, abaya winkels en modest fashion bij jou in de buurt.
                 </p>
               </div>
-              
+
               <div>
                 <h4 className="font-semibold mb-4">Navigatie</h4>
                 <ul className="space-y-2 text-gray-400">
@@ -122,17 +141,35 @@ export default function RootLayout({
                   <li><Link href="/shops?country=BE" className="hover:text-white transition-colors">Winkels in België</Link></li>
                   <li><Link href="/shops?country=NL" className="hover:text-white transition-colors">Winkels in Nederland</Link></li>
                   <li><Link href="/aanmelden" className="hover:text-white transition-colors">Winkel aanmelden</Link></li>
+                  <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                  <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
                 </ul>
               </div>
-              
+
+              <div>
+                <h4 className="font-semibold mb-4">Categorieën</h4>
+                <ul className="space-y-2 text-gray-400">
+                  <li><Link href="/hijab-shops/nederland" className="hover:text-white transition-colors">Hijab Shops Nederland</Link></li>
+                  <li><Link href="/hijab-shops/belgie" className="hover:text-white transition-colors">Hijab Shops België</Link></li>
+                  <li><Link href="/abaya-shops/nederland" className="hover:text-white transition-colors">Abaya Winkels Nederland</Link></li>
+                  <li><Link href="/abaya-shops/belgie" className="hover:text-white transition-colors">Abaya Winkels België</Link></li>
+                  <li><Link href="/islamitische-kleding/nederland" className="hover:text-white transition-colors">Islamitische Kleding NL</Link></li>
+                  <li><Link href="/islamitische-kleding/belgie" className="hover:text-white transition-colors">Islamitische Kleding BE</Link></li>
+                </ul>
+              </div>
+
               <div>
                 <h4 className="font-semibold mb-4">Contact</h4>
                 <ul className="space-y-2 text-gray-400">
-                  <li>info@modestdirectory.be</li>
+                  <li>
+                    <a href="mailto:info@modestdirectory.be" className="hover:text-white transition-colors">
+                      info@modestdirectory.be
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
-            
+
             <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
               © {new Date().getFullYear()} ModestDirectory. Alle rechten voorbehouden.
             </div>
