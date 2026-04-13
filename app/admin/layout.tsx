@@ -42,6 +42,9 @@ export default async function AdminLayout({
                 <Link href="/admin/ads" className="text-gray-300 hover:text-white transition-colors">
                   Advertenties
                 </Link>
+                <Link href="/admin/settings" className="text-gray-300 hover:text-white transition-colors">
+                  Instellingen
+                </Link>
               </nav>
             </div>
             <div className="flex items-center gap-4">
@@ -69,6 +72,7 @@ export default async function AdminLayout({
         <Link href="/admin/blog" className="text-gray-300 hover:text-white whitespace-nowrap">Blog</Link>
         <Link href="/admin/sponsors" className="text-gray-300 hover:text-white whitespace-nowrap">Sponsors</Link>
         <Link href="/admin/ads" className="text-gray-300 hover:text-white whitespace-nowrap">Advertenties</Link>
+        <Link href="/admin/settings" className="text-gray-300 hover:text-white whitespace-nowrap">Instellingen</Link>
       </nav>
 
       {/* Content */}
