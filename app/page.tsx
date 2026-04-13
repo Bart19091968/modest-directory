@@ -4,6 +4,7 @@ import Link from 'next/link'
 import prisma from '@/lib/db'
 import ShopCard from '@/components/ShopCard'
 import Banner from '@/components/Banner'
+import SearchFilter from '@/components/SearchFilter'
 
 export const revalidate = 3600 // Revalidate every hour
 
@@ -56,19 +57,20 @@ async function getSponsors() {
   })
 }
 
-async function getStats() {
-  const [shopCount, reviewCount] = await Promise.all([
-    prisma.shop.count({ where: { status: 'APPROVED' } }),
-    prisma.review.count({ where: { isVerified: true } }),
-  ])
-  return { shopCount, reviewCount }
+async function getHeroImageUrl(): Promise<string | null> {
+  try {
+    const setting = await prisma.siteSetting.findUnique({ where: { key: 'heroImageUrl' } })
+    return setting?.value || null
+  } catch {
+    return null
+  }
 }
 
 export default async function HomePage() {
-  const [shops, sponsors, stats] = await Promise.all([
+  const [shops, sponsors, heroImageUrl] = await Promise.all([
     getFeaturedShops(),
     getSponsors(),
-    getStats(),
+    getHeroImageUrl(),
   ])
 
   const headerSponsors = sponsors.filter(s => s.position === 'HEADER')
@@ -77,8 +79,16 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-50 to-primary-100 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section
+        className={`relative py-20 ${!heroImageUrl ? 'bg-gradient-to-br from-primary-50 to-primary-100' : ''}`}
+        style={heroImageUrl ? {
+          backgroundImage: `url(${heroImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        } : undefined}
+      >
+        {heroImageUrl && <div className="absolute inset-0 bg-black/50" />}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {headerSponsors.length > 0 && (
             <div className="mb-8">
               {headerSponsors.map(sponsor => (
@@ -86,40 +96,26 @@ export default async function HomePage() {
               ))}
             </div>
           )}
-          
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+
+          <h1 className={`text-4xl md:text-5xl font-bold mb-6 ${heroImageUrl ? 'text-white' : 'text-gray-900'}`}>
             Islamitische Kledingwinkels
-            <span className="block text-accent">in Nederland & België</span>
+            <span className={`block ${heroImageUrl ? 'text-white/90' : 'text-accent'}`}>in Nederland & België</span>
           </h1>
-          
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Ontdek de beste hijab shops, abaya winkels en modest fashion. 
+
+          <p className={`text-xl mb-8 max-w-2xl mx-auto ${heroImageUrl ? 'text-white/90' : 'text-gray-600'}`}>
+            Ontdek de beste hijab shops, abaya winkels en modest fashion.
             Lees reviews van echte klanten en vind jouw perfecte winkel.
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+          {/* Search */}
+          <div className="mb-8 max-w-2xl mx-auto">
+            <SearchFilter />
+          </div>
+
+          <div className="flex justify-center">
             <Link href="/shops" className="btn-primary text-lg">
               Bekijk alle winkels
             </Link>
-            <Link href="/aanmelden" className="btn-secondary text-lg">
-              Winkel aanmelden
-            </Link>
-          </div>
-          
-          {/* Stats */}
-          <div className="mt-12 flex justify-center gap-12">
-            <div>
-              <div className="text-3xl font-bold text-accent">{stats.shopCount}</div>
-              <div className="text-gray-600">Winkels</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-accent">{stats.reviewCount}</div>
-              <div className="text-gray-600">Reviews</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-accent">2</div>
-              <div className="text-gray-600">Landen</div>
-            </div>
           </div>
         </div>
       </section>
