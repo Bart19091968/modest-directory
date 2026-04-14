@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { getVisibleReviewData } from '@/lib/reviews'
 
@@ -151,17 +153,21 @@ export default function ShopCard({ shop }: { shop: Shop }) {
         <span className="text-sm text-gray-400 block mb-3">Nog geen reviews</span>
       )}
 
-      {/* Social media icons for GOLD */}
+      {/* Social media icons for GOLD — direct links, stop propagation to prevent card navigation */}
       {socialLinks.length > 0 && (
         <div className="flex items-center gap-2 pt-2 border-t">
           {socialLinks.map(({ url, label, icon }) => (
-            <span
+            <a
               key={label}
+              href={url!}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
               title={label}
               className="text-gray-400 hover:text-accent transition"
+              onClick={e => e.stopPropagation()}
             >
               {icon}
-            </span>
+            </a>
           ))}
         </div>
       )}
