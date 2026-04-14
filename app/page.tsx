@@ -228,11 +228,16 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-2xl font-bold text-white mb-4">Heb je een winkel?</h2>
           <p className="text-primary-100 mb-8 max-w-xl mx-auto">
-            Meld je winkel gratis aan en bereik duizenden potentiële klanten die op zoek zijn naar islamitische kleding.
+            Vind je je winkel niet terug? Meld hem dan gratis aan of kies voor één van onze betalende opties.
           </p>
-          <Link href="/aanmelden" className="inline-block bg-white text-accent px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-            Gratis aanmelden
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/gratis-aanmelden" className="inline-block bg-white text-accent px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+              Gratis aanmelden
+            </Link>
+            <Link href="/aanmelden" className="inline-block bg-transparent text-white border-2 border-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors">
+              Kies een pakket
+            </Link>
+          </div>
         </div>
       </section>
     </>
