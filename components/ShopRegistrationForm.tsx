@@ -26,7 +26,7 @@ const DAYS = [
 ]
 
 const TIER_PRICES: Record<string, number> = { BRONZE: 100, SILVER: 150, GOLD: 200 }
-const TIER_LABELS: Record<string, string> = { BRONZE: 'BRONS', SILVER: 'ZILVER', GOLD: 'GOUD' }
+const TIER_LABELS: Record<string, string> = { BRONZE: 'Brons', SILVER: 'Zilver', GOLD: 'Goud' }
 const MAX_PHOTOS: Record<string, number> = { BRONZE: 0, SILVER: 3, GOLD: 5 }
 const MAX_LOGO_SIZE = 500 * 1024
 const MAX_PHOTO_SIZE = 1024 * 1024
