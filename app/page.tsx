@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 }
 
 async function getFeaturedShops() {
-  return prisma.shop.findMany({
+  const shops = await prisma.shop.findMany({
     where: {
       status: 'APPROVED',
       OR: [
@@ -66,10 +66,9 @@ async function getFeaturedShops() {
     take: 12,
   })
   const TIER_ORDER: Record<string, number> = { GOLD: 0, SILVER: 1, BRONZE: 2 }
-  const sorted = [...shops].sort((a, b) =>
+  return [...shops].sort((a, b) =>
     (TIER_ORDER[a.subscriptionTier ?? ''] ?? 3) - (TIER_ORDER[b.subscriptionTier ?? ''] ?? 3)
-  )
-  return sorted.slice(0, 6)
+  ).slice(0, 6)
 }
 
 async function getSponsors() {
