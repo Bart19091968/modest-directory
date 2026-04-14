@@ -100,7 +100,7 @@ export default function ShopCard({ shop }: { shop: Shop }) {
             <h3 className="font-semibold text-lg text-gray-900 truncate">{shop.name}</h3>
             <div className="flex items-center gap-1 flex-shrink-0">
               {isGold && (
-                <img src="/trusted-partner-badge.svg" alt="Trusted Partner" title="Trusted Partner" className="h-12 w-auto flex-shrink-0" />
+                <img src="/trusted-partner-badge.svg" alt="Trusted Partner" title="Trusted Partner" className="h-14 w-auto flex-shrink-0" />
               )}
               {shop.isFeatured && !isGold && (
                 <span className="text-yellow-500">⭐</span>
@@ -131,7 +131,7 @@ export default function ShopCard({ shop }: { shop: Shop }) {
         )}
       </div>
 
-      {reviewData.reviewCount > 0 ? (
+      {shop.subscriptionTier && reviewData.reviewCount > 0 && (
         <div className="flex items-center gap-2 mb-3">
           <div className="flex">
             {[1, 2, 3, 4, 5].map(star => (
@@ -147,8 +147,6 @@ export default function ShopCard({ shop }: { shop: Shop }) {
             <span className="text-xs text-gray-400">Google</span>
           )}
         </div>
-      ) : (
-        <span className="text-sm text-gray-400 block mb-3">Nog geen reviews</span>
       )}
 
       {/* Social media icons for GOLD — direct links, stop propagation to prevent card navigation */}

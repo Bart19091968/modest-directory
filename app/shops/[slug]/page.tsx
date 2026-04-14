@@ -158,7 +158,7 @@ export default async function ShopDetailPage({
 
               <div className="flex items-center gap-2">
                 {shop.subscriptionTier === 'GOLD' && (
-                  <img src="/trusted-partner-badge.svg" alt="Trusted Partner" title="Trusted Partner" className="h-16 w-auto" />
+                  <img src="/trusted-partner-badge.svg" alt="Trusted Partner" title="Trusted Partner" className="h-20 w-auto" />
                 )}
                 {shop.isFeatured && shop.subscriptionTier !== 'GOLD' && (
                   <span className="text-2xl" title="Uitgelichte winkel">⭐</span>
@@ -166,8 +166,8 @@ export default async function ShopDetailPage({
               </div>
             </div>
 
-            {/* Rating - with fallback logic */}
-            {reviewData.reviewCount > 0 && (
+            {/* Rating - only for subscribed shops */}
+            {shop.subscriptionTier && reviewData.reviewCount > 0 && (
               <div className="flex items-center gap-3 mt-3 flex-wrap">
                 <div className="flex items-center gap-3">
                   <StarRating rating={Math.round(reviewData.averageRating)} readonly />
@@ -214,7 +214,7 @@ export default async function ShopDetailPage({
               Bezoek website
             </a>
           )}
-          {(shop.googlePlaceId || shop.googleReviewsUrl) && (
+          {shop.subscriptionTier && (shop.googlePlaceId || shop.googleReviewsUrl) && (
             <a
               href={
                 shop.googlePlaceId
@@ -242,7 +242,7 @@ export default async function ShopDetailPage({
               📞 {shop.phone}
             </a>
           )}
-          {shop.isPhysicalStore && (shop.googlePlaceId || shop.address) && (
+          {shop.subscriptionTier && shop.isPhysicalStore && (shop.googlePlaceId || shop.address) && (
             <a
               href={
                 shop.googlePlaceId
@@ -418,8 +418,8 @@ export default async function ShopDetailPage({
         </div>
       )}
 
-      {/* Reviews */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* Reviews — only for subscribed shops */}
+      {shop.subscriptionTier && <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Review List */}
         <div>
           <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -462,7 +462,7 @@ export default async function ShopDetailPage({
         <div className="bg-gray-50 rounded-xl p-6">
           <ReviewForm shopId={shop.id} shopName={shop.name} />
         </div>
-      </div>
+      </div>}
     </div>
   )
 }
