@@ -102,12 +102,17 @@ export async function POST(request: Request) {
       },
     })
 
-    // Link categories
+    // Link categories — default to "Islamitische Kleding" when none selected
     if (Array.isArray(categoryIds) && categoryIds.length > 0) {
       await prisma.shopCategory.createMany({
         data: categoryIds.map((categoryId: string) => ({ shopId: shop.id, categoryId })),
         skipDuplicates: true,
       })
+    } else {
+      const defaultCat = await prisma.category.findUnique({ where: { slug: 'islamitische-kleding' } })
+      if (defaultCat) {
+        await prisma.shopCategory.create({ data: { shopId: shop.id, categoryId: defaultCat.id } })
+      }
     }
 
     await sendNewShopNotification(name, email, city, invoiceRequested)

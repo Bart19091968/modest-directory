@@ -81,7 +81,7 @@ export default function ShopCard({ shop }: { shop: Shop }) {
       <div className="flex gap-4 mb-3">
         {/* Logo or first letter */}
         <div className="flex-shrink-0">
-          {shop.logoUrl ? (
+          {(shop.subscriptionTier && shop.logoUrl) ? (
             <img
               src={shop.logoUrl}
               alt={`${shop.name} logo`}
@@ -100,7 +100,7 @@ export default function ShopCard({ shop }: { shop: Shop }) {
             <h3 className="font-semibold text-lg text-gray-900 truncate">{shop.name}</h3>
             <div className="flex items-center gap-1 flex-shrink-0">
               {isGold && (
-                <img src="/trusted-partner-badge.svg" alt="Trusted Partner" title="Trusted Partner" className="h-9 w-auto flex-shrink-0" />
+                <img src="/trusted-partner-badge.svg" alt="Trusted Partner" title="Trusted Partner" className="h-12 w-auto flex-shrink-0" />
               )}
               {shop.isFeatured && !isGold && (
                 <span className="text-yellow-500">⭐</span>

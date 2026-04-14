@@ -123,9 +123,9 @@ export default async function ShopDetailPage({
         <div className="flex flex-wrap gap-6 mb-6">
           {/* Logo or first letter */}
           <div className="flex-shrink-0">
-            {shop.logoUrl ? (
-              <img 
-                src={shop.logoUrl} 
+            {(shop.subscriptionTier && shop.logoUrl) ? (
+              <img
+                src={shop.logoUrl}
                 alt={`${shop.name} logo`}
                 className="w-24 h-24 rounded-xl object-cover border"
               />
@@ -158,7 +158,7 @@ export default async function ShopDetailPage({
 
               <div className="flex items-center gap-2">
                 {shop.subscriptionTier === 'GOLD' && (
-                  <img src="/trusted-partner-badge.svg" alt="Trusted Partner" title="Trusted Partner" className="h-12 w-auto" />
+                  <img src="/trusted-partner-badge.svg" alt="Trusted Partner" title="Trusted Partner" className="h-16 w-auto" />
                 )}
                 {shop.isFeatured && shop.subscriptionTier !== 'GOLD' && (
                   <span className="text-2xl" title="Uitgelichte winkel">⭐</span>
