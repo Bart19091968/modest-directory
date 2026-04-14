@@ -117,7 +117,7 @@ export default function AdminShopList({ shops }: { shops: Shop[] }) {
               </td>
               <td className="px-4 py-4">
                 {(() => {
-                  const tier = (shop.subscriptionTier && TIER_LABELS[shop.subscriptionTier]) ?? TIER_LABELS.NONE
+                  const tier = TIER_LABELS[shop.subscriptionTier ?? ''] ?? TIER_LABELS.NONE
                   return (
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${tier.className}`}>
                       {tier.label}
