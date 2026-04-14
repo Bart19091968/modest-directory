@@ -107,6 +107,12 @@ async function getShops(params: SearchParams) {
       googlePlaceId: true,
       googleRating: true,
       googleReviewCount: true,
+      subscriptionTier: true,
+      facebookUrl: true,
+      instagramUrl: true,
+      pinterestUrl: true,
+      youtubeUrl: true,
+      tiktokUrl: true,
       reviews: { where: { isVerified: true }, select: { score: true } },
     },
   })

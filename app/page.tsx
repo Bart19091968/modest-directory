@@ -30,14 +30,37 @@ export const metadata: Metadata = {
 
 async function getFeaturedShops() {
   return prisma.shop.findMany({
-    where: { status: 'APPROVED' },
-    include: {
-      reviews: {
-        where: { isVerified: true },
-        select: { score: true },
-      },
+    where: {
+      status: 'APPROVED',
+      OR: [
+        { isFeatured: true },
+        { subscriptionTier: { in: ['SILVER', 'GOLD'] } },
+      ],
+    },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      shortDescription: true,
+      city: true,
+      country: true,
+      isPhysicalStore: true,
+      isWebshop: true,
+      isFeatured: true,
+      logoUrl: true,
+      subscriptionTier: true,
+      facebookUrl: true,
+      instagramUrl: true,
+      pinterestUrl: true,
+      youtubeUrl: true,
+      tiktokUrl: true,
+      googlePlaceId: true,
+      googleRating: true,
+      googleReviewCount: true,
+      reviews: { where: { isVerified: true }, select: { score: true } },
     },
     orderBy: [
+      { subscriptionTier: 'desc' },
       { isFeatured: 'desc' },
       { createdAt: 'desc' },
     ],

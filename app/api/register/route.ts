@@ -12,18 +12,28 @@ function generateSlug(name: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { 
-      name, 
-      email, 
-      shortDescription, 
-      city, 
-      country, 
-      websiteUrl, 
+    const {
+      name,
+      email,
+      shortDescription,
+      longDescription,
+      address,
+      city,
+      country,
+      websiteUrl,
       phone,
-      isPhysicalStore, 
+      isPhysicalStore,
       isWebshop,
       logoUrl,
       photos,
+      subscriptionTier,
+      categoryIds,
+      openingHours,
+      facebookUrl,
+      instagramUrl,
+      pinterestUrl,
+      youtubeUrl,
+      tiktokUrl,
       // Invoice fields
       invoiceRequested,
       invoiceCompanyName,
@@ -40,16 +50,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Beschrijving mag max. 200 tekens zijn' }, { status: 400 })
     }
 
-    // Validate invoice fields if requested
     if (invoiceRequested) {
       if (!invoiceCompanyName || !invoiceVatNumber || !invoiceAddress || !invoiceEmail) {
         return NextResponse.json({ error: 'Alle factuurgegevens zijn verplicht' }, { status: 400 })
       }
     }
 
+    const tier = (subscriptionTier === 'SILVER' || subscriptionTier === 'GOLD') ? subscriptionTier : 'BRONZE'
+    const isFeatured = tier === 'SILVER' || tier === 'GOLD'
+
     let slug = generateSlug(name)
-    
-    // Check if slug exists
     const existing = await prisma.shop.findUnique({ where: { slug } })
     if (existing) {
       slug = `${slug}-${Date.now().toString(36)}`
@@ -62,17 +72,27 @@ export async function POST(request: Request) {
         name,
         slug,
         shortDescription,
+        longDescription: (tier === 'SILVER' || tier === 'GOLD') ? (longDescription || null) : null,
+        address: address || null,
         city,
         citySlug,
         country: country || 'BE',
-        websiteUrl,
+        websiteUrl: websiteUrl || null,
         email,
-        phone,
+        phone: phone || null,
         logoUrl: logoUrl || null,
         photos: photos || [],
         isPhysicalStore: isPhysicalStore || false,
         isWebshop: isWebshop !== false,
+        isFeatured,
         status: 'PENDING',
+        subscriptionTier: tier as 'BRONZE' | 'SILVER' | 'GOLD',
+        openingHours: tier === 'GOLD' ? (openingHours || null) : null,
+        facebookUrl: tier === 'GOLD' ? (facebookUrl || null) : null,
+        instagramUrl: tier === 'GOLD' ? (instagramUrl || null) : null,
+        pinterestUrl: tier === 'GOLD' ? (pinterestUrl || null) : null,
+        youtubeUrl: tier === 'GOLD' ? (youtubeUrl || null) : null,
+        tiktokUrl: tier === 'GOLD' ? (tiktokUrl || null) : null,
         // Invoice fields
         invoiceRequested: invoiceRequested || false,
         invoiceCompanyName: invoiceCompanyName || null,
@@ -82,7 +102,14 @@ export async function POST(request: Request) {
       },
     })
 
-    // Send notification to admin
+    // Link categories
+    if (Array.isArray(categoryIds) && categoryIds.length > 0) {
+      await prisma.shopCategory.createMany({
+        data: categoryIds.map((categoryId: string) => ({ shopId: shop.id, categoryId })),
+        skipDuplicates: true,
+      })
+    }
+
     await sendNewShopNotification(name, email, city, invoiceRequested)
 
     return NextResponse.json({ success: true, shopId: shop.id })

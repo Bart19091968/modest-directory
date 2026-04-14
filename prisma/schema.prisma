@@ -48,6 +48,14 @@ model Shop {
   isPaid              Boolean  @default(false)
   paidAt              DateTime?
   validUntil          DateTime?
+  // Subscription
+  subscriptionTier    SubscriptionTier @default(BRONZE)
+  openingHours        Json?
+  facebookUrl         String?
+  instagramUrl        String?
+  pinterestUrl        String?
+  youtubeUrl          String?
+  tiktokUrl           String?
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
   reviews          Review[]
@@ -60,7 +68,7 @@ model ShopCategory {
   shop       Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  
+
   @@unique([shopId, categoryId])
 }
 
@@ -201,6 +209,12 @@ model SiteSetting {
 // ============================================
 // ENUMS
 // ============================================
+
+enum SubscriptionTier {
+  BRONZE
+  SILVER
+  GOLD
+}
 
 enum ShopStatus {
   PENDING
