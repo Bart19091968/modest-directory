@@ -67,7 +67,7 @@ type Shop = {
   isWebshop: boolean
   isFeatured: boolean
   status: string
-  subscriptionTier: string
+  subscriptionTier: string | null
   categories: { category: Category }[]
   // Social media
   facebookUrl: string | null
