@@ -14,8 +14,15 @@ type Shop = {
   email: string | null
   websiteUrl: string | null
   isFeatured: boolean
+  subscriptionTier: string
   createdAt: Date
   _count: { reviews: number }
+}
+
+const TIER_LABELS: Record<string, { label: string; className: string }> = {
+  BRONZE: { label: 'Brons', className: 'bg-amber-100 text-amber-800' },
+  SILVER: { label: 'Zilver', className: 'bg-gray-100 text-gray-700' },
+  GOLD: { label: 'Goud', className: 'bg-yellow-100 text-yellow-800' },
 }
 
 export default function AdminShopList({ shops }: { shops: Shop[] }) {
@@ -91,9 +98,9 @@ export default function AdminShopList({ shops }: { shops: Shop[] }) {
           <tr>
             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Winkel</th>
             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Locatie</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Abonnement</th>
             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Uitgelicht</th>
-            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Reviews</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase hidden sm:table-cell">Reviews</th>
             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acties</th>
           </tr>
         </thead>
@@ -108,20 +115,21 @@ export default function AdminShopList({ shops }: { shops: Shop[] }) {
                 {shop.city && `${shop.city}, `}{shop.country}
               </td>
               <td className="px-4 py-4">
+                {(() => {
+                  const tier = TIER_LABELS[shop.subscriptionTier] ?? TIER_LABELS.BRONZE
+                  return (
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${tier.className}`}>
+                      {tier.label}
+                    </span>
+                  )
+                })()}
+              </td>
+              <td className="px-4 py-4">
                 <span className={`px-2 py-1 text-xs rounded-full ${statusColors[shop.status as keyof typeof statusColors]}`}>
                   {shop.status}
                 </span>
               </td>
-              <td className="px-4 py-4">
-                <button
-                  onClick={() => handleToggleFeatured(shop.id)}
-                  className="text-xl hover:scale-110 transition"
-                  title={shop.isFeatured ? 'Verwijder uit uitgelicht' : 'Markeer als uitgelicht'}
-                >
-                  {shop.isFeatured ? '⭐' : '☆'}
-                </button>
-              </td>
-              <td className="px-4 py-4 text-sm text-gray-600">
+              <td className="px-4 py-4 text-sm text-gray-600 hidden sm:table-cell">
                 {shop._count.reviews}
               </td>
               <td className="px-4 py-4">

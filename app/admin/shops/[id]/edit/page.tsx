@@ -30,6 +30,7 @@ type Shop = {
   isWebshop: boolean
   isFeatured: boolean
   status: string
+  subscriptionTier: string
   categories: { category: Category }[]
   // Google Places
   googlePlaceId: string | null
@@ -68,6 +69,7 @@ export default function EditShopPage() {
     isWebshop: true,
     isFeatured: false,
     status: 'APPROVED',
+    subscriptionTier: 'BRONZE',
     // Google Places
     googlePlaceId: '',
     googleName: '',
@@ -109,6 +111,7 @@ export default function EditShopPage() {
           isWebshop: shop.isWebshop,
           isFeatured: shop.isFeatured,
           status: shop.status,
+          subscriptionTier: shop.subscriptionTier || 'BRONZE',
           // Google Places
           googlePlaceId: shop.googlePlaceId || '',
           googleName: shop.googleName || '',
@@ -478,18 +481,36 @@ export default function EditShopPage() {
               </label>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-              <select
-                name="status"
-                value={form.status}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
-              >
-                <option value="PENDING">⏳ Wachtend</option>
-                <option value="APPROVED">✅ Goedgekeurd</option>
-                <option value="REJECTED">❌ Afgewezen</option>
-              </select>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Abonnement</label>
+                <select
+                  name="subscriptionTier"
+                  value={form.subscriptionTier}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                >
+                  <option value="BRONZE">🥉 BRONS — €100/3 maanden</option>
+                  <option value="SILVER">🥈 ZILVER — €150/3 maanden</option>
+                  <option value="GOLD">🥇 GOUD — €200/3 maanden</option>
+                </select>
+                <p className="text-xs text-gray-400 mt-1">
+                  Bepaalt welke functies zichtbaar zijn op de site (foto's, lange beschrijving, openingsuren, social media).
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select
+                  name="status"
+                  value={form.status}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                >
+                  <option value="PENDING">⏳ Wachtend</option>
+                  <option value="APPROVED">✅ Goedgekeurd</option>
+                  <option value="REJECTED">❌ Afgewezen</option>
+                </select>
+              </div>
             </div>
           </div>
         </section>

@@ -270,17 +270,28 @@ export default function ShopRegistrationForm({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-6 mt-6">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={form.isWebshop} onChange={e => setForm({ ...form, isWebshop: e.target.checked })}
-              className="w-5 h-5 text-accent rounded" />
-            <span>Webshop</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={form.isPhysicalStore} onChange={e => setForm({ ...form, isPhysicalStore: e.target.checked })}
-              className="w-5 h-5 text-accent rounded" />
-            <span>Fysieke winkel</span>
-          </label>
+        <div className="mt-6">
+          <p className="text-sm font-medium text-gray-700 mb-3">Type winkel & Categorieën</p>
+          <div className="flex flex-wrap gap-x-6 gap-y-3">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={form.isWebshop} onChange={e => setForm({ ...form, isWebshop: e.target.checked })}
+                className="w-5 h-5 text-accent rounded" />
+              <span className="text-sm">Webshop</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={form.isPhysicalStore} onChange={e => setForm({ ...form, isPhysicalStore: e.target.checked })}
+                className="w-5 h-5 text-accent rounded" />
+              <span className="text-sm">Fysieke winkel</span>
+            </label>
+            {categories.length > 0 && <div className="w-px bg-gray-200 self-stretch hidden sm:block" />}
+            {categories.map(cat => (
+              <label key={cat.id} className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={selectedCategories.includes(cat.id)}
+                  onChange={() => toggleCategory(cat.id)} className="w-5 h-5 text-accent rounded" />
+                <span className="text-sm">{cat.name}</span>
+              </label>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -305,22 +316,6 @@ export default function ShopRegistrationForm({
           </label>
         )}
       </div>
-
-      {/* Categories */}
-      {categories.length > 0 && (
-        <div>
-          <h3 className="font-semibold text-gray-900 mb-4 pb-2 border-b">Categorieën</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {categories.map(cat => (
-              <label key={cat.id} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg border hover:border-accent transition">
-                <input type="checkbox" checked={selectedCategories.includes(cat.id)}
-                  onChange={() => toggleCategory(cat.id)} className="w-5 h-5 text-accent rounded" />
-                <span className="text-gray-700">{cat.name}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* SILVER + GOLD: Long description & photos */}
       {isSilverOrGold && (
