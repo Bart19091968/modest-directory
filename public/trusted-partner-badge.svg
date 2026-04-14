@@ -1,37 +1,96 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 132" role="img" aria-label="Trusted Partner">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 224" role="img" aria-label="Trusted Partner">
   <defs>
-    <linearGradient id="tp-gold-outer" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFE566"/>
-      <stop offset="35%" stop-color="#F5B820"/>
-      <stop offset="70%" stop-color="#D4860A"/>
-      <stop offset="100%" stop-color="#7A4400"/>
+    <!-- Gold border: bright yellow top-left → dark amber bottom-right -->
+    <linearGradient id="tp-gold" x1="10%" y1="4%" x2="90%" y2="94%">
+      <stop offset="0%"   stop-color="#FFE566"/>
+      <stop offset="25%"  stop-color="#F5C118"/>
+      <stop offset="60%"  stop-color="#CC8300"/>
+      <stop offset="100%" stop-color="#6E3C00"/>
     </linearGradient>
-    <radialGradient id="tp-green" cx="38%" cy="28%" r="72%">
-      <stop offset="0%" stop-color="#5ED177"/>
-      <stop offset="40%" stop-color="#27933E"/>
-      <stop offset="100%" stop-color="#124D22"/>
+
+    <!-- Green body: light centre → deep edge -->
+    <radialGradient id="tp-green" cx="42%" cy="30%" r="68%">
+      <stop offset="0%"   stop-color="#62E07C"/>
+      <stop offset="38%"  stop-color="#1F8E3A"/>
+      <stop offset="100%" stop-color="#093D18"/>
     </radialGradient>
-    <linearGradient id="tp-gold-shine" x1="0%" y1="0%" x2="60%" y2="100%">
-      <stop offset="0%" stop-color="#FFF0A0" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#F5B820" stop-opacity="0"/>
+
+    <!-- Diagonal gloss on green -->
+    <linearGradient id="tp-gloss" x1="8%" y1="5%" x2="70%" y2="52%">
+      <stop offset="0%"   stop-color="white" stop-opacity="0.22"/>
+      <stop offset="50%"  stop-color="white" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
     </linearGradient>
+
+    <!-- Text drop-shadow -->
+    <filter id="tp-tshadow" x="-8%" y="-15%" width="116%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="black" flood-opacity="0.6"/>
+    </filter>
+
+    <!-- Checkmark drop-shadow -->
+    <filter id="tp-cshadow" x="-12%" y="-12%" width="124%" height="135%">
+      <feDropShadow dx="1" dy="3" stdDeviation="3.5" flood-color="black" flood-opacity="0.45"/>
+    </filter>
   </defs>
 
-  <!-- Gold outer shield -->
-  <path d="M9 19 Q9 9 19 9 L101 9 Q111 9 111 19 L111 68 Q93 104 60 124 Q27 104 9 68 Z" fill="url(#tp-gold-outer)"/>
+  <!-- ── Gold outer shield ── -->
+  <path d="M100 6
+           C 134 6 178 17 197 38
+           L 197 116
+           C 188 168 150 205 100 222
+           C 50  205 12  168 3   116
+           L 3   38
+           C 22  17 66  6  100 6 Z"
+        fill="url(#tp-gold)"/>
 
-  <!-- Green inner shield -->
-  <path d="M18 24 Q18 16 26 16 L94 16 Q102 16 102 24 L102 66 Q87 98 60 116 Q33 98 18 66 Z" fill="url(#tp-green)"/>
+  <!-- Inner gold rim highlight (bevel effect) -->
+  <path d="M100 14
+           C 130 14 170 24 188 43
+           L 188 116
+           C 180 163 145 197 100 212
+           C 55  197 20  163 12  116
+           L 12  43
+           C 30  24 70  14 100 14 Z"
+        fill="none" stroke="#FFE566" stroke-width="2.5" opacity="0.65"/>
 
-  <!-- Subtle shine on green -->
-  <path d="M18 24 Q18 16 26 16 L94 16 Q102 16 102 24 L102 48 Q70 40 18 50 Z" fill="url(#tp-gold-shine)"/>
+  <!-- ── Green inner body ── -->
+  <path d="M100 18
+           C 128 18 165 28 183 45
+           L 183 116
+           C 175 159 142 191 100 206
+           C 58  191 25  159 17  116
+           L 17  45
+           C 35  28 72  18 100 18 Z"
+        fill="url(#tp-green)"/>
 
-  <!-- TRUSTED text -->
-  <text x="60" y="50" text-anchor="middle" fill="white" font-family="'Arial Black',Arial,Helvetica,sans-serif" font-weight="900" font-size="17" letter-spacing="0.5">TRUSTED</text>
+  <!-- Gloss overlay -->
+  <path d="M100 18
+           C 128 18 165 28 183 45
+           L 183 116
+           C 175 159 142 191 100 206
+           C 58  191 25  159 17  116
+           L 17  45
+           C 35  28 72  18 100 18 Z"
+        fill="url(#tp-gloss)"/>
 
-  <!-- PARTNER text -->
-  <text x="60" y="69" text-anchor="middle" fill="white" font-family="'Arial Black',Arial,Helvetica,sans-serif" font-weight="900" font-size="17" letter-spacing="0.5">PARTNER</text>
+  <!-- ── TRUSTED ── -->
+  <text x="100" y="70"
+        text-anchor="middle" dominant-baseline="middle"
+        fill="white"
+        font-family="'Arial Black', 'Franklin Gothic Heavy', Arial, sans-serif"
+        font-weight="900" font-size="35" letter-spacing="2"
+        filter="url(#tp-tshadow)">TRUSTED</text>
 
-  <!-- Checkmark -->
-  <path d="M30 84 L50 103 L90 73" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- ── PARTNER ── -->
+  <text x="100" y="106"
+        text-anchor="middle" dominant-baseline="middle"
+        fill="white"
+        font-family="'Arial Black', 'Franklin Gothic Heavy', Arial, sans-serif"
+        font-weight="900" font-size="35" letter-spacing="2"
+        filter="url(#tp-tshadow)">PARTNER</text>
+
+  <!-- ── Large checkmark: left foot → deep V → high right arm ── -->
+  <path d="M 36 148 L 76 190 L 166 106"
+        stroke="white" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"
+        fill="none" filter="url(#tp-cshadow)"/>
 </svg>
