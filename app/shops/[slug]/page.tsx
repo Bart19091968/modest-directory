@@ -292,13 +292,13 @@ export default async function ShopDetailPage({
 
         {/* Categories */}
         {shop.categories.length > 0 && (
-          <div className="pt-6 border-t">
+          <div className="pt-6 pb-6 border-t">
             <h3 className="text-sm font-medium text-gray-500 mb-2">Categorieën</h3>
             <div className="flex flex-wrap gap-2">
               {shop.categories.map(({ category }) => (
                 <Link
                   key={category.id}
-                  href={`/${category.slug}/${shop.country.toLowerCase()}`}
+                  href={`/${category.slug}`}
                   className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-200 transition"
                 >
                   {category.name}
