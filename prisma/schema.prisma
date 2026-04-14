@@ -49,7 +49,7 @@ model Shop {
   paidAt              DateTime?
   validUntil          DateTime?
   // Subscription
-  subscriptionTier    SubscriptionTier @default(BRONZE)
+  subscriptionTier    SubscriptionTier?
   openingHours        Json?
   facebookUrl         String?
   instagramUrl        String?

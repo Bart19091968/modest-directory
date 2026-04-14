@@ -60,12 +60,16 @@ async function getFeaturedShops() {
       reviews: { where: { isVerified: true }, select: { score: true } },
     },
     orderBy: [
-      { subscriptionTier: 'desc' },
       { isFeatured: 'desc' },
       { createdAt: 'desc' },
     ],
-    take: 6,
+    take: 12,
   })
+  const TIER_ORDER: Record<string, number> = { GOLD: 0, SILVER: 1, BRONZE: 2 }
+  const sorted = [...shops].sort((a, b) =>
+    (TIER_ORDER[a.subscriptionTier ?? ''] ?? 3) - (TIER_ORDER[b.subscriptionTier ?? ''] ?? 3)
+  )
+  return sorted.slice(0, 6)
 }
 
 async function getSponsors() {

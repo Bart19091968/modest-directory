@@ -114,7 +114,7 @@ export default function EditShopPage() {
     isWebshop: true,
     isFeatured: false,
     status: 'APPROVED',
-    subscriptionTier: 'BRONZE',
+    subscriptionTier: '',
     // Social media
     facebookUrl: '',
     instagramUrl: '',
@@ -163,7 +163,7 @@ export default function EditShopPage() {
           isWebshop: shop.isWebshop,
           isFeatured: shop.isFeatured,
           status: shop.status,
-          subscriptionTier: shop.subscriptionTier || 'BRONZE',
+          subscriptionTier: shop.subscriptionTier || '',
           // Social media
           facebookUrl: shop.facebookUrl || '',
           instagramUrl: shop.instagramUrl || '',
@@ -559,6 +559,7 @@ export default function EditShopPage() {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                 >
+                  <option value="">Geen abonnement</option>
                   <option value="BRONZE">🥉 BRONS — €100/3 maanden</option>
                   <option value="SILVER">🥈 ZILVER — €150/3 maanden</option>
                   <option value="GOLD">🥇 GOUD — €200/3 maanden</option>
