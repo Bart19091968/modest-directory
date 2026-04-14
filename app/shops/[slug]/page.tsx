@@ -192,8 +192,8 @@ export default async function ShopDetailPage({
 
         <p className="text-gray-700 text-lg mb-6">{shop.shortDescription}</p>
 
-        {/* Long description if available */}
-        {shop.longDescription && (
+        {/* Long description — only for SILVER and GOLD */}
+        {(shop.subscriptionTier === 'SILVER' || shop.subscriptionTier === 'GOLD') && shop.longDescription && (
           <div className="mb-6 text-gray-600">
             <p>{shop.longDescription}</p>
           </div>
@@ -365,15 +365,19 @@ export default async function ShopDetailPage({
         )}
       </div>
 
-      {/* Photo Gallery */}
-      {shop.photos && shop.photos.length > 0 && (
+      {/* Photo Gallery — tier-limited: SILVER max 3, GOLD max 5, BRONZE none */}
+      {(() => {
+        const maxPhotos = shop.subscriptionTier === 'GOLD' ? 5 : shop.subscriptionTier === 'SILVER' ? 3 : 0
+        const visiblePhotos = shop.photos?.slice(0, maxPhotos) ?? []
+        if (visiblePhotos.length === 0) return null
+        return (
         <div className="mb-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Foto&apos;s</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {shop.photos.map((photo, index) => (
+            {visiblePhotos.map((photo, index) => (
               <div key={index} className="aspect-square rounded-xl overflow-hidden bg-gray-100">
-                <img 
-                  src={photo} 
+                <img
+                  src={photo}
                   alt={`${shop.name} foto ${index + 1}`}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />
@@ -381,7 +385,8 @@ export default async function ShopDetailPage({
             ))}
           </div>
         </div>
-      )}
+        )
+      })()}
 
       {/* Opening hours (GOLD) */}
       {shop.subscriptionTier === 'GOLD' && shop.openingHours && (

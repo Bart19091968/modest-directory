@@ -81,6 +81,7 @@ export async function PUT(
       isWebshop,
       isFeatured,
       status,
+      subscriptionTier,
       categoryIds,
       // Google Places
       googlePlaceId,
@@ -142,6 +143,7 @@ export async function PUT(
         isWebshop: !!isWebshop,
         isFeatured: !!isFeatured,
         status: status || existing.status,
+        subscriptionTier: (['BRONZE', 'SILVER', 'GOLD'].includes(subscriptionTier) ? subscriptionTier : existing.subscriptionTier) as 'BRONZE' | 'SILVER' | 'GOLD',
         // Google Places
         googlePlaceId: googlePlaceId || null,
         googleName: googleName || null,
