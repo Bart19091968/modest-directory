@@ -100,9 +100,7 @@ export default function ShopCard({ shop }: { shop: Shop }) {
             <h3 className="font-semibold text-lg text-gray-900 truncate">{shop.name}</h3>
             <div className="flex items-center gap-1 flex-shrink-0">
               {isGold && (
-                <span className="bg-yellow-100 text-yellow-700 text-xs font-semibold px-2 py-0.5 rounded-full border border-yellow-300">
-                  Trusted Partner
-                </span>
+                <img src="/trusted-partner-badge.svg" alt="Trusted Partner" title="Trusted Partner" className="h-9 w-auto flex-shrink-0" />
               )}
               {shop.isFeatured && !isGold && (
                 <span className="text-yellow-500">⭐</span>

@@ -41,7 +41,6 @@ async function getData(categorySlug: string) {
       } : {}),
     },
     orderBy: [
-      { subscriptionTier: 'desc' },
       { isFeatured: 'desc' },
       { createdAt: 'desc' },
     ],
@@ -80,7 +79,12 @@ async function getData(categorySlug: string) {
     orderBy: { name: 'asc' },
   })
 
-  return { shops, faqs, countries, categoryRecord }
+  const TIER_ORDER: Record<string, number> = { GOLD: 0, SILVER: 1, BRONZE: 2 }
+  const sortedShops = [...shops].sort((a, b) =>
+    (TIER_ORDER[a.subscriptionTier ?? ''] ?? 3) - (TIER_ORDER[b.subscriptionTier ?? ''] ?? 3)
+  )
+
+  return { shops: sortedShops, faqs, countries, categoryRecord }
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {

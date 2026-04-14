@@ -89,7 +89,7 @@ async function getShops(params: SearchParams) {
     }
   }
 
-  return prisma.shop.findMany({
+  const shops = await prisma.shop.findMany({
     where,
     orderBy: [{ isFeatured: 'desc' }, { createdAt: 'desc' }],
     select: {
@@ -116,6 +116,10 @@ async function getShops(params: SearchParams) {
       reviews: { where: { isVerified: true }, select: { score: true } },
     },
   })
+  const TIER_ORDER: Record<string, number> = { GOLD: 0, SILVER: 1, BRONZE: 2 }
+  return [...shops].sort((a, b) =>
+    (TIER_ORDER[a.subscriptionTier ?? ''] ?? 3) - (TIER_ORDER[b.subscriptionTier ?? ''] ?? 3)
+  )
 }
 
 async function getFilterData() {

@@ -151,7 +151,7 @@ export async function PUT(
         isWebshop: !!isWebshop,
         isFeatured: !!isFeatured,
         status: status || existing.status,
-        subscriptionTier: (['BRONZE', 'SILVER', 'GOLD'].includes(subscriptionTier) ? subscriptionTier : existing.subscriptionTier) as 'BRONZE' | 'SILVER' | 'GOLD',
+        subscriptionTier: (['BRONZE', 'SILVER', 'GOLD'].includes(subscriptionTier) ? subscriptionTier : null) as 'BRONZE' | 'SILVER' | 'GOLD' | null,
         // Social media
         facebookUrl: facebookUrl || null,
         instagramUrl: instagramUrl || null,

@@ -56,7 +56,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const tier = (subscriptionTier === 'SILVER' || subscriptionTier === 'GOLD') ? subscriptionTier : 'BRONZE'
+    const tier = (['BRONZE', 'SILVER', 'GOLD'] as const).includes(subscriptionTier) ? subscriptionTier as 'BRONZE' | 'SILVER' | 'GOLD' : null
     const isFeatured = tier === 'SILVER' || tier === 'GOLD'
 
     let slug = generateSlug(name)
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
         isWebshop: isWebshop !== false,
         isFeatured,
         status: 'PENDING',
-        subscriptionTier: tier as 'BRONZE' | 'SILVER' | 'GOLD',
+        subscriptionTier: tier,
         openingHours: tier === 'GOLD' ? (openingHours || null) : null,
         facebookUrl: tier === 'GOLD' ? (facebookUrl || null) : null,
         instagramUrl: tier === 'GOLD' ? (instagramUrl || null) : null,

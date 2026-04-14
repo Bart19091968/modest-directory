@@ -69,12 +69,23 @@ async function getData(category: string, location: string) {
       isWebshop: true,
       isFeatured: true,
       logoUrl: true,
+      subscriptionTier: true,
+      facebookUrl: true,
+      instagramUrl: true,
+      pinterestUrl: true,
+      youtubeUrl: true,
+      tiktokUrl: true,
       googlePlaceId: true,
       googleRating: true,
       googleReviewCount: true,
       reviews: { where: { isVerified: true }, select: { score: true } },
     },
   })
+
+  const TIER_ORDER: Record<string, number> = { GOLD: 0, SILVER: 1, BRONZE: 2 }
+  const sortedShops = [...shops].sort((a, b) =>
+    (TIER_ORDER[a.subscriptionTier ?? ''] ?? 3) - (TIER_ORDER[b.subscriptionTier ?? ''] ?? 3)
+  )
 
   const relatedCities = isCountry ? await prisma.city.findMany({
     where: { countryId: country!.id },
@@ -91,7 +102,7 @@ async function getData(category: string, location: string) {
     isCountry,
     locationName,
     countryCode,
-    shops,
+    shops: sortedShops,
     relatedCities,
     faqs,
     country: country || city?.country,
