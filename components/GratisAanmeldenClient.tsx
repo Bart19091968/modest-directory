@@ -4,8 +4,6 @@ import { useState } from 'react'
 
 type Category = { id: string; name: string }
 
-const MAX_LOGO_SIZE = 500 * 1024
-
 export default function GratisAanmeldenClient({ categories }: { categories: Category[] }) {
   const [form, setForm] = useState({
     name: '',
@@ -21,8 +19,6 @@ export default function GratisAanmeldenClient({ categories }: { categories: Cate
   })
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [logo, setLogo] = useState<string | null>(null)
-  const [logoPreview, setLogoPreview] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
@@ -31,20 +27,6 @@ export default function GratisAanmeldenClient({ categories }: { categories: Cate
     setSelectedCategories(prev =>
       prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
     )
-  }
-
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    if (file.size > MAX_LOGO_SIZE) { setError('Logo mag maximaal 500KB zijn'); return }
-    if (!file.type.startsWith('image/')) { setError('Alleen afbeeldingen zijn toegestaan'); return }
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      setLogo(reader.result as string)
-      setLogoPreview(reader.result as string)
-      setError('')
-    }
-    reader.readAsDataURL(file)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -59,7 +41,7 @@ export default function GratisAanmeldenClient({ categories }: { categories: Cate
           ...form,
           subscriptionTier: '',
           categoryIds: selectedCategories,
-          logoUrl: logo,
+          logoUrl: null,
           photos: [],
           openingHours: null,
           facebookUrl: null,
@@ -181,28 +163,6 @@ export default function GratisAanmeldenClient({ categories }: { categories: Cate
             ))}
           </div>
         </div>
-      </div>
-
-      {/* Logo */}
-      <div>
-        <h3 className="font-semibold text-gray-900 mb-4 pb-2 border-b">Logo</h3>
-        <p className="text-xs text-gray-500 mb-3">Max. 500KB, vierkant formaat aanbevolen.</p>
-        {logoPreview ? (
-          <div className="flex items-center gap-4">
-            <img src={logoPreview} alt="Logo preview" className="w-20 h-20 object-cover rounded-lg border" />
-            <button type="button" onClick={() => { setLogo(null); setLogoPreview(null) }}
-              className="text-red-600 hover:text-red-700 text-sm">Verwijderen</button>
-          </div>
-        ) : (
-          <label className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-accent transition">
-            <div className="text-center">
-              <div className="text-3xl mb-1">📷</div>
-              <p className="text-sm text-gray-600">Klik om logo te uploaden</p>
-              <p className="text-xs text-gray-400">PNG, JPG tot 500KB</p>
-            </div>
-            <input type="file" accept="image/*" onChange={handleLogoChange} className="hidden" />
-          </label>
-        )}
       </div>
 
       <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50 text-lg py-4">
