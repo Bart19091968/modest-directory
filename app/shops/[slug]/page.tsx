@@ -158,7 +158,7 @@ export default async function ShopDetailPage({
 
               <div className="flex items-center gap-2">
                 {shop.subscriptionTier === 'GOLD' && (
-                  <img src="/trusted-partner-badge.svg" alt="Trusted Partner" title="Trusted Partner" className="h-20 w-auto" />
+                  <img src="/trusted-partner-badge.png" alt="Trusted Partner" title="Trusted Partner" className="h-20 w-auto" />
                 )}
                 {shop.isFeatured && shop.subscriptionTier !== 'GOLD' && (
                   <span className="text-2xl" title="Uitgelichte winkel">⭐</span>
