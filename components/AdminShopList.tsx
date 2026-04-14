@@ -14,7 +14,7 @@ type Shop = {
   email: string | null
   websiteUrl: string | null
   isFeatured: boolean
-  subscriptionTier: string
+  subscriptionTier: string | null
   createdAt: Date
   _count: { reviews: number }
 }
@@ -23,6 +23,7 @@ const TIER_LABELS: Record<string, { label: string; className: string }> = {
   BRONZE: { label: 'Brons', className: 'bg-amber-100 text-amber-800' },
   SILVER: { label: 'Zilver', className: 'bg-gray-100 text-gray-700' },
   GOLD: { label: 'Goud', className: 'bg-yellow-100 text-yellow-800' },
+  NONE: { label: 'Geen', className: 'bg-gray-50 text-gray-400' },
 }
 
 export default function AdminShopList({ shops }: { shops: Shop[] }) {
@@ -116,7 +117,7 @@ export default function AdminShopList({ shops }: { shops: Shop[] }) {
               </td>
               <td className="px-4 py-4">
                 {(() => {
-                  const tier = TIER_LABELS[shop.subscriptionTier] ?? TIER_LABELS.BRONZE
+                  const tier = (shop.subscriptionTier && TIER_LABELS[shop.subscriptionTier]) ?? TIER_LABELS.NONE
                   return (
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${tier.className}`}>
                       {tier.label}

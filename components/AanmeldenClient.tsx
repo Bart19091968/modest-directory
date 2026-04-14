@@ -10,7 +10,7 @@ type Props = {
 const PLANS = [
   {
     tier: 'BRONZE',
-    label: 'BRONS',
+    label: 'Brons',
     price: 100,
     borderColor: 'border-amber-500',
     badge: null,
@@ -27,7 +27,7 @@ const PLANS = [
   },
   {
     tier: 'SILVER',
-    label: 'ZILVER',
+    label: 'Zilver',
     price: 150,
     borderColor: 'border-gray-400',
     badge: 'Meest gekozen',
@@ -47,7 +47,7 @@ const PLANS = [
   },
   {
     tier: 'GOLD',
-    label: 'GOUD',
+    label: 'Goud',
     price: 200,
     borderColor: 'border-yellow-500',
     badge: null,

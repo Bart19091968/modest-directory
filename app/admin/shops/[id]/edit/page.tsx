@@ -67,7 +67,7 @@ type Shop = {
   isWebshop: boolean
   isFeatured: boolean
   status: string
-  subscriptionTier: string
+  subscriptionTier: string | null
   categories: { category: Category }[]
   // Social media
   facebookUrl: string | null
@@ -560,9 +560,9 @@ export default function EditShopPage() {
                   className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                 >
                   <option value="">Geen abonnement</option>
-                  <option value="BRONZE">🥉 BRONS — €100/3 maanden</option>
-                  <option value="SILVER">🥈 ZILVER — €150/3 maanden</option>
-                  <option value="GOLD">🥇 GOUD — €200/3 maanden</option>
+                  <option value="BRONZE">🥉 Brons — €100/3 maanden</option>
+                  <option value="SILVER">🥈 Zilver — €150/3 maanden</option>
+                  <option value="GOLD">🥇 Goud — €200/3 maanden</option>
                 </select>
                 <p className="text-xs text-gray-400 mt-1">
                   Bepaalt welke functies zichtbaar zijn op de site (foto's, lange beschrijving, openingsuren, social media).
