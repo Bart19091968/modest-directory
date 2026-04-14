@@ -83,6 +83,14 @@ export async function PUT(
       status,
       subscriptionTier,
       categoryIds,
+      // Social media
+      facebookUrl,
+      instagramUrl,
+      pinterestUrl,
+      youtubeUrl,
+      tiktokUrl,
+      // Opening hours
+      openingHours,
       // Google Places
       googlePlaceId,
       googleName,
@@ -144,6 +152,14 @@ export async function PUT(
         isFeatured: !!isFeatured,
         status: status || existing.status,
         subscriptionTier: (['BRONZE', 'SILVER', 'GOLD'].includes(subscriptionTier) ? subscriptionTier : existing.subscriptionTier) as 'BRONZE' | 'SILVER' | 'GOLD',
+        // Social media
+        facebookUrl: facebookUrl || null,
+        instagramUrl: instagramUrl || null,
+        pinterestUrl: pinterestUrl || null,
+        youtubeUrl: youtubeUrl || null,
+        tiktokUrl: tiktokUrl || null,
+        // Opening hours
+        openingHours: openingHours ?? null,
         // Google Places
         googlePlaceId: googlePlaceId || null,
         googleName: googleName || null,

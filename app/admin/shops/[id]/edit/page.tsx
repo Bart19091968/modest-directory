@@ -12,6 +12,43 @@ type Category = {
   icon: string | null
 }
 
+type DaySchedule = {
+  closed: boolean
+  open: string
+  close: string
+  lunchBreak: boolean
+  lunchOpen: string
+  lunchClose: string
+}
+
+type OpeningHours = Record<string, DaySchedule>
+
+const DAYS = [
+  { key: 'monday', label: 'Maandag' },
+  { key: 'tuesday', label: 'Dinsdag' },
+  { key: 'wednesday', label: 'Woensdag' },
+  { key: 'thursday', label: 'Donderdag' },
+  { key: 'friday', label: 'Vrijdag' },
+  { key: 'saturday', label: 'Zaterdag' },
+  { key: 'sunday', label: 'Zondag' },
+]
+
+function defaultDay(closed = false): DaySchedule {
+  return { closed, open: '09:00', close: '18:00', lunchBreak: false, lunchOpen: '12:00', lunchClose: '13:30' }
+}
+
+function defaultHours(): OpeningHours {
+  return {
+    monday: defaultDay(),
+    tuesday: defaultDay(),
+    wednesday: defaultDay(),
+    thursday: defaultDay(),
+    friday: defaultDay(),
+    saturday: { ...defaultDay(), open: '10:00', close: '17:00' },
+    sunday: defaultDay(true),
+  }
+}
+
 type Shop = {
   id: string
   name: string
@@ -32,6 +69,14 @@ type Shop = {
   status: string
   subscriptionTier: string
   categories: { category: Category }[]
+  // Social media
+  facebookUrl: string | null
+  instagramUrl: string | null
+  pinterestUrl: string | null
+  youtubeUrl: string | null
+  tiktokUrl: string | null
+  // Opening hours
+  openingHours: any | null
   // Google Places
   googlePlaceId: string | null
   googleName: string | null
@@ -70,6 +115,12 @@ export default function EditShopPage() {
     isFeatured: false,
     status: 'APPROVED',
     subscriptionTier: 'BRONZE',
+    // Social media
+    facebookUrl: '',
+    instagramUrl: '',
+    pinterestUrl: '',
+    youtubeUrl: '',
+    tiktokUrl: '',
     // Google Places
     googlePlaceId: '',
     googleName: '',
@@ -78,6 +129,7 @@ export default function EditShopPage() {
     googleReviewCount: '',
     googleReviewsUrl: '',
   })
+  const [openingHours, setOpeningHours] = useState<OpeningHours>(defaultHours())
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [photos, setPhotos] = useState<string[]>([])
   const [newPhotoUrl, setNewPhotoUrl] = useState('')
@@ -112,6 +164,12 @@ export default function EditShopPage() {
           isFeatured: shop.isFeatured,
           status: shop.status,
           subscriptionTier: shop.subscriptionTier || 'BRONZE',
+          // Social media
+          facebookUrl: shop.facebookUrl || '',
+          instagramUrl: shop.instagramUrl || '',
+          pinterestUrl: shop.pinterestUrl || '',
+          youtubeUrl: shop.youtubeUrl || '',
+          tiktokUrl: shop.tiktokUrl || '',
           // Google Places
           googlePlaceId: shop.googlePlaceId || '',
           googleName: shop.googleName || '',
@@ -122,6 +180,9 @@ export default function EditShopPage() {
         })
         setPhotos(shop.photos || [])
         setSelectedCategories(shop.categories.map(sc => sc.category.id))
+        if (shop.openingHours && typeof shop.openingHours === 'object') {
+          setOpeningHours({ ...defaultHours(), ...shop.openingHours as OpeningHours })
+        }
         setAllCategories(data.allCategories)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Fout bij laden')
@@ -193,6 +254,13 @@ export default function EditShopPage() {
     setGoogleSearch('')
   }
 
+  const updateDay = (day: string, field: keyof DaySchedule, value: boolean | string) => {
+    setOpeningHours(prev => ({
+      ...prev,
+      [day]: { ...prev[day], [field]: value },
+    }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
@@ -207,6 +275,7 @@ export default function EditShopPage() {
           ...form,
           photos,
           categoryIds: selectedCategories,
+          openingHours,
         }),
       })
 
@@ -729,6 +798,160 @@ export default function EditShopPage() {
               </div>
             </div>
           </details>
+        </section>
+
+        {/* ── Social media ── */}
+        <section className="bg-white rounded-xl shadow-sm border p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-1">Social media</h2>
+          <p className="text-sm text-gray-500 mb-4">
+            Enkel zichtbaar op de site bij een <strong>GOUD</strong> abonnement.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { name: 'facebookUrl', label: 'Facebook', placeholder: 'https://facebook.com/jouwpagina' },
+              { name: 'instagramUrl', label: 'Instagram', placeholder: 'https://instagram.com/jouwpagina' },
+              { name: 'pinterestUrl', label: 'Pinterest', placeholder: 'https://pinterest.com/jouwpagina' },
+              { name: 'youtubeUrl', label: 'YouTube', placeholder: 'https://youtube.com/@jouwkanaal' },
+              { name: 'tiktokUrl', label: 'TikTok', placeholder: 'https://tiktok.com/@jouwpagina' },
+            ].map(({ name, label, placeholder }) => (
+              <div key={name}>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                <input
+                  type="url"
+                  name={name}
+                  value={(form as any)[name]}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  placeholder={placeholder}
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Openingsuren ── */}
+        <section className="bg-white rounded-xl shadow-sm border p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-1">Openingsuren</h2>
+          <p className="text-sm text-gray-500 mb-4">
+            Enkel zichtbaar op de site bij een <strong>GOUD</strong> abonnement.
+          </p>
+
+          {/* Desktop tabel */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-gray-500 text-xs uppercase tracking-wide">
+                  <th className="pb-3 pr-4 w-28">Dag</th>
+                  <th className="pb-3 pr-4 w-24">Gesloten</th>
+                  <th className="pb-3 pr-4">Open</th>
+                  <th className="pb-3 pr-4">Sluit</th>
+                  <th className="pb-3 pr-4 w-36">Middagsluiting</th>
+                  <th className="pb-3 pr-4">Middag open</th>
+                  <th className="pb-3">Middag sluit</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {DAYS.map(({ key, label }) => {
+                  const day = openingHours[key] ?? defaultDay()
+                  return (
+                    <tr key={key}>
+                      <td className="py-2 pr-4 font-medium text-gray-700">{label}</td>
+                      <td className="py-2 pr-4">
+                        <input type="checkbox" checked={day.closed}
+                          onChange={e => updateDay(key, 'closed', e.target.checked)}
+                          className="w-4 h-4 text-accent rounded" />
+                      </td>
+                      <td className="py-2 pr-4">
+                        <input type="time" value={day.open} disabled={day.closed}
+                          onChange={e => updateDay(key, 'open', e.target.value)}
+                          className={`w-full px-2 py-1 border rounded text-sm ${day.closed ? 'opacity-40' : ''}`} />
+                      </td>
+                      <td className="py-2 pr-4">
+                        <input type="time" value={day.close} disabled={day.closed}
+                          onChange={e => updateDay(key, 'close', e.target.value)}
+                          className={`w-full px-2 py-1 border rounded text-sm ${day.closed ? 'opacity-40' : ''}`} />
+                      </td>
+                      <td className="py-2 pr-4">
+                        <input type="checkbox" checked={day.lunchBreak} disabled={day.closed}
+                          onChange={e => updateDay(key, 'lunchBreak', e.target.checked)}
+                          className={`w-4 h-4 text-accent rounded ${day.closed ? 'opacity-40' : ''}`} />
+                      </td>
+                      <td className="py-2 pr-4">
+                        <input type="time" value={day.lunchOpen} disabled={day.closed || !day.lunchBreak}
+                          onChange={e => updateDay(key, 'lunchOpen', e.target.value)}
+                          className={`w-full px-2 py-1 border rounded text-sm ${(day.closed || !day.lunchBreak) ? 'opacity-40' : ''}`} />
+                      </td>
+                      <td className="py-2">
+                        <input type="time" value={day.lunchClose} disabled={day.closed || !day.lunchBreak}
+                          onChange={e => updateDay(key, 'lunchClose', e.target.value)}
+                          className={`w-full px-2 py-1 border rounded text-sm ${(day.closed || !day.lunchBreak) ? 'opacity-40' : ''}`} />
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobiele kaarten */}
+          <div className="md:hidden space-y-3">
+            {DAYS.map(({ key, label }) => {
+              const day = openingHours[key] ?? defaultDay()
+              return (
+                <div key={key} className="border rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-medium text-gray-700">{label}</span>
+                    <label className="flex items-center gap-2 text-sm text-gray-500">
+                      <input type="checkbox" checked={day.closed}
+                        onChange={e => updateDay(key, 'closed', e.target.checked)}
+                        className="w-4 h-4 text-accent rounded" />
+                      Gesloten
+                    </label>
+                  </div>
+                  {!day.closed && (
+                    <>
+                      <div className="grid grid-cols-2 gap-3 mb-3">
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">Open</p>
+                          <input type="time" value={day.open}
+                            onChange={e => updateDay(key, 'open', e.target.value)}
+                            className="w-full px-2 py-1 border rounded text-sm" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">Sluit</p>
+                          <input type="time" value={day.close}
+                            onChange={e => updateDay(key, 'close', e.target.value)}
+                            className="w-full px-2 py-1 border rounded text-sm" />
+                        </div>
+                      </div>
+                      <label className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                        <input type="checkbox" checked={day.lunchBreak}
+                          onChange={e => updateDay(key, 'lunchBreak', e.target.checked)}
+                          className="w-4 h-4 text-accent rounded" />
+                        Middagsluiting
+                      </label>
+                      {day.lunchBreak && (
+                        <div className="grid grid-cols-2 gap-3 pl-6">
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">Middag open</p>
+                            <input type="time" value={day.lunchOpen}
+                              onChange={e => updateDay(key, 'lunchOpen', e.target.value)}
+                              className="w-full px-2 py-1 border rounded text-sm" />
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">Middag sluit</p>
+                            <input type="time" value={day.lunchClose}
+                              onChange={e => updateDay(key, 'lunchClose', e.target.value)}
+                              className="w-full px-2 py-1 border rounded text-sm" />
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )
+            })}
+          </div>
         </section>
 
         {/* ── Acties ── */}
