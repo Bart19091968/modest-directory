@@ -159,8 +159,11 @@ export default function RootLayout({
               </div>
 
               <div>
-                <h4 className="font-semibold mb-4">Contact</h4>
+                <h4 className="font-semibold mb-4">Over ons</h4>
                 <ul className="space-y-2 text-gray-400">
+                  <li><Link href="/over-ons" className="hover:text-white transition-colors">Over ModestDirectory</Link></li>
+                  <li><Link href="/privacybeleid" className="hover:text-white transition-colors">Privacybeleid</Link></li>
+                  <li><Link href="/gebruiksvoorwaarden" className="hover:text-white transition-colors">Gebruiksvoorwaarden</Link></li>
                   <li>
                     <a href="mailto:info@modestdirectory.com" className="hover:text-white transition-colors">
                       info@modestdirectory.com
@@ -172,6 +175,10 @@ export default function RootLayout({
 
             <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
               © {new Date().getFullYear()} ModestDirectory. Alle rechten voorbehouden.
+              {' · '}
+              <Link href="/privacybeleid" className="hover:text-gray-300 transition-colors">Privacybeleid</Link>
+              {' · '}
+              <Link href="/gebruiksvoorwaarden" className="hover:text-gray-300 transition-colors">Gebruiksvoorwaarden</Link>
             </div>
           </div>
         </footer>
