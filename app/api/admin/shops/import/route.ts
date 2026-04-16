@@ -121,11 +121,13 @@ export async function POST(request: Request) {
             city: row.city || null,
             citySlug,
             country: row.country?.toUpperCase() === 'BE' ? 'BE' : 'NL',
+            address: row.address || null,
             websiteUrl: row.websiteUrl || null,
             email: row.email || null,
+            phone: row.phone || null,
             isPhysicalStore: row.isPhysicalStore?.toLowerCase() === 'true',
             isWebshop: row.isWebshop?.toLowerCase() !== 'false',
-            status: 'APPROVED', // Auto-approve imported shops
+            status: 'APPROVED',
           },
         })
 

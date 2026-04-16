@@ -67,7 +67,7 @@ export default function ImportShopsPage() {
           Je CSV bestand moet de volgende kolommen hebben (header verplicht):
         </p>
         <code className="block bg-blue-100 p-2 rounded text-xs text-blue-800 overflow-x-auto">
-          name,shortDescription,city,country,websiteUrl,email,isPhysicalStore,isWebshop
+          name,shortDescription,city,country,websiteUrl,email,isPhysicalStore,isWebshop,address,phone
         </code>
         <ul className="text-sm text-blue-700 mt-2 list-disc list-inside">
           <li><strong>name</strong> - Verplicht</li>
@@ -78,6 +78,8 @@ export default function ImportShopsPage() {
           <li><strong>email</strong> - Optioneel</li>
           <li><strong>isPhysicalStore</strong> - Optioneel (true/false)</li>
           <li><strong>isWebshop</strong> - Optioneel (true/false, standaard: true)</li>
+          <li><strong>address</strong> - Optioneel (straat + huisnummer)</li>
+          <li><strong>phone</strong> - Optioneel (telefoonnummer)</li>
         </ul>
       </div>
 
