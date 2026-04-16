@@ -12,15 +12,41 @@ function generateSlug(name: string): string {
     .replace(/(^-|-$)/g, '')
 }
 
+function parseCSVLine(line: string): string[] {
+  const fields: string[] = []
+  let current = ''
+  let inQuotes = false
+
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i]
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        current += '"'
+        i++
+      } else {
+        inQuotes = !inQuotes
+      }
+    } else if (ch === ',' && !inQuotes) {
+      fields.push(current.trim())
+      current = ''
+    } else {
+      current += ch
+    }
+  }
+  fields.push(current.trim())
+  return fields
+}
+
 function parseCSV(text: string): Record<string, string>[] {
   const lines = text.trim().split('\n')
   if (lines.length < 2) return []
 
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''))
+  const headers = parseCSVLine(lines[0])
   const rows: Record<string, string>[] = []
 
   for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(',').map(v => v.trim().replace(/^"|"$/g, ''))
+    if (!lines[i].trim()) continue
+    const values = parseCSVLine(lines[i])
     const row: Record<string, string> = {}
     headers.forEach((header, index) => {
       row[header] = values[index] || ''
