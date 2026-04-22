@@ -137,7 +137,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 function generateBreadcrumbSchema(category: string, categoryName: string, locationName: string, isCountry: boolean, countryName?: string) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.modestdirectory.be'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
   
   const items = [
     { position: 1, name: 'Home', item: siteUrl },
@@ -164,7 +164,7 @@ function generateBreadcrumbSchema(category: string, categoryName: string, locati
 }
 
 function generateItemListSchema(shops: any[], category: string, location: string) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.modestdirectory.be'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
 
   return {
     '@context': 'https://schema.org',
@@ -211,7 +211,7 @@ export default async function CategoryLocationPage({ params }: { params: Params 
 
   const categoryName = categoryNames[params.category] || params.category
   const keywords = categoryKeywords[params.category] || []
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.modestdirectory.be'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
 
   // Schema markup
   const breadcrumbSchema = generateBreadcrumbSchema(

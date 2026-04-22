@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { getVisibleReviewData } from '@/lib/reviews'
 
 type Review = {
@@ -82,9 +83,11 @@ export default function ShopCard({ shop }: { shop: Shop }) {
         {/* Logo or first letter */}
         <div className="flex-shrink-0">
           {(shop.subscriptionTier && shop.logoUrl) ? (
-            <img
+            <Image
               src={shop.logoUrl}
               alt={`${shop.name} logo`}
+              width={56}
+              height={56}
               className="w-14 h-14 rounded-lg object-cover border"
             />
           ) : (
@@ -100,7 +103,7 @@ export default function ShopCard({ shop }: { shop: Shop }) {
             <h3 className="font-semibold text-lg text-gray-900 truncate">{shop.name}</h3>
             <div className="flex items-center gap-1 flex-shrink-0">
               {isGold && (
-                <img src="/trusted-partner-badge.png" alt="Trusted Partner" title="Trusted Partner" className="h-14 w-auto flex-shrink-0" />
+                <Image src="/trusted-partner-badge.png" alt="Trusted Partner" title="Trusted Partner" width={56} height={56} className="h-14 w-auto flex-shrink-0" />
               )}
               {shop.isFeatured && !isGold && (
                 <span className="text-yellow-500">⭐</span>
