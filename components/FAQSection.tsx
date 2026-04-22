@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { generateFAQJsonLd } from '@/lib/seo'
 
 interface FAQ {
   id: string
@@ -14,14 +13,8 @@ export default function FAQSection({ faqs }: { faqs: FAQ[] }) {
 
   if (faqs.length === 0) return null
 
-  const jsonLd = generateFAQJsonLd(faqs)
-
   return (
     <section className="py-8">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Veelgestelde vragen</h2>
       

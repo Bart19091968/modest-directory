@@ -133,6 +133,9 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       description,
       type: 'website',
     },
+    ...(data.shops.length === 0 && {
+      robots: { index: false, follow: true },
+    }),
   }
 }
 
@@ -185,7 +188,7 @@ function generateItemListSchema(shops: any[], category: string, location: string
           address: {
             '@type': 'PostalAddress',
             addressLocality: shop.city,
-            addressCountry: shop.country === 'NL' ? 'Nederland' : 'België',
+            addressCountry: shop.country,
           },
           ...(avgRating && {
             aggregateRating: {
@@ -222,6 +225,7 @@ export default async function CategoryLocationPage({ params }: { params: Params 
     data.city?.country.name
   )
   const itemListSchema = data.shops.length > 0 ? generateItemListSchema(data.shops, params.category, params.location) : null
+  const faqSchema = data.faqs.length > 0 ? generateFAQJsonLd(data.faqs) : null
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
@@ -234,6 +238,12 @@ export default async function CategoryLocationPage({ params }: { params: Params 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        />
+      )}
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
       )}
 
