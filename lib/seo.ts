@@ -94,6 +94,11 @@ export function generateLocalBusinessJsonLd(shop: {
   }
 }
 
+const DAY_OF_WEEK: Record<string, string> = {
+  monday: 'Monday', tuesday: 'Tuesday', wednesday: 'Wednesday',
+  thursday: 'Thursday', friday: 'Friday', saturday: 'Saturday', sunday: 'Sunday',
+}
+
 export function generateShopJsonLd(shop: {
   name: string
   slug: string
@@ -108,9 +113,21 @@ export function generateShopJsonLd(shop: {
   logoUrl?: string | null
   averageRating?: number
   reviewCount?: number
+  openingHours?: Record<string, { open?: string; close?: string; closed?: boolean }> | null
 }) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
   const shopUrl = `${siteUrl}/shops/${shop.slug}`
+
+  const openingHoursSpec = shop.openingHours
+    ? Object.entries(shop.openingHours)
+        .filter(([, h]) => !h.closed && h.open && h.close)
+        .map(([day, h]) => ({
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: DAY_OF_WEEK[day] || day,
+          opens: h.open,
+          closes: h.close,
+        }))
+    : null
 
   return {
     '@context': 'https://schema.org',
@@ -132,6 +149,7 @@ export function generateShopJsonLd(shop: {
     ...(shop.email && { email: shop.email }),
     ...(shop.phone && { telephone: shop.phone }),
     ...(shop.websiteUrl && { sameAs: [shop.websiteUrl] }),
+    ...(openingHoursSpec && openingHoursSpec.length > 0 && { openingHoursSpecification: openingHoursSpec }),
     ...(shop.averageRating && {
       aggregateRating: {
         '@type': 'AggregateRating',

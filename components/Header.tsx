@@ -40,19 +40,22 @@ export default function Header() {
               ref={dropdownRef}
               onMouseLeave={closeDropdown}
             >
-              <button 
+              <button
                 onClick={() => setCategoriesOpen(!categoriesOpen)}
                 onMouseEnter={() => setCategoriesOpen(true)}
+                aria-expanded={categoriesOpen}
+                aria-controls="categories-menu"
+                aria-label="Categorieën navigatie"
                 className="text-gray-600 hover:text-accent transition-colors flex items-center gap-1 py-2"
               >
                 Categorieën
-                <svg className={`w-4 h-4 transition-transform ${categoriesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-4 h-4 transition-transform ${categoriesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
-              
+
               {categoriesOpen && (
-                <div className="absolute top-full left-0 pt-1 z-50">
+                <div id="categories-menu" className="absolute top-full left-0 pt-1 z-50" role="navigation" aria-label="Categorie links">
                   <div className="w-[420px] bg-white rounded-lg shadow-lg border py-4 px-4">
                     <div className="grid grid-cols-2 gap-4">
                       {/* België */}

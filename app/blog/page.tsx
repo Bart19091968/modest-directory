@@ -8,6 +8,18 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/blog',
   },
+  openGraph: {
+    title: 'Blog - Islamitische Mode, Hijab & Modest Fashion Tips | ModestDirectory',
+    description: 'Tips, trends en inspiratie over hijabs, abayas en modest fashion in Nederland en België.',
+    type: 'website',
+    images: [{ url: '/icon-512.png', width: 512, height: 512, alt: 'ModestDirectory Blog' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog | ModestDirectory',
+    description: 'Tips, trends en inspiratie over hijabs, abayas en modest fashion.',
+    images: ['/icon-512.png'],
+  },
 }
 
 export const dynamic = 'force-dynamic'
@@ -21,9 +33,49 @@ async function getBlogPosts() {
 
 export default async function BlogPage() {
   const posts = await getBlogPosts()
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+    ],
+  }
+
+  const collectionJsonLd = posts.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Blog - ModestDirectory',
+    url: `${siteUrl}/blog`,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: posts.map((post, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'BlogPosting',
+          url: `${siteUrl}/blog/${post.slug}`,
+          headline: post.title,
+        },
+      })),
+    },
+  } : null
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      {collectionJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }} />}
+
+      <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+        <ol className="flex flex-wrap items-center gap-1">
+          <li><Link href="/" className="hover:text-accent">Home</Link></li>
+          <li><span className="mx-2">›</span></li>
+          <li className="text-gray-900" aria-current="page">Blog</li>
+        </ol>
+      </nav>
+
       <div className="text-center mb-12">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Blog</h1>
         <p className="text-gray-600">
