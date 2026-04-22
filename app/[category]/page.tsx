@@ -116,7 +116,7 @@ export default async function CategoryPage({ params }: { params: Params }) {
 
   const categoryName = categoryNames[params.category]
   const keywords = categoryKeywords[params.category] || []
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.modestdirectory.com'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',

@@ -119,7 +119,7 @@ export function generateShopJsonLd(shop: {
     address: {
       '@type': 'PostalAddress',
       addressLocality: shop.city,
-      addressCountry: shop.country === 'NL' ? 'Nederland' : 'België',
+      addressCountry: shop.country,
     },
     ...(shop.email && { email: shop.email }),
     ...(shop.phone && { telephone: shop.phone }),

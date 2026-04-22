@@ -2,6 +2,7 @@ import prisma from '@/lib/db'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import ReviewForm from '@/components/ReviewForm'
 import StarRating from '@/components/StarRating'
 import { generateShopJsonLd, generateBreadcrumbListJsonLd } from '@/lib/seo'
@@ -124,9 +125,11 @@ export default async function ShopDetailPage({
           {/* Logo or first letter */}
           <div className="flex-shrink-0">
             {(shop.subscriptionTier && shop.logoUrl) ? (
-              <img
+              <Image
                 src={shop.logoUrl}
                 alt={`${shop.name} logo`}
+                width={96}
+                height={96}
                 className="w-24 h-24 rounded-xl object-cover border"
               />
             ) : (
@@ -158,7 +161,7 @@ export default async function ShopDetailPage({
 
               <div className="flex items-center gap-2">
                 {shop.subscriptionTier === 'GOLD' && (
-                  <img src="/trusted-partner-badge.png" alt="Trusted Partner" title="Trusted Partner" className="h-20 w-auto" />
+                  <Image src="/trusted-partner-badge.png" alt="Trusted Partner" title="Trusted Partner" width={80} height={80} className="h-20 w-auto" />
                 )}
                 {shop.isFeatured && shop.subscriptionTier !== 'GOLD' && (
                   <span className="text-2xl" title="Uitgelichte winkel">⭐</span>
@@ -203,7 +206,7 @@ export default async function ShopDetailPage({
             <a
               href={shop.websiteUrl}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
               className="px-6 py-3 bg-white border-2 border-accent rounded-full hover:bg-gray-50 transition flex items-center gap-2"
             >
               <svg className="w-5 h-5 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -373,11 +376,13 @@ export default async function ShopDetailPage({
           <h2 className="text-xl font-bold text-gray-900 mb-4">Foto&apos;s</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {visiblePhotos.map((photo, index) => (
-              <div key={index} className="aspect-square rounded-xl overflow-hidden bg-gray-100">
-                <img
+              <div key={index} className="aspect-square rounded-xl overflow-hidden bg-gray-100 relative">
+                <Image
                   src={photo}
                   alt={`${shop.name} foto ${index + 1}`}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  className="object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
             ))}

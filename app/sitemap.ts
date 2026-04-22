@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import prisma from '@/lib/db'
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.modestdirectory.be'
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
 
 export const dynamic = 'force-dynamic'
 
@@ -67,7 +67,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // Category + Location SEO pages
-  const categories = ['hijab-shops', 'abaya-shops', 'modest-fashion', 'islamitische-kleding', 'jilbab-shops']
+  const categories = ['hijab-shops', 'abaya-shops', 'modest-fashion', 'islamitische-kleding']
   const countries = await prisma.country.findMany({ select: { slug: true } })
   const cities = await prisma.city.findMany({ select: { slug: true } })
 
