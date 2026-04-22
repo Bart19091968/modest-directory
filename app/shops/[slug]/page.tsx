@@ -56,6 +56,12 @@ export async function generateMetadata({
         ? [{ url: shop.logoUrl, alt: `${shop.name} logo` }]
         : [{ url: '/icon-512.png', width: 512, height: 512, alt: 'ModestDirectory' }],
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${shop.name} | ModestDirectory`,
+      description: shop.shortDescription || `${shop.name} - Islamitische kledingwinkel in ${location}`,
+      images: shop.logoUrl ? [shop.logoUrl] : ['/icon-512.png'],
+    },
   }
 }
 

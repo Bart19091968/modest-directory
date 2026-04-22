@@ -46,6 +46,13 @@ export async function generateMetadata({
       description: post.excerpt,
       type: 'article',
       publishedTime: post.publishedAt?.toISOString(),
+      images: [{ url: '/icon-512.png', width: 512, height: 512, alt: post.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.metaTitle || post.title,
+      description: post.metaDesc || post.excerpt,
+      images: ['/icon-512.png'],
     },
   }
 }

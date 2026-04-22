@@ -5,11 +5,44 @@ export const metadata: Metadata = {
   title: 'Over ModestDirectory | Islamitische Kledingwinkels NL & BE',
   description: 'Leer meer over ModestDirectory, de meest complete gids voor islamitische kledingwinkels, hijab shops en modest fashion in Nederland en België.',
   alternates: { canonical: '/over-ons' },
+  openGraph: {
+    title: 'Over ModestDirectory',
+    description: 'De meest complete gids voor islamitische kledingwinkels, hijab shops en modest fashion in Nederland en België.',
+    type: 'website',
+    images: [{ url: '/icon-512.png', width: 512, height: 512, alt: 'Over ModestDirectory' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Over ModestDirectory',
+    description: 'De meest complete gids voor islamitische kledingwinkels in NL & BE.',
+    images: ['/icon-512.png'],
+  },
+}
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: 'Over ons', item: `${siteUrl}/over-ons` },
+  ],
 }
 
 export default function OverOnsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+
+      <nav className="text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
+        <ol className="flex flex-wrap items-center gap-1">
+          <li><Link href="/" className="hover:text-accent">Home</Link></li>
+          <li><span className="mx-2">›</span></li>
+          <li className="text-gray-900" aria-current="page">Over ons</li>
+        </ol>
+      </nav>
+
       <h1 className="text-3xl font-bold text-gray-900 mb-6">Over ModestDirectory</h1>
 
       <div className="space-y-8">
