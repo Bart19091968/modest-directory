@@ -119,7 +119,7 @@ export function generateShopJsonLd(shop: {
   const shopUrl = `${siteUrl}/shops/${shop.slug}`
 
   const openingHoursSpec = shop.openingHours
-    ? Object.entries(shop.openingHours)
+    ? Object.entries(shop.openingHours as Record<string, any>)
         .filter(([, h]) => !h.closed && h.open && h.close)
         .map(([day, h]) => ({
           '@type': 'OpeningHoursSpecification',
