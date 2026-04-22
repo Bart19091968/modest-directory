@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ShopCard from '@/components/ShopCard'
 import FAQSection from '@/components/FAQSection'
+import { generateFAQJsonLd } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
