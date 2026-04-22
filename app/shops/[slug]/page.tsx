@@ -380,7 +380,7 @@ export default async function ShopDetailPage({
               <div key={index} className="aspect-square rounded-xl overflow-hidden bg-gray-100 relative">
                 <Image
                   src={photo}
-                  alt={`${shop.name} foto ${index + 1}`}
+                  alt={`${shop.name} - foto ${index + 1} van ${visiblePhotos.length}`}
                   fill
                   sizes="(max-width: 768px) 50vw, 33vw"
                   className="object-cover hover:scale-105 transition-transform duration-300"

@@ -13,6 +13,18 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/shops',
   },
+  openGraph: {
+    title: 'Islamitische Kledingwinkels - Hijab & Abaya Shops | ModestDirectory',
+    description: 'Ontdek alle islamitische kledingwinkels in Nederland en België. Filter op locatie, lees reviews en vind de beste winkel.',
+    type: 'website',
+    images: [{ url: '/icon-512.png', width: 512, height: 512, alt: 'ModestDirectory - Alle Winkels' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Islamitische Kledingwinkels | ModestDirectory',
+    description: 'Ontdek hijab shops, abaya winkels en modest fashion in NL & BE.',
+    images: ['/icon-512.png'],
+  },
 }
 
 type SearchParams = {

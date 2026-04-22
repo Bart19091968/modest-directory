@@ -105,6 +105,13 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       title,
       description,
       type: 'website',
+      images: [{ url: '/icon-512.png', width: 512, height: 512, alt: categoryName }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/icon-512.png'],
     },
   }
 }

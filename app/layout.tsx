@@ -72,6 +72,13 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION,
   },
+  alternates: {
+    languages: {
+      'nl-BE': process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com',
+      'nl-NL': process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com',
+      'x-default': process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com',
+    },
+  },
 }
 
 export default function RootLayout({
@@ -84,6 +91,10 @@ export default function RootLayout({
   return (
     <html lang="nl">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
