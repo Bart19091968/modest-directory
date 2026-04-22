@@ -133,6 +133,14 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       title,
       description,
       type: 'website',
+      url: `/${params.category}/${params.location}`,
+      images: [{ url: '/icon-512.png', width: 512, height: 512, alt: `${categoryName} in ${data.locationName}` }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/icon-512.png'],
     },
     ...(data.shops.length === 0 && {
       robots: { index: false, follow: true },
