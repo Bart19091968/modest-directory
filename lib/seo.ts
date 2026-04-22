@@ -113,7 +113,7 @@ export function generateShopJsonLd(shop: {
   logoUrl?: string | null
   averageRating?: number
   reviewCount?: number
-  openingHours?: Record<string, { open?: string; close?: string; closed?: boolean }> | null
+  openingHours?: any
 }) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
   const shopUrl = `${siteUrl}/shops/${shop.slug}`
