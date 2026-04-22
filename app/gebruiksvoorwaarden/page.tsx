@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Gebruiksvoorwaarden | ModestDirectory',
   description: 'De gebruiksvoorwaarden van ModestDirectory. Lees de regels en voorwaarden voor het gebruik van onze website en diensten.',
+  alternates: { canonical: '/gebruiksvoorwaarden' },
 }
 
 export default function GebruiksvoorwaardenPage() {

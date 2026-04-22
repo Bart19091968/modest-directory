@@ -3,8 +3,9 @@ import prisma from '@/lib/db'
 import GratisAanmeldenClient from '@/components/GratisAanmeldenClient'
 
 export const metadata: Metadata = {
-  title: 'Gratis Aanmelden | ModestDirectory',
+  title: 'Gratis Winkel Aanmelden | ModestDirectory',
   description: 'Meld je islamitische kledingwinkel gratis aan bij ModestDirectory en bereik duizenden potentiële klanten in Nederland en België.',
+  alternates: { canonical: '/gratis-aanmelden' },
 }
 
 async function getCategories() {

@@ -163,10 +163,10 @@ export default async function ShopsPage({
       {/* Header + Search bar on top */}
       <div className="text-center mb-12">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          Alle Winkels
+          Alle Islamitische Kledingwinkels in Nederland & België
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-          Ontdek de beste islamitische kledingwinkels in Nederland en België
+          Ontdek hijab shops, abaya winkels en modest fashion boutiques. Filter op locatie, lees reviews en vind de beste winkel bij jou in de buurt.
         </p>
         <SearchFilter />
       </div>

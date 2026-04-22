@@ -37,8 +37,9 @@ export async function generateMetadata({
   }
 
   const location = shop.city ? `${shop.city}, ${shop.country}` : shop.country
-  const description = shop.shortDescription
-    ? `${shop.shortDescription} | Lees reviews en ontdek meer over ${shop.name} in ${location}.`
+  const descBase = shop.shortDescription ? shop.shortDescription.slice(0, 120) : null
+  const description = descBase
+    ? `${descBase} | Reviews & info over ${shop.name} in ${location}.`
     : `${shop.name} - Islamitische kledingwinkel in ${location}. Bekijk reviews, openingstijden en contactgegevens op ModestDirectory.`
 
   return {

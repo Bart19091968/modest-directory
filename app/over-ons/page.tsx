@@ -2,8 +2,9 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Over Ons | ModestDirectory',
+  title: 'Over ModestDirectory | Islamitische Kledingwinkels NL & BE',
   description: 'Leer meer over ModestDirectory, de meest complete gids voor islamitische kledingwinkels, hijab shops en modest fashion in Nederland en België.',
+  alternates: { canonical: '/over-ons' },
 }
 
 export default function OverOnsPage() {

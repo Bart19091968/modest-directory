@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Privacybeleid | ModestDirectory',
   description: 'Lees hoe ModestDirectory omgaat met jouw persoonsgegevens. Wij respecteren jouw privacy en verwerken gegevens conform de AVG/GDPR.',
+  alternates: { canonical: '/privacybeleid' },
 }
 
 export default function PrivacybeleidPage() {

@@ -33,6 +33,13 @@ export function generateDirectoryJsonLd() {
         },
         description: 'Online directory voor islamitische kledingwinkels, hijab shops en abaya winkels in Nederland en België.',
         email: 'info@modestdirectory.com',
+        areaServed: ['NL', 'BE'],
+        contactPoint: {
+          '@type': 'ContactPoint',
+          email: 'info@modestdirectory.com',
+          contactType: 'customer support',
+          availableLanguage: ['Dutch'],
+        },
       },
     ],
   }
@@ -92,6 +99,7 @@ export function generateShopJsonLd(shop: {
   slug: string
   shortDescription: string
   longDescription?: string | null
+  address?: string | null
   city?: string | null
   country: string
   websiteUrl?: string | null
@@ -102,22 +110,22 @@ export function generateShopJsonLd(shop: {
   reviewCount?: number
 }) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
+  const shopUrl = `${siteUrl}/shops/${shop.slug}`
 
   return {
     '@context': 'https://schema.org',
     '@type': 'Store',
+    '@id': shopUrl,
     name: shop.name,
     description: shop.longDescription || shop.shortDescription,
-    url: `${siteUrl}/shops/${shop.slug}`,
+    url: shopUrl,
     ...(shop.logoUrl && {
       image: shop.logoUrl,
-      logo: {
-        '@type': 'ImageObject',
-        url: shop.logoUrl,
-      },
+      logo: { '@type': 'ImageObject', url: shop.logoUrl },
     }),
     address: {
       '@type': 'PostalAddress',
+      ...(shop.address && { streetAddress: shop.address }),
       addressLocality: shop.city,
       addressCountry: shop.country,
     },

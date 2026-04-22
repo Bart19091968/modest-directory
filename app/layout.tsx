@@ -138,8 +138,8 @@ export default function RootLayout({
                 <h4 className="font-semibold mb-4">Navigatie</h4>
                 <ul className="space-y-2 text-gray-400">
                   <li><Link href="/shops" className="hover:text-white transition-colors">Alle winkels</Link></li>
-                  <li><Link href="/shops?country=BE" className="hover:text-white transition-colors">Winkels in België</Link></li>
-                  <li><Link href="/shops?country=NL" className="hover:text-white transition-colors">Winkels in Nederland</Link></li>
+                  <li><Link href="/islamitische-kleding/belgie" className="hover:text-white transition-colors">Winkels in België</Link></li>
+                  <li><Link href="/islamitische-kleding/nederland" className="hover:text-white transition-colors">Winkels in Nederland</Link></li>
                   <li><Link href="/aanmelden" className="hover:text-white transition-colors">Winkel aanmelden</Link></li>
                   <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
                   <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
