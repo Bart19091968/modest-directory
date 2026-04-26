@@ -67,9 +67,6 @@ export default function Header() {
                         <Link href="/abaya-shops/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
                           👗 Abaya Winkels
                         </Link>
-                        <Link href="/modest-fashion/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
-                          ✨ Modest Fashion
-                        </Link>
                         <Link href="/islamitische-kleding/belgie" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
                           🌙 Islamitische Kleding
                         </Link>
@@ -82,9 +79,6 @@ export default function Header() {
                         </Link>
                         <Link href="/abaya-shops/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
                           👗 Abaya Winkels
-                        </Link>
-                        <Link href="/modest-fashion/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
-                          ✨ Modest Fashion
                         </Link>
                         <Link href="/islamitische-kleding/nederland" onClick={closeDropdown} className="block px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent rounded">
                           🌙 Islamitische Kleding
@@ -141,9 +135,6 @@ export default function Header() {
                 <Link href="/abaya-shops/belgie" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
                   Abaya Winkels
                 </Link>
-                <Link href="/modest-fashion/belgie" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
-                  Modest Fashion
-                </Link>
               </div>
 
               <div className="py-2">
@@ -153,9 +144,6 @@ export default function Header() {
                 </Link>
                 <Link href="/abaya-shops/nederland" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
                   Abaya Winkels
-                </Link>
-                <Link href="/modest-fashion/nederland" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
-                  Modest Fashion
                 </Link>
               </div>
 

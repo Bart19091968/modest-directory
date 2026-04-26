@@ -11,15 +11,12 @@ export const dynamic = 'force-dynamic'
 const categoryNames: Record<string, string> = {
   'hijab-shops': 'Hijab Shops',
   'abaya-shops': 'Abaya Winkels',
-  'modest-fashion': 'Modest Fashion',
   'islamitische-kleding': 'Islamitische Kleding',
 }
 
 const categoryKeywords: Record<string, string[]> = {
   'hijab-shops': ['hijab', 'hoofddoek', 'sjaals', 'underscarfs', 'hijab accessoires', 'instant hijabs', 'jersey hijabs', 'chiffon hijabs', 'satijnen hijabs'],
   'abaya-shops': ['abaya', 'jilbab', 'gebedsjurk', 'kimono abaya', 'open abaya', 'gesloten abaya', 'abaya set', 'abaya met riem'],
-  'modest-fashion': ['modest fashion', 'bescheiden kleding', 'lange jurken', 'maxi rokken', 'wijde broeken', 'tuniek', 'modest tops', 'modest zwemkleding'],
-  'islamitische-kleding': ['islamitische kleding', 'moslim kleding', 'gebedkleding', 'thobe', 'kaftan', 'djellaba', 'islamitische mode', 'halal fashion'],
 }
 
 type Params = {

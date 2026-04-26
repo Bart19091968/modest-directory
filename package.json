@@ -10,6 +10,7 @@
     "db:push": "prisma db push",
     "db:seed": "npx tsx prisma/seed.ts",
     "db:seed:quality": "npx tsx prisma/seed-quality.ts",
+    "db:cleanup:modest-fashion": "npx tsx prisma/cleanup-modest-fashion.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {

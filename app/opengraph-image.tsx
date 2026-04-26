@@ -51,7 +51,7 @@ export default async function Image() {
             marginTop: 48,
           }}
         >
-          {['Hijab Shops', 'Abaya Winkels', 'Modest Fashion'].map(label => (
+          {['Hijab Shops', 'Abaya Winkels'].map(label => (
             <div
               key={label}
               style={{

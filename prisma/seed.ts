@@ -85,7 +85,6 @@ async function main() {
   const categories = [
     { name: 'Hijabs', slug: 'hijab-shops', namePlural: 'Hijab Shops', icon: '🧕', sortOrder: 1, metaTitle: 'Hijab Shops', metaDesc: 'Vind de beste hijab winkels bij jou in de buurt.' },
     { name: 'Abayas', slug: 'abaya-shops', namePlural: 'Abaya Winkels', icon: '👗', sortOrder: 2, metaTitle: 'Abaya Winkels', metaDesc: 'Ontdek de mooiste abaya winkels en collecties.' },
-    { name: 'Modest Fashion', slug: 'modest-fashion', namePlural: 'Modest Fashion Winkels', icon: '✨', sortOrder: 3, metaTitle: 'Modest Fashion Winkels', metaDesc: 'Shop modest fashion bij de beste winkels.' },
     { name: 'Islamitische Kleding', slug: 'islamitische-kleding', namePlural: 'Islamitische Kledingwinkels', icon: '🌙', sortOrder: 4, metaTitle: 'Islamitische Kleding', metaDesc: 'Vind islamitische kledingwinkels bij jou in de buurt.' },
   ]
 
