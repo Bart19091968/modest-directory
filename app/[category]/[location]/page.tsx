@@ -460,24 +460,6 @@ export default async function CategoryLocationPage({ params }: { params: Params 
         </p>
       </section>
 
-      {/* CTA sectie */}
-      <section className="text-center mt-12 p-8 bg-accent/5 rounded-xl">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          Heb je een {categoryName.toLowerCase().replace(' winkels', '').replace(' shops', '')} winkel in {data.locationName}?
-        </h2>
-        <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-          Meld je winkel gratis aan bij ModestDirectory en bereik duizenden potentiële klanten 
-          die op zoek zijn naar {categoryName.toLowerCase()} in {data.locationName} en omgeving.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href="/aanmelden" className="btn-primary">
-            Winkel aanmelden
-          </Link>
-          <Link href="/shops" className="px-6 py-3 border border-gray-300 rounded-full hover:bg-gray-50 transition">
-            Alle winkels bekijken
-          </Link>
-        </div>
-      </section>
     </div>
   )
 }
