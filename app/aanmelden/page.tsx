@@ -10,14 +10,25 @@ export const metadata: Metadata = {
 
 async function getCategories() {
   try {
-    return await prisma.category.findMany({
+    const dbCategories = await prisma.category.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: 'asc' },
       select: { id: true, name: true },
     })
-  } catch {
-    return []
+    
+    if (dbCategories.length > 0) {
+      return dbCategories
+    }
+  } catch (e) {
+    console.error('Error fetching categories from database:', e)
   }
+
+  // Fallback: hardcoded categories
+  return [
+    { id: 'hijab-shops', name: 'Hijab Shops' },
+    { id: 'abaya-shops', name: 'Abaya Winkels' },
+    { id: 'islamitische-kleding', name: 'Islamitische Kleding' },
+  ]
 }
 
 export default async function AanmeldenPage() {
