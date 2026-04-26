@@ -52,7 +52,7 @@ async function getLocationData(landSlug: string) {
     })
 
     const cities = await prisma.city.findMany({
-      where: { countryCode: country.code },
+      where: { countryId: country.id },
       orderBy: { name: 'asc' },
     })
 
@@ -139,8 +139,7 @@ export default async function LocationPage({ params }: { params: Params }) {
   }
 
   const { location, shops, isCountry } = data
-  const countryCode = isCountry ? location.code : (data as any).location.country.code
-
+  const countryCode = isCountry ? (location as any).code : (location as any).country.code
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
