@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "start": "npx prisma db push --skip-generate && npx tsx prisma/cleanup-modest-fashion.ts && npx tsx prisma/activate-categories.ts && next start",
+    "start": "npx prisma db push --skip-generate && npm run db:seed && npx tsx prisma/cleanup-modest-fashion.ts && next start",
     "lint": "next lint",
     "db:push": "prisma db push",
     "db:seed": "npx tsx prisma/seed.ts",
