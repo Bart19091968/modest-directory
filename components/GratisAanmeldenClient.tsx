@@ -143,7 +143,7 @@ export default function GratisAanmeldenClient({ categories }: { categories: Cate
         <div className="mt-6">
           <h4 className="font-semibold text-gray-900 mb-4 pb-2 border-b">Type winkel & Categorieën</h4>
           <p className="text-xs text-gray-500 mb-3">Selecteer welk type winkel je bent en in welke categorieën je actief bent:</p>
-          <div className="flex flex-wrap gap-x-6 gap-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <label className="flex items-center gap-2 cursor-pointer">
               <input type="checkbox" checked={form.isWebshop} onChange={e => setForm({ ...form, isWebshop: e.target.checked })}
                 className="w-5 h-5 text-accent rounded" />
