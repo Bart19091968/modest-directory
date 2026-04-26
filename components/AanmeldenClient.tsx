@@ -3,9 +3,6 @@
 import { useRef, useState } from 'react'
 import ShopRegistrationForm from '@/components/ShopRegistrationForm'
 
-type Props = {
-  categories: { id: string; name: string }[]
-}
 
 const PLANS = [
   {
@@ -70,7 +67,7 @@ const PLANS = [
   },
 ]
 
-export default function AanmeldenClient({ categories }: Props) {
+export default function AanmeldenClient() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null)
   const formRef = useRef<HTMLDivElement>(null)
 
@@ -141,7 +138,7 @@ export default function AanmeldenClient({ categories }: Props) {
       {selectedTier && (
         <div ref={formRef} className="scroll-mt-8">
           <div className="bg-white rounded-xl shadow-sm border p-8">
-            <ShopRegistrationForm tier={selectedTier} categories={categories} />
+            <ShopRegistrationForm tier={selectedTier} />
           </div>
         </div>
       )}

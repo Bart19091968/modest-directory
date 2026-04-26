@@ -2,9 +2,13 @@
 
 import { useState } from 'react'
 
-type Category = { id: string; name: string }
+const CATEGORIES = [
+  { slug: 'hijab-shops', name: 'Hijab Shops' },
+  { slug: 'abaya-shops', name: 'Abaya Winkels' },
+  { slug: 'islamitische-kleding', name: 'Islamitische Kleding' },
+]
 
-export default function GratisAanmeldenClient({ categories }: { categories: Category[] }) {
+export default function GratisAanmeldenClient() {
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -40,7 +44,7 @@ export default function GratisAanmeldenClient({ categories }: { categories: Cate
         body: JSON.stringify({
           ...form,
           subscriptionTier: '',
-          categoryIds: selectedCategories,
+          categorySlugs: selectedCategories,
           logoUrl: null,
           photos: [],
           openingHours: null,
@@ -154,11 +158,11 @@ export default function GratisAanmeldenClient({ categories }: { categories: Cate
                 className="w-5 h-5 text-accent rounded" />
               <span className="text-sm">Fysieke winkel</span>
             </label>
-            {categories.length > 0 && <div className="w-px bg-gray-200 self-stretch hidden sm:block" />}
-            {categories.map(cat => (
-              <label key={cat.id} className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={selectedCategories.includes(cat.id)}
-                  onChange={() => toggleCategory(cat.id)} className="w-5 h-5 text-accent rounded" />
+            {<div className="w-full bg-gray-200 h-px my-1" />}
+            {CATEGORIES.map(cat => (
+              <label key={cat.slug} className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={selectedCategories.includes(cat.slug)}
+                  onChange={() => toggleCategory(cat.slug)} className="w-5 h-5 text-accent rounded" />
                 <span className="text-sm">{cat.name}</span>
               </label>
             ))}

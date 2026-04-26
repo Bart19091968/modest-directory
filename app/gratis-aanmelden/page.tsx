@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import prisma from '@/lib/db'
 import GratisAanmeldenClient from '@/components/GratisAanmeldenClient'
 
 export const metadata: Metadata = {
@@ -8,22 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/gratis-aanmelden' },
 }
 
-async function getCategories() {
-  try {
-    return await prisma.category.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: 'asc' },
-      select: { id: true, name: true },
-    })
-  } catch (error) {
-    console.error('Error fetching categories:', error)
-    return []
-  }
-}
-
-export default async function GratisAanmeldenPage() {
-  const categories = await getCategories()
-
+export default function GratisAanmeldenPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <div className="text-center mb-10">
@@ -36,18 +20,11 @@ export default async function GratisAanmeldenPage() {
           <a href="/aanmelden" className="text-accent hover:underline font-medium">Kies een betalend pakket</a>.
         </p>
       </div>
-
       <div className="bg-white rounded-xl shadow-sm border p-8">
-        <GratisAanmeldenClient categories={categories} />
+        <GratisAanmeldenClient />
       </div>
-
       <div className="mt-8 text-center text-sm text-gray-500">
-        <p>
-          Vragen? Mail naar{' '}
-          <a href="mailto:info@modestdirectory.com" className="text-accent hover:underline">
-            info@modestdirectory.com
-          </a>
-        </p>
+        <p>Vragen? Mail naar{' '}<a href="mailto:info@modestdirectory.com" className="text-accent hover:underline">info@modestdirectory.com</a></p>
       </div>
     </div>
   )

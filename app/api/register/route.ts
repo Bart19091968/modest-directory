@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       logoUrl,
       photos,
       subscriptionTier,
-      categoryIds,
+      categorySlugs,
       openingHours,
       facebookUrl,
       instagramUrl,
@@ -102,17 +102,29 @@ export async function POST(request: Request) {
       },
     })
 
-    // Link categories — default to "Islamitische Kleding" when none selected
-    if (Array.isArray(categoryIds) && categoryIds.length > 0) {
-      await prisma.shopCategory.createMany({
-        data: categoryIds.map((categoryId: string) => ({ shopId: shop.id, categoryId })),
-        skipDuplicates: true,
+    // Link categories by slug — upsert so they always exist
+    const slugsToLink: string[] = Array.isArray(categorySlugs) && categorySlugs.length > 0
+      ? categorySlugs
+      : ["islamitische-kleding"]
+
+    for (const slug of slugsToLink) {
+      const cat = await prisma.category.upsert({
+        where: { slug },
+        update: {},
+        create: {
+          slug,
+          name: slug === "hijab-shops" ? "Hijab Shops" : slug === "abaya-shops" ? "Abaya Winkels" : "Islamitische Kleding",
+          namePlural: slug === "hijab-shops" ? "Hijab Shops" : slug === "abaya-shops" ? "Abaya Winkels" : "Islamitische Kledingwinkels",
+          icon: slug === "hijab-shops" ? "🧕" : slug === "abaya-shops" ? "👗" : "🌙",
+          sortOrder: slug === "hijab-shops" ? 1 : slug === "abaya-shops" ? 2 : 4,
+          isActive: true,
+        },
       })
-    } else {
-      const defaultCat = await prisma.category.findUnique({ where: { slug: 'islamitische-kleding' } })
-      if (defaultCat) {
-        await prisma.shopCategory.create({ data: { shopId: shop.id, categoryId: defaultCat.id } })
-      }
+      await prisma.shopCategory.upsert({
+        where: { shopId_categoryId: { shopId: shop.id, categoryId: cat.id } },
+        update: {},
+        create: { shopId: shop.id, categoryId: cat.id },
+      })
     }
 
     await sendNewShopNotification(name, email, city, invoiceRequested)

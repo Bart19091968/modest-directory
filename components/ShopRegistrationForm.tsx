@@ -2,7 +2,11 @@
 
 import { useState } from 'react'
 
-type Category = { id: string; name: string }
+const CATEGORIES = [
+  { slug: 'hijab-shops', name: 'Hijab Shops' },
+  { slug: 'abaya-shops', name: 'Abaya Winkels' },
+  { slug: 'islamitische-kleding', name: 'Islamitische Kleding' },
+]
 
 type DaySchedule = {
   closed: boolean
@@ -49,10 +53,8 @@ function defaultHours(): OpeningHours {
 
 export default function ShopRegistrationForm({
   tier,
-  categories,
 }: {
   tier: string
-  categories: Category[]
 }) {
   const price = TIER_PRICES[tier] ?? 100
   const isSilverOrGold = tier === 'SILVER' || tier === 'GOLD'
@@ -157,7 +159,7 @@ export default function ShopRegistrationForm({
         body: JSON.stringify({
           ...form,
           subscriptionTier: tier,
-          categoryIds: selectedCategories,
+          categorySlugs: selectedCategories,
           logoUrl: logo,
           photos,
           openingHours: isGold ? openingHours : null,
@@ -284,11 +286,11 @@ export default function ShopRegistrationForm({
                 className="w-5 h-5 text-accent rounded" />
               <span className="text-sm">Fysieke winkel</span>
             </label>
-            {categories.length > 0 && <div className="w-px bg-gray-200 self-stretch hidden sm:block" />}
-            {categories.map(cat => (
-              <label key={cat.id} className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={selectedCategories.includes(cat.id)}
-                  onChange={() => toggleCategory(cat.id)} className="w-5 h-5 text-accent rounded" />
+            {<div className="w-full bg-gray-200 h-px my-1" />}
+            {CATEGORIES.map(cat => (
+              <label key={cat.slug} className="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" checked={selectedCategories.includes(cat.slug)}
+                  onChange={() => toggleCategory(cat.slug)} className="w-5 h-5 text-accent rounded" />
                 <span className="text-sm">{cat.name}</span>
               </label>
             ))}

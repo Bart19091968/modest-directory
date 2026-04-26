@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import prisma from '@/lib/db'
 import AanmeldenClient from '@/components/AanmeldenClient'
 
 export const metadata: Metadata = {
@@ -8,21 +7,6 @@ export const metadata: Metadata = {
   alternates: { canonical: '/aanmelden' },
 }
 
-async function getCategories() {
-  try {
-    return await prisma.category.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: 'asc' },
-      select: { id: true, name: true },
-    })
-  } catch (error) {
-    console.error('Error fetching categories:', error)
-    return []
-  }
-}
-
-export default async function AanmeldenPage() {
-  const categories = await getCategories()
-
-  return <AanmeldenClient categories={categories} />
+export default function AanmeldenPage() {
+  return <AanmeldenClient />
 }
