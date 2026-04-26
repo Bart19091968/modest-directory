@@ -5,4 +5,4 @@ Disallow: /api/
 Disallow: /login
 Disallow: /verify/
 
-Sitemap: https://www.modestdirectory.be/sitemap.xml
+Sitemap: https://modestdirectory.com/sitemap.xml

@@ -1,4 +1,4 @@
-// File: C:\Users\bartd\Documents\Bart\Software projecten\modest-directory\app\admin\blog\new\page.tsx
+// File: C:\Users\bartd\AppData\Local\Temp\modest-directory\app\admin\blog\new\page.tsx
 import * as entry from '../../../../../../app/admin/blog/new/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

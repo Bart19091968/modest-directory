@@ -12,6 +12,12 @@ async function getBlogPost(slug: string) {
   })
 }
 
+async function getCountry(slug: string) {
+  return prisma.country.findUnique({
+    where: { slug },
+  })
+}
+
 async function getRelatedPosts(currentSlug: string, tags: string[]) {
   if (tags.length === 0) return []
   
@@ -31,6 +37,20 @@ export async function generateMetadata({
 }: {
   params: { slug: string }
 }): Promise<Metadata> {
+  // Check if it's a country first
+  const country = await getCountry(params.slug)
+  if (country) {
+    const title = `Blog over Modest Fashion in ${country.name}`
+    const description = `Lees het laatste blog content over modest fashion in ${country.name}`
+    return {
+      title,
+      description,
+      alternates: { canonical: `/blog/${params.slug}` },
+      openGraph: { title, description, type: 'website' },
+    }
+  }
+
+  // Otherwise check for blog post
   const post = await getBlogPost(params.slug)
 
   if (!post) {
@@ -57,11 +77,76 @@ export async function generateMetadata({
   }
 }
 
-export default async function BlogPostPage({
+export default async function BlogPage({
   params,
 }: {
   params: { slug: string }
 }) {
+  // Check if it's a country first
+  const country = await getCountry(params.slug)
+  
+  if (country) {
+    // Show all blog posts for this country
+    const blogPosts = await prisma.blogPost.findMany({
+      where: { isPublished: true },
+      orderBy: { publishedAt: 'desc' },
+    })
+
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <nav className="text-sm text-gray-500 mb-8">
+          <Link href="/" className="hover:text-accent">Home</Link>
+          <span className="mx-2">›</span>
+          <Link href="/blog" className="hover:text-accent">Blog</Link>
+          <span className="mx-2">›</span>
+          <span className="text-gray-900">{country.name}</span>
+        </nav>
+
+        <div className="mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Modest Fashion Blog - {country.name}
+          </h1>
+          <p className="text-xl text-gray-600">
+            Lees de nieuwste trends, tips en inspiratie over modest fashion in {country.name}
+          </p>
+        </div>
+
+        {blogPosts.length === 0 ? (
+          <div className="text-center text-gray-600 py-12">
+            Nog geen blog posts beschikbaar
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {blogPosts.map(post => (
+              <article key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+                <Link href={`/blog/${post.slug}`} className="p-6 block">
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">{post.title}</h2>
+                  <p className="text-gray-600 mb-4 line-clamp-2">{post.excerpt}</p>
+                  {post.publishedAt && (
+                    <p className="text-sm text-gray-500">
+                      {new Date(post.publishedAt).toLocaleDateString('nl-NL', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </p>
+                  )}
+                </Link>
+              </article>
+            ))}
+          </div>
+        )}
+
+        <div className="mt-12 text-center">
+          <Link href="/alles/{country.slug}" className="btn-primary">
+            Bekijk winkels in {country.name}
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  // Otherwise show individual blog post
   const post = await getBlogPost(params.slug)
 
   if (!post) {

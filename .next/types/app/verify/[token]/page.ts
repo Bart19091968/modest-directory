@@ -1,4 +1,4 @@
-// File: C:\Users\bartd\Documents\Bart\Software projecten\modest-directory\app\verify\[token]\page.tsx
+// File: C:\Users\bartd\AppData\Local\Temp\modest-directory\app\verify\[token]\page.tsx
 import * as entry from '../../../../../app/verify/[token]/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

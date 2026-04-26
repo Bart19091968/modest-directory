@@ -1,4 +1,4 @@
-// File: C:\Users\bartd\Documents\Bart\Software projecten\modest-directory\app\aanmelden\page.tsx
+// File: C:\Users\bartd\AppData\Local\Temp\modest-directory\app\aanmelden\page.tsx
 import * as entry from '../../../../app/aanmelden/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

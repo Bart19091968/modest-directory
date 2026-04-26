@@ -1,4 +1,4 @@
-// File: C:\Users\bartd\Documents\Bart\Software projecten\modest-directory\app\api\admin\reviews\route.ts
+// File: C:\Users\bartd\AppData\Local\Temp\modest-directory\app\api\admin\reviews\route.ts
 import * as entry from '../../../../../../app/api/admin/reviews/route.js'
 import type { NextRequest } from 'next/server.js'
 
