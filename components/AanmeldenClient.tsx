@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import Link from 'next/link'
 import ShopRegistrationForm from '@/components/ShopRegistrationForm'
 
 
@@ -88,6 +89,14 @@ export default function AanmeldenClient() {
         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
           Kies je formule en bereik duizenden bezoekers per maand
         </p>
+        <div className="mt-6">
+          <Link
+            href="/gratis-aanmelden"
+            className="inline-block border-2 border-accent text-accent px-6 py-3 rounded-lg font-semibold hover:bg-accent hover:text-white transition-colors"
+          >
+            Liever gratis aanmelden?
+          </Link>
+        </div>
       </div>
 
       {/* Pricing cards */}
