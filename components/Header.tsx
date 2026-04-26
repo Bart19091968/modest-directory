@@ -5,7 +5,9 @@ import Link from 'next/link'
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [landOpen, setLandOpen] = useState(false)
   const [categoriesOpen, setCategoriesOpen] = useState(false)
+  const landRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Close dropdown on click outside
@@ -14,12 +16,16 @@ export default function Header() {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setCategoriesOpen(false)
       }
+      if (landRef.current && !landRef.current.contains(e.target as Node)) {
+        setLandOpen(false)
+      }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   const closeDropdown = () => setCategoriesOpen(false)
+  const closeLand = () => setLandOpen(false)
 
   return (
     <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
@@ -34,6 +40,40 @@ export default function Header() {
               Alle Winkels
             </Link>
             
+            {/* Land dropdown */}
+            <div
+              className="relative"
+              ref={landRef}
+              onMouseLeave={closeLand}
+            >
+              <button
+                onClick={() => setLandOpen(!landOpen)}
+                onMouseEnter={() => setLandOpen(true)}
+                aria-expanded={landOpen}
+                aria-controls="land-menu"
+                aria-label="Land navigatie"
+                className="text-gray-600 hover:text-accent transition-colors flex items-center gap-1 py-2"
+              >
+                Land
+                <svg className={`w-4 h-4 transition-transform ${landOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {landOpen && (
+                <div id="land-menu" className="absolute top-full left-0 pt-1 z-50" role="navigation" aria-label="Land links">
+                  <div className="w-44 bg-white rounded-lg shadow-lg border py-2">
+                    <Link href="/modest-fashion/belgie" onClick={closeLand} className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent">
+                      🇧🇪 België
+                    </Link>
+                    <Link href="/modest-fashion/nederland" onClick={closeLand} className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-accent">
+                      🇳🇱 Nederland
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Categories dropdown — no gap between trigger and panel */}
             <div
               className="relative"
@@ -45,10 +85,10 @@ export default function Header() {
                 onMouseEnter={() => setCategoriesOpen(true)}
                 aria-expanded={categoriesOpen}
                 aria-controls="categories-menu"
-                aria-label="Categorieën navigatie"
+                aria-label="Categorie navigatie"
                 className="text-gray-600 hover:text-accent transition-colors flex items-center gap-1 py-2"
               >
-                Categorieën
+                Categorie
                 <svg className={`w-4 h-4 transition-transform ${categoriesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
@@ -126,6 +166,16 @@ export default function Header() {
               <Link href="/shops" className="text-gray-600 hover:text-accent transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
                 Alle Winkels
               </Link>
+
+              <div className="py-2">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">Land</p>
+                <Link href="/modest-fashion/belgie" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
+                  🇧🇪 België
+                </Link>
+                <Link href="/modest-fashion/nederland" className="block text-gray-600 hover:text-accent transition-colors py-1 pl-4 text-sm" onClick={() => setMobileMenuOpen(false)}>
+                  🇳🇱 Nederland
+                </Link>
+              </div>
 
               <div className="py-2">
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">🇧🇪 België</p>
