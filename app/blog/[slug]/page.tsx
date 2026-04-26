@@ -138,7 +138,7 @@ export default async function BlogPage({
         )}
 
         <div className="mt-12 text-center">
-          <Link href="/alles/{country.slug}" className="btn-primary">
+          <Link href="/modest-fashion/{country.slug}" className="btn-primary">
             Bekijk winkels in {country.name}
           </Link>
         </div>
