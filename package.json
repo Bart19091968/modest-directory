@@ -5,12 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "start": "npx prisma db push --skip-generate && npx tsx prisma/cleanup-modest-fashion.ts && next start",
+    "start": "npx prisma db push --skip-generate && npx tsx prisma/cleanup-modest-fashion.ts && npx tsx prisma/activate-categories.ts && next start",
     "lint": "next lint",
     "db:push": "prisma db push",
     "db:seed": "npx tsx prisma/seed.ts",
     "db:seed:quality": "npx tsx prisma/seed-quality.ts",
     "db:cleanup:modest-fashion": "npx tsx prisma/cleanup-modest-fashion.ts",
+    "db:activate-categories": "npx tsx prisma/activate-categories.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
