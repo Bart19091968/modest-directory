@@ -3,7 +3,8 @@ import { Metadata } from 'next'
 import ShopCard from '@/components/ShopCard'
 import SearchFilter from '@/components/SearchFilter'
 import ShopFilters from '@/components/ShopFilters'
-import { generateLocalBusinessJsonLd } from '@/lib/seo'
+import FAQSection from '@/components/FAQSection'
+import { generateLocalBusinessJsonLd, generateFAQJsonLd } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
@@ -46,7 +47,6 @@ async function getShops(params: SearchParams) {
     ]
   }
 
-  // Multi-value: country=BE,NL
   if (params.country) {
     const countries = params.country.split(',').filter(Boolean)
     if (countries.length === 1) {
@@ -56,7 +56,6 @@ async function getShops(params: SearchParams) {
     }
   }
 
-  // Multi-value: city=brussel,antwerpen
   if (params.city) {
     const cities = params.city.split(',').filter(Boolean)
     if (cities.length === 1) {
@@ -66,18 +65,14 @@ async function getShops(params: SearchParams) {
     }
   }
 
-  // Multi-value: type=webshop,physical
   if (params.type) {
     const types = params.type.split(',').filter(Boolean)
     if (types.includes('physical') && types.includes('webshop')) {
-      // Both selected: show shops that are either
       where.OR = [
         ...(where.OR || []),
         { isPhysicalStore: true },
         { isWebshop: true },
       ]
-      // Actually both checked means no filter needed since all shops are one or the other
-      // But let's keep it explicit
     } else if (types.includes('physical')) {
       where.isPhysicalStore = true
     } else if (types.includes('webshop')) {
@@ -85,7 +80,6 @@ async function getShops(params: SearchParams) {
     }
   }
 
-  // Multi-value: category=hijab-shops,abaya-shops
   if (params.category) {
     const categorySlugs = params.category.split(',').filter(Boolean)
     if (categorySlugs.length > 0) {
@@ -140,7 +134,6 @@ async function getFilterData() {
     orderBy: { sortOrder: 'asc' },
   })
 
-  // Get cities that actually have approved shops
   const shopsWithCities = await prisma.shop.findMany({
     where: { status: 'APPROVED', city: { not: null } },
     select: { city: true, citySlug: true, country: true },
@@ -159,20 +152,38 @@ async function getFilterData() {
   return { categories, citiesBE, citiesNL }
 }
 
+async function getFAQs() {
+  return prisma.fAQ.findMany({
+    where: { isActive: true },
+    orderBy: { sortOrder: 'asc' },
+    take: 5,
+  })
+}
+
 export default async function ShopsPage({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>
 }) {
   const params = await searchParams
-  const [shops, filterData] = await Promise.all([
+  const [shops, filterData, faqs] = await Promise.all([
     getShops(params),
     getFilterData(),
+    getFAQs(),
   ])
+
+  const faqSchema = faqs.length > 0 ? generateFAQJsonLd(faqs) : null
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
-      {/* Header + Search bar on top */}
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
+
+      {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
           Alle Islamitische Kledingwinkels in Nederland & België
@@ -217,6 +228,37 @@ export default async function ShopsPage({
           )}
         </main>
       </div>
+
+      {/* FAQ Section */}
+      {faqs.length > 0 && (
+        <section className="mb-12 mt-12">
+          <FAQSection faqs={faqs} />
+        </section>
+      )}
+
+      {/* Editorial text */}
+      <section className="prose prose-lg max-w-none bg-gray-50 rounded-xl p-8 mt-4">
+        <h2>Modest fashion winkels — wereldwijd gecureerd</h2>
+        <p>
+          Er is een moment waarop zoeken overgaat in vinden. Niet door toeval, maar door selectie. Op{' '}
+          <strong>ModestDirectory.com/shops</strong> komt de wereld van <em>modest fashion</em> samen
+          in een zorgvuldig gecureerd overzicht van winkels die begrijpen dat stijl niet luid hoeft
+          te zijn om op te vallen.
+        </p>
+        <p>
+          Van verfijnde hijabmerken tot eigentijdse modest wear labels — hier ontdek je boutiques die
+          uitblinken in kwaliteit, pasvorm en esthetiek. Denk aan neutrale paletten, vloeiende
+          silhouetten en materialen die even comfortabel als elegant aanvoelen. Het is een selectie
+          die aansluit bij de groeiende vraag naar ingetogen luxe en minimalistische mode, zonder in
+          te boeten op persoonlijkheid.
+        </p>
+        <p>
+          Of je nu gericht op zoek bent naar een nieuwe favoriete shop of simpelweg wilt bladeren
+          voor inspiratie, deze pagina biedt een helder vertrekpunt. Geen overdaad, maar een
+          doordachte verzameling van winkels die bescheiden mode naar een hoger niveau tillen —
+          wereldwijd, toegankelijk en altijd in beweging.
+        </p>
+      </section>
 
       {/* SEO: Local Business Schema */}
       {shops.slice(0, 10).map(shop => (
