@@ -201,7 +201,7 @@ export default async function BlogPage({
         </header>
 
         <div 
-          className="prose prose-lg max-w-none"
+          className="prose prose-lg max-w-none prose-h2:text-xl prose-h2:font-semibold prose-h2:text-gray-900 prose-h3:text-lg prose-h3:font-semibold prose-h3:text-gray-900"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
