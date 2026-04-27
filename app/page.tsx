@@ -191,6 +191,25 @@ export default async function HomePage() {
         </div>
       </section>
 
+
+      {/* Editorial intro */}
+      <section className="py-16 bg-primary-50">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="w-10 h-0.5 bg-accent mx-auto mb-8" />
+          <p className="text-lg text-gray-700 leading-relaxed mb-5">
+            Tussen ontdekken en kiezen zit vaak meer dan alleen scrollen. Wie op zoek is naar{' '}
+            <em>modest fashion</em>, zoekt naar stijl die klopt — ingetogen, verfijnd en moeiteloos draagbaar.{' '}
+            <strong>ModestDirectory.com</strong> brengt precies dat samen in één overzichtelijk platform.
+          </p>
+          <p className="text-lg text-gray-700 leading-relaxed mb-5">
+            Van hijabmerken tot moderne modest wear labels: je vindt hier een zorgvuldig geselecteerde collectie van winkels die uitblinken in kwaliteit, esthetiek en tijdloze elegantie. Geen eindeloze lijsten, maar een gerichte selectie die aansluit bij trends zoals minimalisme en ingetogen luxe.
+          </p>
+          <p className="text-lg text-gray-700 leading-relaxed">
+            Of je nu inspiratie zoekt of gericht wilt shoppen, ModestDirectory.com helpt je ontdekken — zonder ruis, met focus.
+          </p>
+          <div className="w-10 h-0.5 bg-accent mx-auto mt-8" />
+        </div>
+      </section>
       {/* How it works */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
