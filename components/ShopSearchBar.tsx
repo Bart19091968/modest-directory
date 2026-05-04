@@ -11,15 +11,15 @@ type CityOption = {
 type Props = {
   citiesBE: CityOption[]
   citiesNL: CityOption[]
+  centered?: boolean
 }
 
-export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
+export default function ShopSearchBar({ citiesBE, citiesNL, centered = false }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
   const [name, setName] = useState(searchParams.get('search') || '')
 
-  // Local state for immediate visual feedback on checkboxes
   const [webshopChecked, setWebshopChecked] = useState(() => {
     const t = searchParams.get('type') || ''
     return !t || t.includes('webshop')
@@ -28,12 +28,10 @@ export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
     const t = searchParams.get('type') || ''
     return !t || t.includes('physical')
   })
-  // Uitgelicht: opt-in filter — unchecked by default, checked = only featured
   const [featuredChecked, setFeaturedChecked] = useState(
     () => searchParams.get('featured') === '1'
   )
 
-  // Sync local checkbox state when URL changes (e.g. browser back/forward)
   useEffect(() => {
     const t = searchParams.get('type') || ''
     setWebshopChecked(!t || t.includes('webshop'))
@@ -85,7 +83,6 @@ export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
     let typeParam: string | null = null
     if (nextWebshop && !nextPhysical) typeParam = 'webshop'
     else if (!nextWebshop && nextPhysical) typeParam = 'physical'
-    // both checked or both unchecked → no type filter
     pushParams({ type: typeParam })
   }
 
@@ -101,12 +98,11 @@ export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
 
   const handleFeaturedChange = (checked: boolean) => {
     setFeaturedChecked(checked)
-    // checked = opt-in filter: show only featured shops
     pushParams({ featured: checked ? '1' : null })
   }
 
   const fieldClass =
-    'h-11 px-4 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors'
+    'h-11 w-full px-4 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-gray-900 focus:ring-1 focus:ring-gray-900 transition-colors'
 
   return (
     <div>
@@ -116,12 +112,12 @@ export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder="Zoek op naam..."
-          className={`${fieldClass} flex-1 min-w-0`}
+          className={`${fieldClass} sm:flex-1 sm:w-auto`}
         />
         <select
           value={country}
           onChange={handleCountryChange}
-          className={`${fieldClass} sm:w-40`}
+          className={`${fieldClass} sm:w-40 sm:flex-none`}
         >
           <option value="">Alle landen</option>
           <option value="NL">Nederland</option>
@@ -130,7 +126,7 @@ export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
         <select
           value={city}
           onChange={handleCityChange}
-          className={`${fieldClass} sm:w-48`}
+          className={`${fieldClass} sm:w-48 sm:flex-none`}
         >
           <option value="">Alle steden</option>
           {visibleCities.map(c => (
@@ -139,13 +135,13 @@ export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
         </select>
         <button
           type="submit"
-          className="h-11 px-6 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-black transition-colors whitespace-nowrap shrink-0"
+          className="h-11 w-full sm:w-auto px-6 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-black transition-colors whitespace-nowrap shrink-0"
         >
           Zoeken
         </button>
       </form>
 
-      <div className="flex flex-wrap items-center gap-6 mt-3">
+      <div className={`flex flex-wrap items-center gap-6 mt-3 ${centered ? 'justify-center' : ''}`}>
         <label className="flex items-center gap-2 cursor-pointer select-none">
           <input
             type="checkbox"
