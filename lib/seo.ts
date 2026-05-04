@@ -72,7 +72,7 @@ export function generateLocalBusinessJsonLd(shop: {
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'Store',
+    '@type': 'ClothingStore',
     name: shop.name,
     description: shop.shortDescription,
     url: `${siteUrl}/shops/${shop.slug}`,
@@ -131,7 +131,7 @@ export function generateShopJsonLd(shop: {
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'Store',
+    '@type': 'ClothingStore',
     '@id': shopUrl,
     name: shop.name,
     description: shop.longDescription || shop.shortDescription,

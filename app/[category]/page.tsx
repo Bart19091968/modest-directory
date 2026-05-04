@@ -133,12 +133,39 @@ export default async function CategoryPage({ params }: { params: Params }) {
     ],
   }
 
+  const itemListSchema = data.shops.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${categoryName} in Nederland en België`,
+    itemListElement: data.shops.slice(0, 10).map((shop, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'ClothingStore',
+        name: shop.name,
+        description: shop.shortDescription,
+        url: `${siteUrl}/shops/${shop.slug}`,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: shop.city,
+          addressCountry: shop.country,
+        },
+      },
+    })),
+  } : null
+
   return (
     <div className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      {itemListSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        />
+      )}
 
       {/* Header */}
       <div className="bg-white border-b">

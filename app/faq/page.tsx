@@ -2,6 +2,7 @@ import prisma from '@/lib/db'
 import { Metadata } from 'next'
 import FAQSection from '@/components/FAQSection'
 import Link from 'next/link'
+import { generateFAQJsonLd } from '@/lib/seo'
 
 export const metadata: Metadata = {
   title: 'Veelgestelde Vragen over Islamitische Kleding & Hijab Shops | ModestDirectory',
@@ -44,10 +45,14 @@ export default async function FAQPage() {
       { '@type': 'ListItem', position: 2, name: 'FAQ', item: `${siteUrl}/faq` },
     ],
   }
+  const faqSchema = faqs.length > 0 ? generateFAQJsonLd(faqs) : null
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      {faqSchema && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      )}
 
       <nav className="text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-1">
