@@ -183,20 +183,30 @@ export default async function ShopsPage({
         />
       )}
 
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <nav className="text-sm text-gray-600 mb-4" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-accent">Home</Link>
+      {/* Hero header */}
+      <div
+        className="relative border-b"
+        style={{ backgroundImage: 'url(/hero-banner.jpg)', backgroundSize: 'cover', backgroundPosition: 'center 30%' }}
+      >
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <nav className="text-sm text-white/70 mb-4" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white">Home</Link>
             <span className="mx-2">/</span>
-            <span>Alle Winkels</span>
+            <span className="text-white">Alle Winkels</span>
           </nav>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold text-white mb-2">
             Alle Islamitische Kledingwinkels in Nederland & België
           </h1>
-          <p className="text-lg text-gray-600 mb-6">
+          <p className="text-lg text-white/80">
             Ontdek hijab shops, abaya winkels en modest fashion boutiques. Filter op locatie, lees reviews en vind de beste winkel bij jou in de buurt.
           </p>
+        </div>
+      </div>
+
+      {/* Search bar */}
+      <div className="bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <ShopSearchBar citiesBE={filterData.citiesBE} citiesNL={filterData.citiesNL} />
         </div>
       </div>
