@@ -96,8 +96,8 @@ async function getShops(params: SearchParams) {
     }
   }
 
-  if (params.featured === '0') {
-    where.isFeatured = { not: true }
+  if (params.featured === '1') {
+    where.isFeatured = true
   }
 
   const shops = await prisma.shop.findMany({
