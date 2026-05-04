@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 type CityOption = {
   name: string
@@ -19,15 +19,30 @@ export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
 
   const [name, setName] = useState(searchParams.get('search') || '')
 
+  // Local state for immediate visual feedback on checkboxes
+  const [webshopChecked, setWebshopChecked] = useState(() => {
+    const t = searchParams.get('type') || ''
+    return !t || t.includes('webshop')
+  })
+  const [physicalChecked, setPhysicalChecked] = useState(() => {
+    const t = searchParams.get('type') || ''
+    return !t || t.includes('physical')
+  })
+  // Uitgelicht: opt-in filter — unchecked by default, checked = only featured
+  const [featuredChecked, setFeaturedChecked] = useState(
+    () => searchParams.get('featured') === '1'
+  )
+
+  // Sync local checkbox state when URL changes (e.g. browser back/forward)
+  useEffect(() => {
+    const t = searchParams.get('type') || ''
+    setWebshopChecked(!t || t.includes('webshop'))
+    setPhysicalChecked(!t || t.includes('physical'))
+    setFeaturedChecked(searchParams.get('featured') === '1')
+  }, [searchParams])
+
   const country = searchParams.get('country') || ''
   const city = searchParams.get('city') || ''
-  const typeParam = searchParams.get('type') || ''
-  const featuredParam = searchParams.get('featured') || ''
-
-  const activeTypes = typeParam.split(',').filter(Boolean)
-  const webshopChecked = activeTypes.length === 0 || activeTypes.includes('webshop')
-  const physicalChecked = activeTypes.length === 0 || activeTypes.includes('physical')
-  const featuredChecked = featuredParam !== '0'
 
   const visibleCities = country === 'BE'
     ? citiesBE
@@ -63,17 +78,31 @@ export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
     pushParams({ city: e.target.value || null })
   }
 
-  const handleTypeChange = (type: 'webshop' | 'physical', checked: boolean) => {
-    const nextWebshop = type === 'webshop' ? checked : webshopChecked
-    const nextPhysical = type === 'physical' ? checked : physicalChecked
-    let next: string | null = null
-    if (nextWebshop && !nextPhysical) next = 'webshop'
-    else if (!nextWebshop && nextPhysical) next = 'physical'
-    pushParams({ type: next })
+  const handleWebshopChange = (checked: boolean) => {
+    setWebshopChecked(checked)
+    const nextWebshop = checked
+    const nextPhysical = physicalChecked
+    let typeParam: string | null = null
+    if (nextWebshop && !nextPhysical) typeParam = 'webshop'
+    else if (!nextWebshop && nextPhysical) typeParam = 'physical'
+    // both checked or both unchecked → no type filter
+    pushParams({ type: typeParam })
+  }
+
+  const handlePhysicalChange = (checked: boolean) => {
+    setPhysicalChecked(checked)
+    const nextWebshop = webshopChecked
+    const nextPhysical = checked
+    let typeParam: string | null = null
+    if (nextWebshop && !nextPhysical) typeParam = 'webshop'
+    else if (!nextWebshop && nextPhysical) typeParam = 'physical'
+    pushParams({ type: typeParam })
   }
 
   const handleFeaturedChange = (checked: boolean) => {
-    pushParams({ featured: checked ? null : '0' })
+    setFeaturedChecked(checked)
+    // checked = opt-in filter: show only featured shops
+    pushParams({ featured: checked ? '1' : null })
   }
 
   const fieldClass =
@@ -130,7 +159,7 @@ export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
           <input
             type="checkbox"
             checked={webshopChecked}
-            onChange={e => handleTypeChange('webshop', e.target.checked)}
+            onChange={e => handleWebshopChange(e.target.checked)}
             className="w-4 h-4 rounded border-gray-300 accent-gray-900"
           />
           <span className="text-sm text-gray-600">Webshop</span>
@@ -139,7 +168,7 @@ export default function ShopSearchBar({ citiesBE, citiesNL }: Props) {
           <input
             type="checkbox"
             checked={physicalChecked}
-            onChange={e => handleTypeChange('physical', e.target.checked)}
+            onChange={e => handlePhysicalChange(e.target.checked)}
             className="w-4 h-4 rounded border-gray-300 accent-gray-900"
           />
           <span className="text-sm text-gray-600">Fysieke winkel</span>
