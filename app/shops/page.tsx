@@ -2,8 +2,7 @@ import prisma from '@/lib/db'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import ShopCard from '@/components/ShopCard'
-import SearchFilter from '@/components/SearchFilter'
-import ShopFilters from '@/components/ShopFilters'
+import ShopSearchBar from '@/components/ShopSearchBar'
 import FAQSection from '@/components/FAQSection'
 import { generateLocalBusinessJsonLd, generateFAQJsonLd } from '@/lib/seo'
 
@@ -35,6 +34,7 @@ type SearchParams = {
   city?: string
   type?: string
   category?: string
+  featured?: string
 }
 
 async function getShops(params: SearchParams) {
@@ -96,6 +96,10 @@ async function getShops(params: SearchParams) {
     }
   }
 
+  if (params.featured === '0') {
+    where.isFeatured = { not: true }
+  }
+
   const shops = await prisma.shop.findMany({
     where,
     orderBy: [{ isFeatured: 'desc' }, { createdAt: 'desc' }],
@@ -130,11 +134,6 @@ async function getShops(params: SearchParams) {
 }
 
 async function getFilterData() {
-  const categories = await prisma.category.findMany({
-    where: { isActive: true },
-    orderBy: { sortOrder: 'asc' },
-  })
-
   const shopsWithCities = await prisma.shop.findMany({
     where: { status: 'APPROVED', city: { not: null } },
     select: { city: true, citySlug: true, country: true },
@@ -150,7 +149,7 @@ async function getFilterData() {
     .filter(s => s.country === 'NL' && s.city && s.citySlug)
     .map(s => ({ name: s.city!, slug: s.citySlug! }))
 
-  return { categories, citiesBE, citiesNL }
+  return { citiesBE, citiesNL }
 }
 
 async function getFAQs() {
@@ -198,45 +197,29 @@ export default async function ShopsPage({
           <p className="text-lg text-gray-600 mb-6">
             Ontdek hijab shops, abaya winkels en modest fashion boutiques. Filter op locatie, lees reviews en vind de beste winkel bij jou in de buurt.
           </p>
-          <SearchFilter />
+          <ShopSearchBar citiesBE={filterData.citiesBE} citiesNL={filterData.citiesNL} />
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Sidebar filters */}
-        <aside className="lg:w-56 shrink-0">
-          <ShopFilters
-            categories={filterData.categories}
-            citiesBE={filterData.citiesBE}
-            citiesNL={filterData.citiesNL}
-          />
-        </aside>
+        <p className="text-sm text-gray-500 mb-6">
+          {shops.length} winkel{shops.length !== 1 ? 's' : ''} gevonden
+        </p>
 
-        {/* Shop listing */}
-        <main className="flex-1">
-          <div className="flex items-center justify-between mb-6">
-            <p className="text-sm text-gray-500">
-              {shops.length} winkel{shops.length !== 1 ? 's' : ''} gevonden
-            </p>
+        {shops.length === 0 ? (
+          <div className="text-center py-12 bg-gray-50 rounded-xl">
+            <p className="text-gray-500 mb-4">Geen winkels gevonden met deze filters</p>
+            <a href="/shops" className="text-accent hover:underline">
+              Alle filters wissen
+            </a>
           </div>
-
-          {shops.length === 0 ? (
-            <div className="text-center py-12 bg-gray-50 rounded-xl">
-              <p className="text-gray-500 mb-4">Geen winkels gevonden met deze filters</p>
-              <a href="/shops" className="text-accent hover:underline">
-                Alle filters wissen
-              </a>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {shops.map(shop => (
-                <ShopCard key={shop.id} shop={shop} />
-              ))}
-            </div>
-          )}
-        </main>
-      </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {shops.map(shop => (
+              <ShopCard key={shop.id} shop={shop} />
+            ))}
+          </div>
+        )}
 
       {/* FAQ Section */}
       {faqs.length > 0 && (
