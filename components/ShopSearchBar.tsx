@@ -12,9 +12,10 @@ type Props = {
   citiesBE: CityOption[]
   citiesNL: CityOption[]
   centered?: boolean
+  showFilters?: boolean
 }
 
-export default function ShopSearchBar({ citiesBE, citiesNL, centered = false }: Props) {
+export default function ShopSearchBar({ citiesBE, citiesNL, centered = false, showFilters = true }: Props) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -141,7 +142,7 @@ export default function ShopSearchBar({ citiesBE, citiesNL, centered = false }: 
         </button>
       </form>
 
-      <div className={`flex flex-wrap items-center gap-6 mt-3 ${centered ? 'justify-center' : ''}`}>
+      {showFilters && <div className={`flex flex-wrap items-center gap-6 mt-3 ${centered ? 'justify-center' : ''}`}>
         <label className="flex items-center gap-2 cursor-pointer select-none">
           <input
             type="checkbox"
@@ -169,7 +170,7 @@ export default function ShopSearchBar({ citiesBE, citiesNL, centered = false }: 
           />
           <span className="text-sm text-gray-600">Fysieke winkel</span>
         </label>
-      </div>
+      </div>}
     </div>
   )
 }
