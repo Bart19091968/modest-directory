@@ -260,16 +260,24 @@ export default async function ShopsPage({
         </p>
       </section>
 
-      {/* SEO: Local Business Schema */}
-      {shops.slice(0, 10).map(shop => (
+      {/* SEO: Shop ItemList Schema */}
+      {shops.length > 0 && (
         <script
-          key={shop.id}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(generateLocalBusinessJsonLd(shop))
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'ItemList',
+              name: 'Islamitische kledingwinkels in Nederland en België',
+              itemListElement: shops.slice(0, 10).map((shop, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                item: generateLocalBusinessJsonLd(shop),
+              })),
+            })
           }}
         />
-      ))}
+      )}
     </div>
   )
 }

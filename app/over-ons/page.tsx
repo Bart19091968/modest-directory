@@ -30,10 +30,35 @@ const breadcrumbJsonLd = {
   ],
 }
 
+const aboutPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  '@id': `${siteUrl}/over-ons`,
+  url: `${siteUrl}/over-ons`,
+  name: 'Over ModestDirectory',
+  description: 'Online directory voor islamitische kledingwinkels, hijab shops en abaya winkels in Nederland en België.',
+  isPartOf: {
+    '@type': 'WebSite',
+    '@id': `${siteUrl}/#website`,
+    name: 'ModestDirectory',
+    url: siteUrl,
+  },
+  about: {
+    '@type': 'Organization',
+    '@id': `${siteUrl}/#organization`,
+    name: 'ModestDirectory',
+    url: siteUrl,
+    email: 'info@modestdirectory.com',
+    description: 'Online directory voor islamitische kledingwinkels, hijab shops en abaya winkels in Nederland en België.',
+    areaServed: ['NL', 'BE'],
+  },
+}
+
 export default function OverOnsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageJsonLd) }} />
 
       <nav className="text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-1">

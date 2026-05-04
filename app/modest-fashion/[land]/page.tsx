@@ -248,6 +248,51 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   }
 }
 
+function generateBreadcrumbSchema(
+  land: string,
+  locationName: string,
+  isCountry: boolean,
+  countrySlug?: string,
+  countryName?: string,
+) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
+  const items = [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: 'Modest Fashion', item: `${siteUrl}/modest-fashion` },
+  ]
+  if (!isCountry && countryName && countrySlug) {
+    items.push({ '@type': 'ListItem', position: 3, name: countryName, item: `${siteUrl}/modest-fashion/${countrySlug}` })
+    items.push({ '@type': 'ListItem', position: 4, name: locationName, item: `${siteUrl}/modest-fashion/${land}` })
+  } else {
+    items.push({ '@type': 'ListItem', position: 3, name: locationName, item: `${siteUrl}/modest-fashion/${land}` })
+  }
+  return { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items }
+}
+
+function generateItemListSchema(shops: any[], locationName: string) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Modest fashion winkels in ${locationName}`,
+    itemListElement: shops.slice(0, 10).map((shop, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'ClothingStore',
+        name: shop.name,
+        description: shop.shortDescription,
+        url: `${siteUrl}/shops/${shop.slug}`,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: shop.city,
+          addressCountry: shop.country,
+        },
+      },
+    })),
+  }
+}
+
 export default async function LocationPage({ params }: { params: Params }) {
   const data = await getLocationData(params.land)
   if (!data) notFound()
@@ -258,10 +303,24 @@ export default async function LocationPage({ params }: { params: Params }) {
   const introParagraphs = content?.intro?.split('\n\n') ?? []
   const seoBlockParagraphs = content?.seoBlock?.split('\n\n') ?? []
   const countrySlug = isCountry ? params.land : (location as any).country?.slug ?? ''
+  const countryName = isCountry ? undefined : (location as any).country?.name
   const internalLinks = getInternalLinks(params.land, isCountry, countrySlug, location.name)
+
+  const breadcrumbSchema = generateBreadcrumbSchema(
+    params.land,
+    location.name,
+    isCountry,
+    isCountry ? undefined : countrySlug,
+    isCountry ? undefined : countryName,
+  )
+  const itemListSchema = shops.length > 0 ? generateItemListSchema(shops, location.name) : null
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {itemListSchema && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
+      )}
       {/* Header */}
       <div className="bg-white border-b">
         <div className="max-w-6xl mx-auto px-4 py-8">
