@@ -134,64 +134,50 @@ export default async function CategoryPage({ params }: { params: Params }) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      {/* Breadcrumb */}
-      <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center gap-1">
-          <li><Link href="/" className="hover:text-accent">Home</Link></li>
-          <li><span className="mx-2">›</span></li>
-          <li><Link href="/shops" className="hover:text-accent">Winkels</Link></li>
-          <li><span className="mx-2">›</span></li>
-          <li className="text-gray-900" aria-current="page">{categoryName}</li>
-        </ol>
-      </nav>
-
       {/* Header */}
-      <header className="text-center mb-12">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          {categoryName}
-        </h1>
-        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          Ontdek de beste {categoryName.toLowerCase()} in Nederland en België.
-          {data.shops.length > 0
-            ? ` We hebben ${data.shops.length} ${data.shops.length !== 1 ? 'winkels' : 'winkel'} voor je verzameld.`
-            : ' Binnenkort meer winkels beschikbaar.'
-          }
-        </p>
-      </header>
+      <div className="bg-white border-b">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <nav className="text-sm text-gray-600 mb-4" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-accent">Home</Link>
+            <span className="mx-2">/</span>
+            <Link href="/shops" className="hover:text-accent">Winkels</Link>
+            <span className="mx-2">/</span>
+            <span>{categoryName}</span>
+          </nav>
+          <h1 className="text-4xl font-bold text-gray-900">{categoryName}</h1>
+          <p className="text-lg text-gray-600 mt-2">
+            {data.shops.length} winkels beschikbaar in Nederland en België
+          </p>
+        </div>
+      </div>
 
       {/* Filter per land */}
       {data.countries.length > 0 && (
-        <section className="mb-10">
-          <h2 className="text-base font-semibold text-gray-700 mb-3">Filter op land</h2>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              href={`/${params.category}`}
-              className="px-4 py-2 bg-accent text-white rounded-full text-sm font-medium"
-            >
-              Alle landen
-            </Link>
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Kies een land</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {data.countries.map(country => (
               <Link
                 key={country.id}
                 href={`/${params.category}/${country.slug}`}
-                className="px-4 py-2 bg-white border rounded-full text-sm hover:border-accent hover:text-accent transition"
+                className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition text-center"
               >
-                {country.name}
+                <p className="font-semibold text-gray-900">{country.name}</p>
               </Link>
             ))}
           </div>
-        </section>
+        </div>
       )}
 
       {/* Shop lijst */}
-      <section className="mb-12">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">
           {data.shops.length > 0
             ? `Alle ${categoryName} (${data.shops.length})`
             : categoryName
@@ -199,16 +185,10 @@ export default async function CategoryPage({ params }: { params: Params }) {
         </h2>
 
         {data.shops.length === 0 ? (
-          <div className="text-center py-12 bg-gray-50 rounded-xl">
-            <p className="text-gray-500 mb-4">
-              We zijn nog bezig met het toevoegen van {categoryName.toLowerCase()}.
-            </p>
-            <p className="text-gray-600 mb-6">
-              Heb je een winkel? Meld je aan en bereik duizenden potentiële klanten.
-            </p>
-            <Link href="/aanmelden" className="btn-primary">
-              Winkel aanmelden
-            </Link>
+          <div className="bg-white p-8 rounded-lg shadow text-center text-gray-600">
+            <p className="mb-4">We zijn nog bezig met het toevoegen van {categoryName.toLowerCase()}.</p>
+            <p className="mb-6">Heb je een winkel? Meld je aan en bereik duizenden potentiële klanten.</p>
+            <Link href="/aanmelden" className="btn-primary">Winkel aanmelden</Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -217,72 +197,74 @@ export default async function CategoryPage({ params }: { params: Params }) {
             ))}
           </div>
         )}
-      </section>
+      </div>
 
       {/* Andere categorieën */}
-      <section className="mb-12">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Andere categorieën</h2>
-        <div className="flex flex-wrap gap-2">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Andere categorieën</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {Object.entries(categoryNames)
             .filter(([slug]) => slug !== params.category)
             .map(([slug, name]) => (
               <Link
                 key={slug}
                 href={`/${slug}`}
-                className="px-4 py-2 bg-white border rounded-full text-sm hover:border-accent hover:text-accent transition"
+                className="bg-white p-4 rounded-lg shadow hover:shadow-lg transition text-center"
               >
-                {name}
+                <p className="font-semibold text-gray-900">{name}</p>
               </Link>
             ))}
         </div>
-      </section>
+      </div>
 
       {/* FAQ */}
       {data.faqs.length > 0 && (
-        <section className="mb-12">
+        <div className="max-w-6xl mx-auto px-4 py-8">
           <FAQSection faqs={data.faqs} />
-        </section>
+        </div>
       )}
 
       {/* SEO content */}
-      <section className="prose prose-lg max-w-none bg-gray-50 rounded-xl p-8 mt-12">
-        <h2>Alles over {categoryName} in Nederland en België</h2>
-        <p>
-          Bij ModestDirectory vind je een volledig overzicht van alle {categoryName.toLowerCase()} in Nederland en België.
-          Of je nu op zoek bent naar {keywords.slice(0, 3).join(', ')} of andere producten,
-          onze directory helpt je de perfecte winkel te vinden.
-        </p>
-        <p>
-          Elke winkel is voorzien van klantbeoordelingen zodat je altijd weet wat je kunt verwachten.
-          Zowel fysieke winkels als webshops zijn opgenomen — zo vind je altijd een winkel die bij jou past,
-          of je nu liever in de winkel koopt of online bestelt.
-        </p>
-        <h3>Winkels per land</h3>
-        <p>
-          Ben je op zoek naar {categoryName.toLowerCase()} in een specifiek land?
-          Gebruik de landfilters hierboven om te filteren op Nederland of België,
-          of klik door naar een specifieke stad voor een lokaal overzicht.
-        </p>
-      </section>
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="bg-white p-8 rounded-lg shadow">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Alles over {categoryName} in Nederland en België</h2>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            Bij ModestDirectory vind je een volledig overzicht van alle {categoryName.toLowerCase()} in Nederland en België.
+            Of je nu op zoek bent naar {keywords.slice(0, 3).join(', ')} of andere producten,
+            onze directory helpt je de perfecte winkel te vinden.
+          </p>
+          <p className="text-gray-700 leading-relaxed mb-4">
+            Elke winkel is voorzien van klantbeoordelingen zodat je altijd weet wat je kunt verwachten.
+            Zowel fysieke winkels als webshops zijn opgenomen — zo vind je altijd een winkel die bij jou past,
+            of je nu liever in de winkel koopt of online bestelt.
+          </p>
+          <h3 className="text-xl font-bold text-gray-900 mt-6 mb-3">Winkels per land</h3>
+          <p className="text-gray-700 leading-relaxed">
+            Ben je op zoek naar {categoryName.toLowerCase()} in een specifiek land?
+            Gebruik de landfilters hierboven om te filteren op Nederland of België,
+            of klik door naar een specifieke stad voor een lokaal overzicht.
+          </p>
+        </div>
+      </div>
 
       {/* CTA */}
-      <section className="text-center mt-12 p-8 bg-accent/5 rounded-xl">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          Heb je een {categoryName.toLowerCase().replace(' winkels', '').replace(' shops', '')} winkel?
-        </h2>
-        <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-          Meld je winkel aan bij ModestDirectory en bereik duizenden potentiële klanten
-          die op zoek zijn naar {categoryName.toLowerCase()} in Nederland en België.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Link href="/aanmelden" className="btn-primary">
-            Winkel aanmelden
-          </Link>
-          <Link href="/shops" className="px-6 py-3 border border-gray-300 rounded-full hover:bg-gray-50 transition">
-            Alle winkels bekijken
-          </Link>
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="bg-blue-50 p-8 rounded-lg text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Heb je een {categoryName.toLowerCase().replace(' winkels', '').replace(' shops', '')} winkel?
+          </h2>
+          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+            Meld je winkel aan bij ModestDirectory en bereik duizenden potentiële klanten
+            die op zoek zijn naar {categoryName.toLowerCase()} in Nederland en België.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link href="/aanmelden" className="btn-primary">Winkel aanmelden</Link>
+            <Link href="/shops" className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-white transition bg-white/50">
+              Alle winkels bekijken
+            </Link>
+          </div>
         </div>
-      </section>
+      </div>
     </div>
   )
 }
