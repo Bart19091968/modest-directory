@@ -35,7 +35,13 @@ async function main() {
       name: 'België',
       nameLocal: 'België',
       slug: 'belgie',
-      description: 'Verken de mooiste hijab shops, modest fashion boutiques en islamitische kledingwinkels in België. Van Brussel tot Antwerpen, ontdek modest fashion bij jou in de buurt.',
+      description: `Welkom bij je gids voor hijab winkels en modest fashion in België. Ontdek fysieke winkels en webshops voor hijabs, hoofddoeken, abaya's, khimars, jilbabs en islamitische kleding in België. Via ModestDirectory vind je eenvoudig winkels in steden zoals Brussel, Antwerpen, Gent, Luik en Charleroi.
+
+België heeft een groeiende modest fashion-scene, met een divers aanbod aan klassieke en moderne islamitische kleding. In Antwerpen en Brussel vind je bijvoorbeeld meerdere winkels en boutiques met hijabs, abaya's en modest fashion voor dagelijks gebruik, feestelijke gelegenheden, Ramadan en Eid. Ook online bieden Belgische webshops steeds vaker een breed assortiment aan hoofddoeken, abaya's en bescheiden kleding.
+
+Gebruik deze gids om hijab winkels in België te vergelijken op locatie, categorie en type winkel. Zoek je een fysieke hijab winkel in Antwerpen, een abaya webshop in België of een islamitische kledingwinkel in Brussel? Dan helpt deze pagina je om sneller relevante winkels te vinden.
+
+Van basic jersey hijabs en chiffon hoofddoeken tot elegante abaya's en moderne modest fashion: België biedt steeds meer keuze voor wie op zoek is naar stijlvolle, comfortabele en bescheiden kleding.`,
       metaTitle: 'Hijab Shops België - Modest Fashion Winkels',
       metaDesc: 'Vind de beste hijab shops en modest fashion winkels in België. Bekijk onze gids met beoordelingen.',
     },
@@ -44,7 +50,7 @@ async function main() {
   for (const country of countries) {
     await prisma.country.upsert({
       where: { code: country.code },
-      update: {},
+      update: { description: country.description },
       create: country,
     })
   }
