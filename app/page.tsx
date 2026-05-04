@@ -5,7 +5,7 @@ import Link from 'next/link'
 import prisma from '@/lib/db'
 import ShopCard from '@/components/ShopCard'
 import Banner from '@/components/Banner'
-import SearchFilter from '@/components/SearchFilter'
+import ShopSearchBar from '@/components/ShopSearchBar'
 
 export const revalidate = 3600 // Revalidate every hour
 
@@ -93,11 +93,25 @@ async function getHeroImageUrl(): Promise<string | null> {
   }
 }
 
+async function getCities() {
+  const rows = await prisma.shop.findMany({
+    where: { status: 'APPROVED', city: { not: null } },
+    select: { city: true, citySlug: true, country: true },
+    distinct: ['citySlug'],
+    orderBy: { city: 'asc' },
+  })
+  return {
+    citiesBE: rows.filter(r => r.country === 'BE' && r.city && r.citySlug).map(r => ({ name: r.city!, slug: r.citySlug! })),
+    citiesNL: rows.filter(r => r.country === 'NL' && r.city && r.citySlug).map(r => ({ name: r.city!, slug: r.citySlug! })),
+  }
+}
+
 export default async function HomePage() {
-  const [shops, sponsors, heroImageUrl] = await Promise.all([
+  const [shops, sponsors, heroImageUrl, cities] = await Promise.all([
     getFeaturedShops(),
     getSponsors(),
     getHeroImageUrl(),
+    getCities(),
   ])
 
   const headerSponsors = sponsors.filter(s => s.position === 'HEADER')
@@ -136,7 +150,7 @@ export default async function HomePage() {
 
           {/* Search */}
           <div className="mb-8 max-w-2xl mx-auto">
-            <SearchFilter />
+            <ShopSearchBar citiesBE={cities.citiesBE} citiesNL={cities.citiesNL} centered />
           </div>
 
           <div className="flex justify-center">
