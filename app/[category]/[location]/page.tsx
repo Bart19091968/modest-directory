@@ -541,28 +541,32 @@ export default async function CategoryLocationPage({ params }: { params: Params 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
       )}
 
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <nav className="text-sm text-gray-600 mb-4" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-accent">Home</Link>
+      {/* Hero header */}
+      <div
+        className="relative border-b"
+        style={{ backgroundImage: 'url(/hero-banner.jpg)', backgroundSize: 'cover', backgroundPosition: 'center 30%' }}
+      >
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-6xl mx-auto px-4 py-10">
+          <nav className="text-sm text-white/70 mb-4" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/shops" className="hover:text-accent">Winkels</Link>
+            <Link href="/shops" className="hover:text-white">Winkels</Link>
             <span className="mx-2">/</span>
-            <Link href={`/${params.category}`} className="hover:text-accent">{categoryNames[params.category] ?? params.category}</Link>
+            <Link href={`/${params.category}`} className="hover:text-white">{categoryNames[params.category] ?? params.category}</Link>
             {!data.isCountry && data.city && (
               <>
                 <span className="mx-2">/</span>
-                <Link href={`/${params.category}/${data.city.country.slug}`} className="hover:text-accent">
+                <Link href={`/${params.category}/${data.city.country.slug}`} className="hover:text-white">
                   {data.city.country.name}
                 </Link>
               </>
             )}
             <span className="mx-2">/</span>
-            <span>{data.locationName}</span>
+            <span className="text-white">{data.locationName}</span>
           </nav>
-          <h1 className="text-4xl font-bold text-gray-900">{h1}</h1>
-          <p className="text-lg text-gray-600 mt-2">{data.shops.length} winkels beschikbaar</p>
+          <h1 className="text-4xl font-bold text-white">{h1}</h1>
+          <p className="text-lg text-white/80 mt-2">{data.shops.length} winkels beschikbaar</p>
         </div>
       </div>
 

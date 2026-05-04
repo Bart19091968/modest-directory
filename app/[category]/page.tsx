@@ -167,18 +167,22 @@ export default async function CategoryPage({ params }: { params: Params }) {
         />
       )}
 
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <nav className="text-sm text-gray-600 mb-4" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-accent">Home</Link>
+      {/* Hero header */}
+      <div
+        className="relative border-b"
+        style={{ backgroundImage: 'url(/hero-banner.jpg)', backgroundSize: 'cover', backgroundPosition: 'center 30%' }}
+      >
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-6xl mx-auto px-4 py-10">
+          <nav className="text-sm text-white/70 mb-4" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/shops" className="hover:text-accent">Winkels</Link>
+            <Link href="/shops" className="hover:text-white">Winkels</Link>
             <span className="mx-2">/</span>
-            <span>{categoryName}</span>
+            <span className="text-white">{categoryName}</span>
           </nav>
-          <h1 className="text-4xl font-bold text-gray-900">{categoryName}</h1>
-          <p className="text-lg text-gray-600 mt-2">
+          <h1 className="text-4xl font-bold text-white">{categoryName}</h1>
+          <p className="text-lg text-white/80 mt-2">
             {data.shops.length} winkels beschikbaar in Nederland en België
           </p>
         </div>
