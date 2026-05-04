@@ -150,7 +150,7 @@ export default async function HomePage() {
 
           {/* Search */}
           <div className="mb-8 max-w-2xl mx-auto">
-            <ShopSearchBar citiesBE={cities.citiesBE} citiesNL={cities.citiesNL} centered />
+            <ShopSearchBar citiesBE={cities.citiesBE} citiesNL={cities.citiesNL} centered showFilters={false} />
           </div>
 
           <div className="flex justify-center">
