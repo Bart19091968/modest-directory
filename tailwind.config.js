@@ -25,6 +25,14 @@ module.exports = {
           dark: '#000000',
         }
       },
+      fontSize: {
+        // Scaled-down editorial type scale (FashionUnited style)
+        '4xl': ['1.5rem',    { lineHeight: '2rem' }],      // 24px  (was 36px)
+        '3xl': ['1.25rem',   { lineHeight: '1.75rem' }],   // 20px  (was 30px)
+        '2xl': ['1.125rem',  { lineHeight: '1.625rem' }],  // 18px  (was 24px)
+        'xl':  ['1rem',      { lineHeight: '1.5rem' }],    // 16px  (was 20px)
+        'lg':  ['0.9375rem', { lineHeight: '1.5rem' }],    // 15px  (was 18px)
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],
