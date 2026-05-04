@@ -93,6 +93,7 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <script
@@ -137,7 +138,7 @@ export default function RootLayout({
         <section className="py-16 bg-accent">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-2xl font-bold text-white mb-4">Heb je een winkel?</h2>
-            <p className="text-primary-100 mb-8 max-w-xl mx-auto">
+            <p className="text-gray-300 mb-8 max-w-xl mx-auto">
               Vind je je winkel niet terug? Meld hem dan gratis aan of kies voor één van onze betalende opties.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
