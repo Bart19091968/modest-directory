@@ -21,8 +21,8 @@ module.exports = {
           900: '#263b26',
         },
         accent: {
-          DEFAULT: '#5d7a5d',
-          dark: '#4a624a',
+          DEFAULT: '#111111',
+          dark: '#000000',
         }
       },
     },

@@ -112,7 +112,7 @@ export default function ShopCard({ shop }: { shop: Shop }) {
           </div>
 
           <div className="flex items-center gap-2 text-sm text-gray-500">
-            <span>📍 {shop.city || shop.country}</span>
+            <span>{shop.city || shop.country}</span>
           </div>
         </div>
       </div>
