@@ -1,5 +1,6 @@
 import prisma from '@/lib/db'
 import { Metadata } from 'next'
+import Link from 'next/link'
 import ShopCard from '@/components/ShopCard'
 import SearchFilter from '@/components/SearchFilter'
 import ShopFilters from '@/components/ShopFilters'
@@ -175,7 +176,7 @@ export default async function ShopsPage({
   const faqSchema = faqs.length > 0 ? generateFAQJsonLd(faqs) : null
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="min-h-screen">
       {faqSchema && (
         <script
           type="application/ld+json"
@@ -184,16 +185,24 @@ export default async function ShopsPage({
       )}
 
       {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          Alle Islamitische Kledingwinkels in Nederland & België
-        </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-          Ontdek hijab shops, abaya winkels en modest fashion boutiques. Filter op locatie, lees reviews en vind de beste winkel bij jou in de buurt.
-        </p>
-        <SearchFilter />
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <nav className="text-sm text-gray-600 mb-4" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-accent">Home</Link>
+            <span className="mx-2">/</span>
+            <span>Alle Winkels</span>
+          </nav>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            Alle Islamitische Kledingwinkels in Nederland & België
+          </h1>
+          <p className="text-lg text-gray-600 mb-6">
+            Ontdek hijab shops, abaya winkels en modest fashion boutiques. Filter op locatie, lees reviews en vind de beste winkel bij jou in de buurt.
+          </p>
+          <SearchFilter />
+        </div>
       </div>
 
+      <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar filters */}
         <aside className="lg:w-56 shrink-0">
@@ -278,6 +287,7 @@ export default async function ShopsPage({
           }}
         />
       )}
+      </div>
     </div>
   )
 }
