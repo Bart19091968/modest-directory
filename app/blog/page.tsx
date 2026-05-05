@@ -64,64 +64,71 @@ export default async function BlogPage() {
   } : null
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="min-h-screen bg-gray-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       {collectionJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }} />}
 
-      <nav className="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center gap-1">
-          <li><Link href="/" className="hover:text-accent">Home</Link></li>
-          <li><span className="mx-2">›</span></li>
-          <li className="text-gray-900" aria-current="page">Blog</li>
-        </ol>
-      </nav>
-
-      <div className="text-center mb-12">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Blog</h1>
-        <p className="text-gray-600">
-          Tips, trends en inspiratie over hijabs, modest fashion en islamitische kleding
-        </p>
+      {/* Hero header */}
+      <div
+        className="relative border-b"
+        style={{ backgroundImage: 'url(/hero-banner-blog.jpg)', backgroundSize: 'cover', backgroundPosition: 'center 30%' }}
+      >
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative max-w-6xl mx-auto px-4 py-10">
+          <nav className="text-sm text-white/70 mb-4" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-white">Home</Link>
+            <span className="mx-2">/</span>
+            <span className="text-white">Blog</span>
+          </nav>
+          <h1 className="text-4xl font-bold text-white">Blog</h1>
+          <p className="text-lg text-white/80 mt-2">
+            Tips, trends en inspiratie over hijabs, modest fashion en islamitische kleding
+          </p>
+        </div>
       </div>
 
-      {posts.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-xl">
-          <p className="text-gray-500">Binnenkort meer artikelen</p>
-        </div>
-      ) : (
-        <div className="space-y-8">
-          {posts.map(post => (
-            <article key={post.id} className="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition">
-              <Link href={`/blog/${post.slug}`}>
-                <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-accent transition">
-                  {post.title}
-                </h2>
-              </Link>
-              <p className="text-gray-600 mb-4">{post.excerpt}</p>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-500">
-                  {post.publishedAt && new Date(post.publishedAt).toLocaleDateString('nl-NL', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </span>
-                <Link href={`/blog/${post.slug}`} className="text-accent hover:underline text-sm">
-                  Lees meer →
+      {/* Posts */}
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {posts.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-xl border">
+            <p className="text-gray-500">Binnenkort meer artikelen</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map(post => (
+              <article key={post.id} className="card p-6 flex flex-col">
+                <Link href={`/blog/${post.slug}`}>
+                  <h2 className="font-semibold text-lg text-gray-900 mb-2 hover:text-accent transition line-clamp-2">
+                    {post.title}
+                  </h2>
                 </Link>
-              </div>
-              {post.tags && post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {post.tags.map(tag => (
-                    <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                      {tag}
-                    </span>
-                  ))}
+                <p className="text-gray-600 text-sm mb-4 flex-grow line-clamp-3">{post.excerpt}</p>
+                <div className="flex justify-between items-center mt-auto pt-3 border-t">
+                  <span className="text-xs text-gray-400">
+                    {post.publishedAt && new Date(post.publishedAt).toLocaleDateString('nl-NL', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </span>
+                  <Link href={`/blog/${post.slug}`} className="text-accent hover:underline text-sm">
+                    Lees meer →
+                  </Link>
                 </div>
-              )}
-            </article>
-          ))}
-        </div>
-      )}
+                {post.tags && post.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {post.tags.map(tag => (
+                      <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
