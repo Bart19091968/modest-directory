@@ -200,8 +200,8 @@ export default async function ShopDetailPage({
 
         <p className="text-gray-700 text-lg mb-6">{shop.shortDescription}</p>
 
-        {/* Long description — only for SILVER and GOLD */}
-        {(shop.subscriptionTier === 'SILVER' || shop.subscriptionTier === 'GOLD') && shop.longDescription && (
+        {/* Long description — BRONZE, SILVER and GOLD */}
+        {shop.subscriptionTier && shop.longDescription && (
           <div className="mb-6 text-gray-600">
             <p>{shop.longDescription}</p>
           </div>

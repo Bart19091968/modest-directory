@@ -18,6 +18,7 @@ const PLANS = [
       'Categorieën',
       'Email',
       'Korte beschrijving',
+      'Lange beschrijving',
       'Adres',
       'Website URL',
       'Telefoonnummer',
