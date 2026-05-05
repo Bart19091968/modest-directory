@@ -9,7 +9,7 @@ const PLANS = [
   {
     tier: 'BRONZE',
     label: 'Brons',
-    price: 100,
+    price: 50,
     borderColor: 'border-amber-500',
     badge: null,
     features: [
@@ -26,7 +26,7 @@ const PLANS = [
   {
     tier: 'SILVER',
     label: 'Zilver',
-    price: 150,
+    price: 75,
     borderColor: 'border-gray-400',
     badge: 'Meest gekozen',
     features: [
@@ -46,7 +46,7 @@ const PLANS = [
   {
     tier: 'GOLD',
     label: 'Goud',
-    price: 200,
+    price: 100,
     borderColor: 'border-yellow-500',
     badge: null,
     features: [
