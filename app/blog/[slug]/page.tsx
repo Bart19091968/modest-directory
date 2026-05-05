@@ -209,7 +209,7 @@ export default async function BlogPostPage({
       <div className="max-w-3xl mx-auto px-4 py-10">
         <article>
           <div
-            className="prose prose-lg max-w-none prose-h2:text-xl prose-h2:font-semibold prose-h2:text-gray-900 prose-h3:text-lg prose-h3:font-semibold prose-h3:text-gray-900"
+            className="prose max-w-none prose-h2:text-xl prose-h2:font-semibold prose-h2:text-gray-900 prose-h3:text-lg prose-h3:font-semibold prose-h3:text-gray-900"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </article>
