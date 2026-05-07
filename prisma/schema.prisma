@@ -149,6 +149,31 @@ model FAQ {
   createdAt DateTime @default(now())
 }
 
+model DictionaryTerm {
+  id                      String    @id @default(cuid())
+  term                    String
+  slug                    String    @unique
+  arabic                  String?
+  pronunciation           String?
+  shortDefinition         String    @db.VarChar(400)
+  longDefinition          String    @db.Text
+  category                String
+  aliases                 String[]
+  transliterationVariants String[]
+  relatedTermSlugs        String[]
+  relatedCategoryLinks    Json?
+  relatedBlogLinks        Json?
+  seoTitle                String?
+  seoDescription          String?   @db.VarChar(200)
+  canonicalUrl            String?
+  isPublished             Boolean   @default(false)
+  isFeatured              Boolean   @default(false)
+  sortOrder               Int?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  publishedAt             DateTime?
+}
+
 // ============================================
 // MONETIZATION MODELS
 // ============================================

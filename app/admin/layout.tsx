@@ -36,6 +36,9 @@ export default async function AdminLayout({
                 <Link href="/admin/blog" className="text-gray-300 hover:text-white transition-colors">
                   Blog
                 </Link>
+                <Link href="/admin/dictionary" className="text-gray-300 hover:text-white transition-colors">
+                  Woordenboek
+                </Link>
                 <Link href="/admin/sponsors" className="text-gray-300 hover:text-white transition-colors">
                   Sponsors
                 </Link>
@@ -70,6 +73,7 @@ export default async function AdminLayout({
         <Link href="/admin/shops" className="text-gray-300 hover:text-white whitespace-nowrap">Winkels</Link>
         <Link href="/admin/reviews" className="text-gray-300 hover:text-white whitespace-nowrap">Reviews</Link>
         <Link href="/admin/blog" className="text-gray-300 hover:text-white whitespace-nowrap">Blog</Link>
+        <Link href="/admin/dictionary" className="text-gray-300 hover:text-white whitespace-nowrap">Woordenboek</Link>
         <Link href="/admin/sponsors" className="text-gray-300 hover:text-white whitespace-nowrap">Sponsors</Link>
         <Link href="/admin/ads" className="text-gray-300 hover:text-white whitespace-nowrap">Advertenties</Link>
         <Link href="/admin/settings" className="text-gray-300 hover:text-white whitespace-nowrap">Instellingen</Link>

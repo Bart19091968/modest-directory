@@ -399,6 +399,26 @@ export default async function LocationPage({ params }: { params: Params }) {
         )}
       </div>
 
+      {/* Woordenboek contextlink — alleen voor land-pagina's */}
+      {isCountry && (
+        <div className="max-w-6xl mx-auto px-4 pb-4">
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 text-sm text-gray-600">
+            Ontdek belangrijke termen in ons{' '}
+            <Link href="/woordenboek" className="text-gray-900 font-medium hover:underline">Modest Fashion Woordenboek</Link>
+            , van{' '}
+            <Link href="/woordenboek/khimar" className="text-gray-900 hover:underline">khimar</Link>
+            {' '}en{' '}
+            <Link href="/woordenboek/jilbab" className="text-gray-900 hover:underline">jilbab</Link>
+            {' '}tot{' '}
+            <Link href="/woordenboek/qamis" className="text-gray-900 hover:underline">qamis</Link>
+            {', '}
+            <Link href="/woordenboek/undercap" className="text-gray-900 hover:underline">undercap</Link>
+            {' '}en{' '}
+            <Link href="/woordenboek/instant-hijab" className="text-gray-900 hover:underline">instant hijab</Link>.
+          </div>
+        </div>
+      )}
+
       {/* SEO block */}
       {seoBlockParagraphs.length > 0 && (
         <div className="max-w-6xl mx-auto px-4 py-8">

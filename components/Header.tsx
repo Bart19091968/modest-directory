@@ -130,6 +130,9 @@ export default function Header() {
             <Link href="/blog" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Blog
             </Link>
+            <Link href="/woordenboek" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+              Woordenboek
+            </Link>
             <Link href="/aanmelden" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Winkel Aanmelden
             </Link>
@@ -196,6 +199,9 @@ export default function Header() {
 
               <Link href="/blog" className="text-sm text-gray-700 hover:text-gray-900 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
                 Blog
+              </Link>
+              <Link href="/woordenboek" className="text-sm text-gray-700 hover:text-gray-900 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
+                Woordenboek
               </Link>
               <Link href="/aanmelden" className="text-sm text-gray-700 hover:text-gray-900 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
                 Winkel Aanmelden
