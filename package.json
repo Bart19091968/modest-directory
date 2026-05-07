@@ -12,6 +12,7 @@
     "db:seed:quality": "npx tsx prisma/seed-quality.ts",
     "db:cleanup:modest-fashion": "npx tsx prisma/cleanup-modest-fashion.ts",
     "db:activate-categories": "npx tsx prisma/activate-categories.ts",
+    "db:seed:blog": "npx tsx prisma/seed-blog-posts.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
