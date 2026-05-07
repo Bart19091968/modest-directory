@@ -155,7 +155,7 @@ export default function RootLayout({
         {/* Footer */}
         <footer className="bg-gray-900 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
               <div>
                 <h3 className="text-xl font-bold mb-4">ModestDirectory</h3>
                 <p className="text-gray-400 mb-4">
@@ -173,6 +173,17 @@ export default function RootLayout({
                   <li><Link href="/aanmelden" className="hover:text-white transition-colors">Winkel aanmelden</Link></li>
                   <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
                   <li><Link href="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-4">Ontdekken</h4>
+                <ul className="space-y-2 text-gray-400">
+                  <li><Link href="/woordenboek" className="hover:text-white transition-colors">Modest Fashion Woordenboek</Link></li>
+                  <li><Link href="/woordenboek/hijab" className="hover:text-white transition-colors">Wat is een hijab?</Link></li>
+                  <li><Link href="/woordenboek/abaya" className="hover:text-white transition-colors">Wat is een abaya?</Link></li>
+                  <li><Link href="/woordenboek/khimar" className="hover:text-white transition-colors">Wat is een khimar?</Link></li>
+                  <li><Link href="/woordenboek/jilbab" className="hover:text-white transition-colors">Wat is een jilbab?</Link></li>
                 </ul>
               </div>
 

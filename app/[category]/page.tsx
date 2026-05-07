@@ -230,6 +230,38 @@ export default async function CategoryPage({ params }: { params: Params }) {
         )}
       </div>
 
+      {/* Woordenboek contextlink */}
+      {(params.category === 'hijab-shops' || params.category === 'abaya-shops') && (
+        <div className="max-w-6xl mx-auto px-4 pb-6">
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 text-sm text-gray-600">
+            {params.category === 'hijab-shops' && (
+              <>
+                Niet zeker welke hijabstijl bij je past?{' '}
+                <Link href="/woordenboek/hijab" className="text-gray-900 font-medium hover:underline">Lees: Wat is een hijab?</Link>
+                {' '}of ontdek het verschil tussen{' '}
+                <Link href="/woordenboek/chiffon-hijab" className="text-gray-900 hover:underline">chiffon</Link>
+                {', '}
+                <Link href="/woordenboek/jersey-hijab" className="text-gray-900 hover:underline">jersey</Link>
+                {' '}en{' '}
+                <Link href="/woordenboek/modal-hijab" className="text-gray-900 hover:underline">modal hijabs</Link>.
+              </>
+            )}
+            {params.category === 'abaya-shops' && (
+              <>
+                Lees ook:{' '}
+                <Link href="/woordenboek/abaya" className="text-gray-900 font-medium hover:underline">wat is een abaya</Link>
+                , en wat is het verschil tussen een{' '}
+                <Link href="/woordenboek/abaya" className="text-gray-900 hover:underline">abaya</Link>
+                {', '}
+                <Link href="/woordenboek/jilbab" className="text-gray-900 hover:underline">jilbab</Link>
+                {' '}en{' '}
+                <Link href="/woordenboek/kimono-abaya" className="text-gray-900 hover:underline">kimono abaya</Link>?
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Andere categorieën */}
       <div className="max-w-6xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Andere categorieën</h2>

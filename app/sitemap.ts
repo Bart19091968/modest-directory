@@ -27,6 +27,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${BASE_URL}/woordenboek`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
       url: `${BASE_URL}/faq`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
@@ -119,5 +125,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  return [...staticPages, ...shopPages, ...blogPages, ...seoPages]
+  // Dictionary term pages
+  const dictionaryTerms = await prisma.dictionaryTerm.findMany({
+    where: { isPublished: true },
+    select: { slug: true, updatedAt: true },
+  })
+
+  const dictionaryPages: MetadataRoute.Sitemap = dictionaryTerms.map(term => ({
+    url: `${BASE_URL}/woordenboek/${term.slug}`,
+    lastModified: term.updatedAt,
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }))
+
+  return [...staticPages, ...shopPages, ...blogPages, ...seoPages, ...dictionaryPages]
 }

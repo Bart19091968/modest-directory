@@ -14,6 +14,7 @@
     "db:activate-categories": "npx tsx prisma/activate-categories.ts",
     "db:seed:blog": "npx tsx prisma/seed-blog-posts.ts",
     "db:seed:blog:april": "npx tsx prisma/seed-blog-posts-april.ts",
+    "db:seed:dictionary": "npx tsx prisma/seed-dictionary.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
