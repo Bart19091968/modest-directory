@@ -15,6 +15,7 @@
     "db:seed:blog": "npx tsx prisma/seed-blog-posts.ts",
     "db:seed:blog:april": "npx tsx prisma/seed-blog-posts-april.ts",
     "db:seed:dictionary": "npx tsx prisma/seed-dictionary.ts",
+    "db:seed:dictionary:extended": "npx tsx prisma/seed-dictionary-extended.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
