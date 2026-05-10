@@ -132,7 +132,6 @@ export default function EditShopPage() {
   const [openingHours, setOpeningHours] = useState<OpeningHours>(defaultHours())
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [photos, setPhotos] = useState<string[]>([])
-  const [newPhotoUrl, setNewPhotoUrl] = useState('')
   // Google Places search
   const [googleSearch, setGoogleSearch] = useState('')
   const [googleResults, setGoogleResults] = useState<any[]>([])
@@ -226,12 +225,20 @@ export default function EditShopPage() {
     )
   }
 
-  const addPhoto = () => {
-    const url = newPhotoUrl.trim()
-    if (url && !photos.includes(url)) {
-      setPhotos(prev => [...prev, url])
-      setNewPhotoUrl('')
+  const handlePhotoAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? [])
+    for (const file of files) {
+      if (file.size > 1024 * 1024) {
+        setError(`"${file.name}" is te groot (max 1MB per foto)`)
+        continue
+      }
+      const reader = new FileReader()
+      reader.onload = () => {
+        setPhotos(prev => [...prev, reader.result as string])
+      }
+      reader.readAsDataURL(file)
     }
+    e.target.value = ''
   }
 
   const removePhoto = (index: number) => {
@@ -638,31 +645,20 @@ export default function EditShopPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Foto&apos;s ({photos.length})
               </label>
-              <div className="flex gap-2">
+              <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition bg-gray-50">
+                <p className="text-sm text-gray-600">Klik om foto&apos;s te uploaden</p>
+                <p className="text-xs text-gray-400 mt-1">PNG, JPG, WebP — max 1MB per foto, meerdere bestanden tegelijk</p>
                 <input
-                  type="url"
-                  value={newPhotoUrl}
-                  onChange={(e) => setNewPhotoUrl(e.target.value)}
-                  className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
-                  placeholder="https://voorbeeld.com/foto.jpg"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault()
-                      addPhoto()
-                    }
-                  }}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handlePhotoAdd}
                 />
-                <button
-                  type="button"
-                  onClick={addPhoto}
-                  className="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-dark transition"
-                >
-                  Toevoegen
-                </button>
-              </div>
+              </label>
 
               {photos.length > 0 && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mt-3">
@@ -672,9 +668,6 @@ export default function EditShopPage() {
                         src={photo}
                         alt={`Foto ${index + 1}`}
                         className="w-full h-24 object-cover rounded-lg border"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23f3f4f6" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%239ca3af" font-size="12">Fout</text></svg>'
-                        }}
                       />
                       <button
                         type="button"
@@ -684,7 +677,6 @@ export default function EditShopPage() {
                       >
                         ✕
                       </button>
-                      <div className="text-xs text-gray-400 mt-1 truncate">{photo}</div>
                     </div>
                   ))}
                 </div>
