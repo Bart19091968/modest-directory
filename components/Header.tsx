@@ -38,6 +38,9 @@ export default function Header() {
             <Link href="/shops" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Alle Winkels
             </Link>
+            <Link href="/winkels-in-de-buurt" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+              In mijn buurt
+            </Link>
 
             {/* Land dropdown */}
             <div
@@ -127,9 +130,6 @@ export default function Header() {
               )}
             </div>
 
-            <Link href="/winkels-in-de-buurt" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-              In mijn buurt
-            </Link>
             <Link href="/blog" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Blog
             </Link>
@@ -169,6 +169,9 @@ export default function Header() {
               <Link href="/shops" className="text-sm text-gray-700 hover:text-gray-900 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
                 Alle Winkels
               </Link>
+              <Link href="/winkels-in-de-buurt" className="text-sm text-gray-700 hover:text-gray-900 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
+                In mijn buurt
+              </Link>
 
               <div className="py-2">
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Land</p>
@@ -200,9 +203,6 @@ export default function Header() {
                 </Link>
               </div>
 
-              <Link href="/winkels-in-de-buurt" className="text-sm text-gray-700 hover:text-gray-900 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
-                In mijn buurt
-              </Link>
               <Link href="/blog" className="text-sm text-gray-700 hover:text-gray-900 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
                 Blog
               </Link>
