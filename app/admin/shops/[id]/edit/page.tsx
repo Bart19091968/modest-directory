@@ -204,6 +204,20 @@ export default function EditShopPage() {
     }))
   }
 
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 500 * 1024) {
+      setError('Logo is te groot (max 500KB)')
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => {
+      setForm(prev => ({ ...prev, logoUrl: reader.result as string }))
+    }
+    reader.readAsDataURL(file)
+  }
+
   const toggleCategory = (categoryId: string) => {
     setSelectedCategories(prev =>
       prev.includes(categoryId)
@@ -591,27 +605,36 @@ export default function EditShopPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Logo URL</label>
-              <input
-                type="url"
-                name="logoUrl"
-                value={form.logoUrl}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
-                placeholder="https://voorbeeld.com/logo.png"
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-2">Logo</label>
               {form.logoUrl && (
-                <div className="mt-2">
+                <div className="mb-3 flex items-center gap-3">
                   <img
                     src={form.logoUrl}
                     alt="Logo preview"
                     className="h-16 w-auto object-contain rounded border bg-gray-50 p-1"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none'
-                    }}
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setForm(prev => ({ ...prev, logoUrl: '' }))}
+                    className="text-sm text-red-600 hover:text-red-800"
+                  >
+                    Verwijder logo
+                  </button>
                 </div>
               )}
+              <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition bg-gray-50">
+                <p className="text-sm text-gray-600">
+                  {form.logoUrl ? 'Ander logo uploaden' : 'Klik om een logo te uploaden'}
+                </p>
+                <p className="text-xs text-gray-400 mt-1">PNG, JPG, WebP — max 500KB</p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleLogoChange}
+                />
+              </label>
             </div>
 
             <div>
