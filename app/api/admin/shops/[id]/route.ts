@@ -99,7 +99,32 @@ export async function PUT(
       googleReviewCount,
       googleReviewsUrl,
       googleLastSyncedAt,
+      // Geocoding
+      addressLine1,
+      addressLine2,
+      postalCode,
+      latitude,
+      longitude,
+      geocodedAddress,
+      geocodedAddressInput,
+      geocodingStatus,
+      geocodedAt,
     } = body
+
+    function validateCoordinates(lat: unknown, lng: unknown): boolean {
+      const la = Number(lat)
+      const lo = Number(lng)
+      if (!Number.isFinite(la) || !Number.isFinite(lo)) return false
+      if (la < -90 || la > 90) return false
+      if (lo < -180 || lo > 180) return false
+      return true
+    }
+
+    if ((latitude != null && latitude !== '') || (longitude != null && longitude !== '')) {
+      if (!validateCoordinates(latitude, longitude)) {
+        return NextResponse.json({ error: 'Ongeldige coördinaten' }, { status: 400 })
+      }
+    }
 
     // Validate required fields
     if (!name || !shortDescription) {
@@ -138,10 +163,20 @@ export async function PUT(
         slug,
         shortDescription: shortDescription.substring(0, 200),
         longDescription: longDescription || null,
-        address: address || null,
+        address: addressLine1 || address || null,
+        addressLine1: addressLine1 || null,
+        addressLine2: addressLine2 || null,
+        postalCode: postalCode || null,
         city: city || null,
         citySlug,
         country: country || 'BE',
+        latitude: (latitude != null && latitude !== '') ? parseFloat(latitude) : null,
+        longitude: (longitude != null && longitude !== '') ? parseFloat(longitude) : null,
+        geocodedAddress: geocodedAddress || null,
+        geocodedAddressInput: geocodedAddressInput || null,
+        geocodingProvider: geocodingStatus === 'success' ? 'nominatim' : (geocodingStatus === 'manual' ? 'manual' : null),
+        geocodedAt: geocodedAt ? new Date(geocodedAt) : (geocodingStatus === 'success' ? new Date() : null),
+        geocodingStatus: geocodingStatus || null,
         websiteUrl: websiteUrl || null,
         email: email || null,
         phone: phone || null,

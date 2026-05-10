@@ -30,6 +30,17 @@ model Shop {
   isWebshop        Boolean    @default(true)
   isFeatured       Boolean    @default(false)
   status           ShopStatus @default(PENDING)
+  // Structured address + geocoding
+  addressLine1         String?
+  addressLine2         String?
+  postalCode           String?
+  latitude             Float?
+  longitude            Float?
+  geocodedAddress      String?
+  geocodedAddressInput String?
+  geocodingProvider    String?
+  geocodedAt           DateTime?
+  geocodingStatus      String?
   // Google Places
   googlePlaceId       String?
   googleName          String?

@@ -56,6 +56,9 @@ type Shop = {
   shortDescription: string
   longDescription: string | null
   address: string | null
+  addressLine1: string | null
+  addressLine2: string | null
+  postalCode: string | null
   city: string | null
   country: string
   websiteUrl: string | null
@@ -85,6 +88,13 @@ type Shop = {
   googleReviewCount: number | null
   googleReviewsUrl: string | null
   googleLastSyncedAt: string | null
+  // Geocoding
+  latitude: number | null
+  longitude: number | null
+  geocodedAddress: string | null
+  geocodedAddressInput: string | null
+  geocodingStatus: string | null
+  geocodedAt: string | null
 }
 
 export default function EditShopPage() {
@@ -94,6 +104,7 @@ export default function EditShopPage() {
 
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [geocoding, setGeocoding] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [allCategories, setAllCategories] = useState<Category[]>([])
@@ -104,6 +115,9 @@ export default function EditShopPage() {
     shortDescription: '',
     longDescription: '',
     address: '',
+    addressLine1: '',
+    addressLine2: '',
+    postalCode: '',
     city: '',
     country: 'BE',
     websiteUrl: '',
@@ -128,6 +142,13 @@ export default function EditShopPage() {
     googleRating: '',
     googleReviewCount: '',
     googleReviewsUrl: '',
+    // Geocoding
+    latitude: '',
+    longitude: '',
+    geocodedAddress: '',
+    geocodedAddressInput: '',
+    geocodingStatus: '',
+    geocodedAt: '',
   })
   const [openingHours, setOpeningHours] = useState<OpeningHours>(defaultHours())
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
@@ -152,6 +173,9 @@ export default function EditShopPage() {
           shortDescription: shop.shortDescription,
           longDescription: shop.longDescription || '',
           address: shop.address || '',
+          addressLine1: shop.addressLine1 || '',
+          addressLine2: shop.addressLine2 || '',
+          postalCode: shop.postalCode || '',
           city: shop.city || '',
           country: shop.country,
           websiteUrl: shop.websiteUrl || '',
@@ -176,6 +200,13 @@ export default function EditShopPage() {
           googleRating: shop.googleRating != null ? String(shop.googleRating) : '',
           googleReviewCount: shop.googleReviewCount != null ? String(shop.googleReviewCount) : '',
           googleReviewsUrl: shop.googleReviewsUrl || '',
+          // Geocoding
+          latitude: shop.latitude != null ? String(shop.latitude) : '',
+          longitude: shop.longitude != null ? String(shop.longitude) : '',
+          geocodedAddress: shop.geocodedAddress || '',
+          geocodedAddressInput: shop.geocodedAddressInput || '',
+          geocodingStatus: shop.geocodingStatus || '',
+          geocodedAt: shop.geocodedAt || '',
         })
         setPhotos(shop.photos || [])
         setSelectedCategories(shop.categories.map(sc => sc.category.id))
@@ -223,6 +254,52 @@ export default function EditShopPage() {
         ? prev.filter(id => id !== categoryId)
         : [...prev, categoryId]
     )
+  }
+
+  const buildAddressFromForm = () =>
+    [form.addressLine1, form.addressLine2, form.postalCode, form.city, form.country]
+      .filter(Boolean)
+      .join(', ')
+
+  const handleGeocode = async () => {
+    const address = buildAddressFromForm()
+    if (!address || address.length < 5) {
+      setError('Vul eerst een adres, postcode, stad en land in.')
+      return
+    }
+    setGeocoding(true)
+    setError('')
+    try {
+      const res = await fetch('/api/admin/shops/geocode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error || 'Geocoding mislukt')
+        setForm(prev => ({ ...prev, geocodingStatus: 'failed' }))
+        return
+      }
+      setForm(prev => ({
+        ...prev,
+        latitude: String(data.latitude),
+        longitude: String(data.longitude),
+        geocodedAddress: data.geocodedAddress,
+        geocodedAddressInput: address,
+        geocodingStatus: 'success',
+        geocodedAt: new Date().toISOString(),
+      }))
+    } catch {
+      setError('De geocoding-service is tijdelijk niet beschikbaar. Probeer later opnieuw.')
+      setForm(prev => ({ ...prev, geocodingStatus: 'failed' }))
+    } finally {
+      setGeocoding(false)
+    }
+  }
+
+  const handleCoordChange = (field: 'latitude' | 'longitude', value: string) => {
+    setForm(prev => ({ ...prev, [field]: value, geocodingStatus: 'manual' }))
   }
 
   const handlePhotoAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -444,46 +521,130 @@ export default function EditShopPage() {
           )}
         </section>
 
-        {/* ── Locatie & Contact ── */}
+        {/* ── Adres & Geocodering ── */}
         <section className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Locatie & Contact</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Adres & Geocodering</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Adres</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Adresregel 1</label>
               <input
                 type="text"
-                name="address"
-                value={form.address}
+                name="addressLine1"
+                value={form.addressLine1}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
                 placeholder="Straatnaam 123"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Stad</label>
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Adresregel 2 <span className="text-gray-400 font-normal">(optioneel)</span></label>
               <input
                 type="text"
-                name="city"
-                value={form.city}
+                name="addressLine2"
+                value={form.addressLine2}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                placeholder="Bus 4, verdieping 2..."
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Land</label>
-              <select
-                name="country"
-                value={form.country}
+              <label className="block text-sm font-medium text-gray-700 mb-1">Postcode</label>
+              <input
+                type="text"
+                name="postalCode"
+                value={form.postalCode}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
-              >
-                <option value="BE">België</option>
-                <option value="NL">Nederland</option>
-              </select>
+                placeholder="1000"
+              />
             </div>
+
+          </div>
+
+          {/* Address changed warning */}
+          {form.geocodedAddressInput &&
+           (form.geocodingStatus === 'success' || form.geocodingStatus === 'manual') &&
+           buildAddressFromForm() !== form.geocodedAddressInput && (
+            <div className="mb-4 px-4 py-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+              Het adres is gewijzigd. Haal de coördinaten opnieuw op om de locatie correct te houden.
+            </div>
+          )}
+
+          {/* Geocode button */}
+          <button
+            type="button"
+            onClick={handleGeocode}
+            disabled={geocoding}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-60 text-sm font-medium"
+          >
+            {geocoding
+              ? 'Coördinaten ophalen...'
+              : form.latitude
+                ? 'Coördinaten opnieuw ophalen'
+                : 'Coördinaten ophalen'
+            }
+          </button>
+
+          {/* Coordinates + result */}
+          {(form.latitude || form.geocodingStatus === 'failed') && (
+            <div className="mt-5 space-y-4">
+              {form.geocodedAddress && (
+                <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-sm">
+                  <span className="font-medium text-green-800">Gevonden adres: </span>
+                  <span className="text-green-700">{form.geocodedAddress}</span>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
+                  <input
+                    type="text"
+                    value={form.latitude}
+                    onChange={(e) => handleCoordChange('latitude', e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent font-mono text-sm"
+                    placeholder="50.8503"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
+                  <input
+                    type="text"
+                    value={form.longitude}
+                    onChange={(e) => handleCoordChange('longitude', e.target.value)}
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent font-mono text-sm"
+                    placeholder="4.3517"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 text-sm text-gray-500">
+                {form.geocodingStatus && (
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${
+                    form.geocodingStatus === 'success' ? 'bg-green-100 text-green-700' :
+                    form.geocodingStatus === 'manual'  ? 'bg-blue-100 text-blue-700' :
+                    form.geocodingStatus === 'failed'  ? 'bg-red-100 text-red-700' :
+                                                         'bg-gray-100 text-gray-600'
+                  }`}>
+                    Status: {form.geocodingStatus}
+                  </span>
+                )}
+                {form.geocodedAt && (
+                  <span>Gegeocodeerd: {new Date(form.geocodedAt).toLocaleString('nl-NL')}</span>
+                )}
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* ── Locatie & Contact ── */}
+        <section className="bg-white rounded-xl shadow-sm border p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Website URL</label>
