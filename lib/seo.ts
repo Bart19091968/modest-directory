@@ -105,8 +105,12 @@ export function generateShopJsonLd(shop: {
   shortDescription: string
   longDescription?: string | null
   address?: string | null
+  addressLine1?: string | null
+  postalCode?: string | null
   city?: string | null
   country: string
+  latitude?: number | null
+  longitude?: number | null
   websiteUrl?: string | null
   email?: string | null
   phone?: string | null
@@ -142,10 +146,19 @@ export function generateShopJsonLd(shop: {
     }),
     address: {
       '@type': 'PostalAddress',
-      ...(shop.address && { streetAddress: shop.address }),
+      ...(shop.addressLine1 && { streetAddress: shop.addressLine1 }),
+      ...(!shop.addressLine1 && shop.address && { streetAddress: shop.address }),
+      ...(shop.postalCode && { postalCode: shop.postalCode }),
       addressLocality: shop.city,
       addressCountry: shop.country,
     },
+    ...(shop.latitude != null && shop.longitude != null && {
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: shop.latitude,
+        longitude: shop.longitude,
+      },
+    }),
     ...(shop.email && { email: shop.email }),
     ...(shop.phone && { telephone: shop.phone }),
     ...(shop.websiteUrl && { sameAs: [shop.websiteUrl] }),
