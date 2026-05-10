@@ -12,6 +12,15 @@ function generateSlug(name: string): string {
     .replace(/(^-|-$)/g, '')
 }
 
+function validateCoordinates(lat: unknown, lng: unknown): boolean {
+  const la = Number(lat)
+  const lo = Number(lng)
+  if (!Number.isFinite(la) || !Number.isFinite(lo)) return false
+  if (la < -90 || la > 90) return false
+  if (lo < -180 || lo > 180) return false
+  return true
+}
+
 // GET /api/admin/shops/[id] — fetch shop with categories
 export async function GET(
   request: Request,
@@ -110,15 +119,6 @@ export async function PUT(
       geocodingStatus,
       geocodedAt,
     } = body
-
-    function validateCoordinates(lat: unknown, lng: unknown): boolean {
-      const la = Number(lat)
-      const lo = Number(lng)
-      if (!Number.isFinite(la) || !Number.isFinite(lo)) return false
-      if (la < -90 || la > 90) return false
-      if (lo < -180 || lo > 180) return false
-      return true
-    }
 
     if ((latitude != null && latitude !== '') || (longitude != null && longitude !== '')) {
       if (!validateCoordinates(latitude, longitude)) {
