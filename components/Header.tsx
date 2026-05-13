@@ -7,8 +7,10 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [landOpen, setLandOpen] = useState(false)
   const [categoriesOpen, setCategoriesOpen] = useState(false)
+  const [mijnWinkelOpen, setMijnWinkelOpen] = useState(false)
   const landRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const mijnWinkelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -18,6 +20,9 @@ export default function Header() {
       if (landRef.current && !landRef.current.contains(e.target as Node)) {
         setLandOpen(false)
       }
+      if (mijnWinkelRef.current && !mijnWinkelRef.current.contains(e.target as Node)) {
+        setMijnWinkelOpen(false)
+      }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -25,6 +30,7 @@ export default function Header() {
 
   const closeDropdown = () => setCategoriesOpen(false)
   const closeLand = () => setLandOpen(false)
+  const closeMijnWinkel = () => setMijnWinkelOpen(false)
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -136,9 +142,39 @@ export default function Header() {
             <Link href="/woordenboek" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
               Woordenboek
             </Link>
-            <Link href="/aanmelden" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">
-              Winkel Aanmelden
-            </Link>
+            {/* Mijn winkel dropdown */}
+            <div
+              className="relative"
+              ref={mijnWinkelRef}
+              onMouseLeave={closeMijnWinkel}
+            >
+              <button
+                onClick={() => setMijnWinkelOpen(!mijnWinkelOpen)}
+                onMouseEnter={() => setMijnWinkelOpen(true)}
+                aria-expanded={mijnWinkelOpen}
+                aria-controls="mijn-winkel-menu"
+                aria-label="Mijn winkel navigatie"
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1 py-2"
+              >
+                Mijn winkel
+                <svg className={`w-3.5 h-3.5 transition-transform ${mijnWinkelOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {mijnWinkelOpen && (
+                <div id="mijn-winkel-menu" className="absolute top-full right-0 pt-1 z-50" role="navigation" aria-label="Mijn winkel links">
+                  <div className="w-48 bg-white rounded-lg shadow-md border border-gray-200 py-1">
+                    <Link href="/mijn-winkel" onClick={closeMijnWinkel} className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+                      Inloggen
+                    </Link>
+                    <Link href="/aanmelden" onClick={closeMijnWinkel} className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+                      Winkel Aanmelden
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
             <Link href="/shops" className="btn-primary text-sm">
               Zoek een winkel
             </Link>
@@ -209,9 +245,15 @@ export default function Header() {
               <Link href="/woordenboek" className="text-sm text-gray-700 hover:text-gray-900 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
                 Woordenboek
               </Link>
-              <Link href="/aanmelden" className="text-sm text-gray-700 hover:text-gray-900 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>
-                Winkel Aanmelden
-              </Link>
+              <div className="py-2">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Mijn winkel</p>
+                <Link href="/mijn-winkel" className="block text-sm text-gray-700 hover:text-gray-900 transition-colors py-1.5 pl-4" onClick={() => setMobileMenuOpen(false)}>
+                  Inloggen
+                </Link>
+                <Link href="/aanmelden" className="block text-sm text-gray-700 hover:text-gray-900 transition-colors py-1.5 pl-4" onClick={() => setMobileMenuOpen(false)}>
+                  Winkel Aanmelden
+                </Link>
+              </div>
               <Link href="/shops" className="btn-primary text-sm text-center mt-2" onClick={() => setMobileMenuOpen(false)}>
                 Zoek een winkel
               </Link>
