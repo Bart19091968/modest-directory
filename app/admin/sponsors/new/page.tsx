@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function NewSponsorPage() {
   const router = useRouter()
@@ -14,6 +15,20 @@ export default function NewSponsorPage() {
     linkUrl: '',
     position: 'SIDEBAR',
   })
+
+  const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (file.size > 1024 * 1024) {
+      setError('Banner is te groot (max 1 MB)')
+      e.target.value = ''
+      return
+    }
+    setError('')
+    const reader = new FileReader()
+    reader.onload = () => setForm(prev => ({ ...prev, bannerUrl: reader.result as string }))
+    reader.readAsDataURL(file)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -69,15 +84,36 @@ export default function NewSponsorPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Banner URL *</label>
-          <input
-            type="url"
-            value={form.bannerUrl}
-            onChange={(e) => setForm({ ...form, bannerUrl: e.target.value })}
-            required
-            className="input"
-            placeholder="https://example.com/banner.jpg"
-          />
+          <label className="block text-sm font-medium text-gray-700 mb-1">Banner *</label>
+          {form.bannerUrl ? (
+            <div className="space-y-2">
+              <div className="relative w-full h-32 rounded-lg overflow-hidden border bg-gray-50">
+                <Image src={form.bannerUrl} alt="Banner preview" fill className="object-contain" />
+              </div>
+              <button
+                type="button"
+                onClick={() => setForm(prev => ({ ...prev, bannerUrl: '' }))}
+                className="text-sm text-red-600 hover:underline"
+              >
+                Banner verwijderen
+              </button>
+            </div>
+          ) : (
+            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-accent hover:bg-accent/5 transition">
+              <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span className="text-sm text-gray-500">Klik om een banner te uploaden</span>
+              <span className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP — max 1 MB</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleBannerChange}
+                className="hidden"
+                required
+              />
+            </label>
+          )}
         </div>
 
         <div>
