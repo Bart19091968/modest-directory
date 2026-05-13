@@ -30,7 +30,7 @@ export default function SettingsDropdown() {
 
       {open && (
         <div className="absolute top-full right-0 pt-2 z-50">
-          <div className="w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+          <div className="w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
             <Link href="/admin/settings" onClick={() => setOpen(false)}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">
               Huisstijl
@@ -38,6 +38,10 @@ export default function SettingsDropdown() {
             <Link href="/admin/password" onClick={() => setOpen(false)}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">
               Wachtwoord
+            </Link>
+            <Link href="/admin/login-gegevens" onClick={() => setOpen(false)}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+              Inloggegevens
             </Link>
           </div>
         </div>

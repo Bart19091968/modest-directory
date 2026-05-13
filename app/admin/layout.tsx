@@ -78,6 +78,7 @@ export default async function AdminLayout({
         <Link href="/admin/owners" className="text-gray-300 hover:text-white whitespace-nowrap">Accounts</Link>
         <Link href="/admin/settings" className="text-gray-300 hover:text-white whitespace-nowrap">Huisstijl</Link>
         <Link href="/admin/password" className="text-gray-300 hover:text-white whitespace-nowrap">Wachtwoord</Link>
+        <Link href="/admin/login-gegevens" className="text-gray-300 hover:text-white whitespace-nowrap">Inloggegevens</Link>
       </nav>
 
       {/* Content */}
