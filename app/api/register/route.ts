@@ -142,31 +142,40 @@ export async function POST(request: Request) {
       })
     }
 
+    let accountCreated = false
+    let accountError: string | null = null
+
     if (createAccount && accountEmail && password) {
-      const hashedPassword = await bcrypt.hash(password, 12)
-      const existingOwner = await prisma.shopOwner.findUnique({ where: { email: accountEmail } })
-      if (existingOwner) {
-        await prisma.shopOwner.update({
-          where: { email: accountEmail },
-          data: {
-            hashedPassword,
-            shops: { connect: { id: shop.id } },
-          },
-        })
-      } else {
-        await prisma.shopOwner.create({
-          data: {
-            email: accountEmail,
-            hashedPassword,
-            shops: { connect: { id: shop.id } },
-          },
-        })
+      try {
+        const hashedPassword = await bcrypt.hash(password, 12)
+        const existingOwner = await prisma.shopOwner.findUnique({ where: { email: accountEmail } })
+        if (existingOwner) {
+          await prisma.shopOwner.update({
+            where: { email: accountEmail },
+            data: {
+              hashedPassword,
+              shops: { connect: { id: shop.id } },
+            },
+          })
+        } else {
+          await prisma.shopOwner.create({
+            data: {
+              email: accountEmail,
+              hashedPassword,
+              shops: { connect: { id: shop.id } },
+            },
+          })
+        }
+        accountCreated = true
+      } catch (err) {
+        console.error('Account creation error:', err)
+        accountError = 'Je winkel is aangemeld maar het account kon niet worden aangemaakt. Neem contact op via info@modestdirectory.com.'
       }
     }
 
     await sendNewShopNotification(name, email, city, invoiceRequested)
 
-    return NextResponse.json({ success: true, shopId: shop.id, accountCreated: !!(createAccount && password) })
+    return NextResponse.json({ success: true, shopId: shop.id, accountCreated, accountError })
   } catch (error) {
     console.error('Register error:', error)
     return NextResponse.json({ error: 'Er ging iets mis' }, { status: 500 })
