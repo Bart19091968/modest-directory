@@ -199,6 +199,7 @@ export default function ShopRegistrationForm({
       const data = await res.json()
       if (res.ok) {
         setAccountCreated(!!data.accountCreated)
+        if (data.accountError) setError(data.accountError)
         setSuccess(true)
       } else {
         setError(data.error || 'Er ging iets mis')
@@ -226,8 +227,11 @@ export default function ShopRegistrationForm({
         </div>
         {accountCreated && (
           <p className="text-green-700 text-sm mt-2 font-medium">
-            ✓ Je account is aangemaakt. Je kunt later inloggen om je winkelgegevens te beheren.
+            ✓ Je account is aangemaakt. Je kunt later <a href="/mijn-winkel/login" className="underline">inloggen</a> om je winkelgegevens te beheren.
           </p>
+        )}
+        {!accountCreated && error && (
+          <p className="text-orange-700 text-sm mt-2">{error}</p>
         )}
         <p className="text-green-600 text-sm mt-2">
           Je ontvangt een bevestigingsmail zodra je betaling is ontvangen en je winkel is goedgekeurd.
