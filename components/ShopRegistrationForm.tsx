@@ -96,6 +96,7 @@ export default function ShopRegistrationForm({
   const [success, setSuccess] = useState(false)
   const [accountCreated, setAccountCreated] = useState(false)
   const [createAccount, setCreateAccount] = useState(false)
+  const [accountEmail, setAccountEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -157,6 +158,11 @@ export default function ShopRegistrationForm({
     setError('')
 
     if (createAccount) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!accountEmail || !emailRegex.test(accountEmail)) {
+        setError('Voer een geldig e-mailadres in voor je account')
+        return
+      }
       if (password.length < 8) {
         setError('Wachtwoord moet minimaal 8 tekens lang zijn')
         return
@@ -186,6 +192,7 @@ export default function ShopRegistrationForm({
           tiktokUrl: isGold ? form.tiktokUrl : null,
           longDescription: isSilverOrGold ? form.longDescription : null,
           createAccount,
+          accountEmail: createAccount ? accountEmail : undefined,
           password: createAccount ? password : undefined,
         }),
       })
@@ -588,9 +595,19 @@ export default function ShopRegistrationForm({
         </label>
         {createAccount && (
           <div className="mt-4 p-4 bg-gray-50 rounded-lg space-y-4">
-            <p className="text-sm text-gray-600">
-              Je account wordt aangemaakt met het e-mailadres <strong>{form.email || '—'}</strong>.
-            </p>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Gebruikersnaam (e-mailadres) *</label>
+              <input
+                type="email"
+                value={accountEmail}
+                onChange={e => setAccountEmail(e.target.value)}
+                className="input"
+                placeholder="jouw@emailadres.be"
+              />
+              <p className="text-xs text-gray-400 mt-1">
+                Als dit e-mailadres al bestaat, wordt je wachtwoord bijgewerkt en wordt deze winkel aan je account gekoppeld.
+              </p>
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Wachtwoord *</label>
               <input

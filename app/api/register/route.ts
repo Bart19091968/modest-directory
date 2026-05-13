@@ -43,6 +43,7 @@ export async function POST(request: Request) {
       invoiceEmail,
       // Optional account
       createAccount,
+      accountEmail,
       password,
     } = body
 
@@ -60,13 +61,13 @@ export async function POST(request: Request) {
       }
     }
 
-    if (createAccount && password) {
+    if (createAccount && accountEmail && password) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(accountEmail)) {
+        return NextResponse.json({ error: 'Ongeldig e-mailadres voor account' }, { status: 400 })
+      }
       if (password.length < 8) {
         return NextResponse.json({ error: 'Wachtwoord moet minimaal 8 tekens lang zijn' }, { status: 400 })
-      }
-      const existingOwner = await prisma.shopOwner.findUnique({ where: { email } })
-      if (existingOwner) {
-        return NextResponse.json({ error: 'Er bestaat al een account met dit e-mailadres' }, { status: 400 })
       }
     }
 
@@ -141,11 +142,26 @@ export async function POST(request: Request) {
       })
     }
 
-    if (createAccount && password) {
+    if (createAccount && accountEmail && password) {
       const hashedPassword = await bcrypt.hash(password, 12)
-      await prisma.shopOwner.create({
-        data: { email, hashedPassword, shopId: shop.id },
-      })
+      const existingOwner = await prisma.shopOwner.findUnique({ where: { email: accountEmail } })
+      if (existingOwner) {
+        await prisma.shopOwner.update({
+          where: { email: accountEmail },
+          data: {
+            hashedPassword,
+            shops: { connect: { id: shop.id } },
+          },
+        })
+      } else {
+        await prisma.shopOwner.create({
+          data: {
+            email: accountEmail,
+            hashedPassword,
+            shops: { connect: { id: shop.id } },
+          },
+        })
+      }
     }
 
     await sendNewShopNotification(name, email, city, invoiceRequested)
