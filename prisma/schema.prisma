@@ -269,3 +269,16 @@ enum AdType {
   SPONSOR
   CUSTOM
 }
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  visitorId String
+  isBot     Boolean  @default(false)
+  botName   String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([isBot, createdAt])
+  @@index([visitorId, createdAt])
+}

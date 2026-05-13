@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { generateDirectoryJsonLd } from '@/lib/seo'
 import Header from '@/components/Header'
+import PageViewTracker from '@/components/analytics/PageViewTracker'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://modestdirectory.com'),
@@ -127,6 +128,7 @@ export default function RootLayout({
         )}
       </head>
       <body className="min-h-screen flex flex-col">
+        <PageViewTracker />
         <Header />
 
         {/* Main content */}
