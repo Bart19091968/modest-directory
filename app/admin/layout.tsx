@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { isAdmin } from '@/lib/auth'
+import SettingsDropdown from './SettingsDropdown'
 
 export default async function AdminLayout({
   children,
@@ -48,15 +49,10 @@ export default async function AdminLayout({
                 <Link href="/admin/owners" className="text-gray-300 hover:text-white transition-colors">
                   Accounts
                 </Link>
-                <Link href="/admin/settings" className="text-gray-300 hover:text-white transition-colors">
-                  Instellingen
-                </Link>
+                <SettingsDropdown />
               </nav>
             </div>
             <div className="flex items-center gap-4">
-              <Link href="/admin/password" className="text-gray-400 hover:text-white text-sm">
-                Wachtwoord
-              </Link>
               <Link href="/" className="text-gray-400 hover:text-white text-sm">
                 ← Site
               </Link>
@@ -80,7 +76,8 @@ export default async function AdminLayout({
         <Link href="/admin/sponsors" className="text-gray-300 hover:text-white whitespace-nowrap">Sponsors</Link>
         <Link href="/admin/ads" className="text-gray-300 hover:text-white whitespace-nowrap">Advertenties</Link>
         <Link href="/admin/owners" className="text-gray-300 hover:text-white whitespace-nowrap">Accounts</Link>
-        <Link href="/admin/settings" className="text-gray-300 hover:text-white whitespace-nowrap">Instellingen</Link>
+        <Link href="/admin/settings" className="text-gray-300 hover:text-white whitespace-nowrap">Huisstijl</Link>
+        <Link href="/admin/password" className="text-gray-300 hover:text-white whitespace-nowrap">Wachtwoord</Link>
       </nav>
 
       {/* Content */}
