@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/db'
 import { sendNewShopNotification } from '@/lib/email'
+import bcrypt from 'bcryptjs'
 
 function generateSlug(name: string): string {
   return name
@@ -40,6 +41,9 @@ export async function POST(request: Request) {
       invoiceVatNumber,
       invoiceAddress,
       invoiceEmail,
+      // Optional account
+      createAccount,
+      password,
     } = body
 
     if (!name || !email || !shortDescription) {
@@ -53,6 +57,16 @@ export async function POST(request: Request) {
     if (invoiceRequested) {
       if (!invoiceCompanyName || !invoiceVatNumber || !invoiceAddress || !invoiceEmail) {
         return NextResponse.json({ error: 'Alle factuurgegevens zijn verplicht' }, { status: 400 })
+      }
+    }
+
+    if (createAccount && password) {
+      if (password.length < 8) {
+        return NextResponse.json({ error: 'Wachtwoord moet minimaal 8 tekens lang zijn' }, { status: 400 })
+      }
+      const existingOwner = await prisma.shopOwner.findUnique({ where: { email } })
+      if (existingOwner) {
+        return NextResponse.json({ error: 'Er bestaat al een account met dit e-mailadres' }, { status: 400 })
       }
     }
 
@@ -127,9 +141,16 @@ export async function POST(request: Request) {
       })
     }
 
+    if (createAccount && password) {
+      const hashedPassword = await bcrypt.hash(password, 12)
+      await prisma.shopOwner.create({
+        data: { email, hashedPassword, shopId: shop.id },
+      })
+    }
+
     await sendNewShopNotification(name, email, city, invoiceRequested)
 
-    return NextResponse.json({ success: true, shopId: shop.id })
+    return NextResponse.json({ success: true, shopId: shop.id, accountCreated: !!(createAccount && password) })
   } catch (error) {
     console.error('Register error:', error)
     return NextResponse.json({ error: 'Er ging iets mis' }, { status: 500 })

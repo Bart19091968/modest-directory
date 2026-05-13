@@ -94,6 +94,10 @@ export default function ShopRegistrationForm({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  const [accountCreated, setAccountCreated] = useState(false)
+  const [createAccount, setCreateAccount] = useState(false)
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   const toggleCategory = (id: string) => {
     setSelectedCategories(prev =>
@@ -151,6 +155,18 @@ export default function ShopRegistrationForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
+    if (createAccount) {
+      if (password.length < 8) {
+        setError('Wachtwoord moet minimaal 8 tekens lang zijn')
+        return
+      }
+      if (password !== confirmPassword) {
+        setError('Wachtwoorden komen niet overeen')
+        return
+      }
+    }
+
     setLoading(true)
     try {
       const res = await fetch('/api/register', {
@@ -169,11 +185,17 @@ export default function ShopRegistrationForm({
           youtubeUrl: isGold ? form.youtubeUrl : null,
           tiktokUrl: isGold ? form.tiktokUrl : null,
           longDescription: isSilverOrGold ? form.longDescription : null,
+          createAccount,
+          password: createAccount ? password : undefined,
         }),
       })
       const data = await res.json()
-      if (res.ok) setSuccess(true)
-      else setError(data.error || 'Er ging iets mis')
+      if (res.ok) {
+        setAccountCreated(!!data.accountCreated)
+        setSuccess(true)
+      } else {
+        setError(data.error || 'Er ging iets mis')
+      }
     } catch {
       setError('Er ging iets mis')
     } finally {
@@ -195,7 +217,12 @@ export default function ShopRegistrationForm({
           <p className="text-xl font-mono font-bold text-gray-900">BE07 9734 4192 5566</p>
           <p className="text-gray-600 text-sm mt-2">Vermeld je winkelnaam bij de betaling</p>
         </div>
-        <p className="text-green-600 text-sm">
+        {accountCreated && (
+          <p className="text-green-700 text-sm mt-2 font-medium">
+            ✓ Je account is aangemaakt. Je kunt later inloggen om je winkelgegevens te beheren.
+          </p>
+        )}
+        <p className="text-green-600 text-sm mt-2">
           Je ontvangt een bevestigingsmail zodra je betaling is ontvangen en je winkel is goedgekeurd.
         </p>
       </div>
@@ -543,6 +570,47 @@ export default function ShopRegistrationForm({
               <input type="email" value={form.invoiceEmail}
                 onChange={e => setForm({ ...form, invoiceEmail: e.target.value })}
                 required={form.invoiceRequested} className="input" placeholder="factuur@jouwbedrijf.be" />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Optional account creation */}
+      <div className="border-t pt-6">
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input type="checkbox" checked={createAccount}
+            onChange={e => setCreateAccount(e.target.checked)}
+            className="w-5 h-5 text-accent rounded" />
+          <div>
+            <span className="font-medium text-gray-900">Maak een account aan (optioneel)</span>
+            <p className="text-sm text-gray-500">Hiermee kan je later de gegevens van je winkel aanpassen.</p>
+          </div>
+        </label>
+        {createAccount && (
+          <div className="mt-4 p-4 bg-gray-50 rounded-lg space-y-4">
+            <p className="text-sm text-gray-600">
+              Je account wordt aangemaakt met het e-mailadres <strong>{form.email || '—'}</strong>.
+            </p>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Wachtwoord *</label>
+              <input
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                className="input"
+                placeholder="Minimaal 8 tekens"
+                minLength={8}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Wachtwoord bevestigen *</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                className="input"
+                placeholder="Herhaal wachtwoord"
+              />
             </div>
           </div>
         )}
